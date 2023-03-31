@@ -1,0 +1,13 @@
+﻿@model HomeViewModel
+
+
+<div class="row">
+    @foreach (var anunt in Model.Anunturi)
+    {
+        <div>
+            <h2>@anunt.Title</h2>
+            <h3>@anunt.Descriere</h3>
+            <a class="btn-info" asp-controller="Home" asp-action="Details" asp-route-id="@anunt.Id">Detalii</a>
+        </div>
+    }
+</div>

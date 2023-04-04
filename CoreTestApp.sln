@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTestApp", "CoreTestApp\CoreTestApp.csproj", "{D28AD022-D88B-4FBF-B8FF-3D4038EDB938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreTestApp", "CoreTestApp\CoreTestApp.csproj", "{D28AD022-D88B-4FBF-B8FF-3D4038EDB938}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{EB7C7357-44AD-4B8A-BB7A-660B980B37E3}"
 EndProject

@@ -11,5 +11,12 @@ namespace CoreTestApp.Models
         }
 
         public DbSet<Imobil> Imobils { get; set; }
+
+        public DbSet<FavoriteAnuntItem> FavoriteAnuntItems { get; set; }
+
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
     }
 }

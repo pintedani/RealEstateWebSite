@@ -6,4 +6,6 @@
 
 <div class="row gx-5">
     <p>@Model.Descriere</p>
+
+    <a class="btn btn-secondary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-pieId="@Model.Id"> + Add to Favorites</a>
 </div>

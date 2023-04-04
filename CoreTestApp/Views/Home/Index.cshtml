@@ -7,6 +7,7 @@
         <div>
             <h2>@anunt.Title</h2>
             <h3>@anunt.Descriere</h3>
+            <a class="btn btn-secondary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-pieId ="@anunt.Id"> + Add to Favorites</a>
             <a class="btn-info" asp-controller="Home" asp-action="Details" asp-route-id="@anunt.Id">Detalii</a>
         </div>
     }

@@ -7,5 +7,7 @@
         IEnumerable<Imobil> LastAddedImobils { get; }
 
         Imobil GetImobilById(int id);
+
+        IEnumerable<Imobil> SearchImobils(string searchQuery);
     }
 }

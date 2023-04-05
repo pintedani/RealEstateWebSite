@@ -23,5 +23,10 @@
         {
             return _context.Imobils.FirstOrDefault(x => x.Id == id);
         }
+
+        public IEnumerable<Imobil> SearchImobils(string searchQuery)
+        {
+            return _context.Imobils.Where(p=>p.Title.Contains(searchQuery));
+        }
     }
 }

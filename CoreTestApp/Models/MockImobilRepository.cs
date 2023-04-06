@@ -24,5 +24,10 @@
         {
             return AllImobils.FirstOrDefault(x => x.Id == id);
         }
+
+        public IEnumerable<Imobil> SearchImobils(string searchQuery)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

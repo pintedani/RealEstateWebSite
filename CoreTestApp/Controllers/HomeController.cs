@@ -29,5 +29,7 @@ namespace CoreTestApp.Controllers
 
             return View(anunt);
         }
+
+        public IActionResult Search() { return View(); }
     }
 }

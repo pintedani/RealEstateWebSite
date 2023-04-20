@@ -1,0 +1,350 @@
+﻿@using System.Configuration
+@*@using Microsoft.Owin.Security*@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    @*Use Html.Raw to show in src diacritice normal, nu ca si encoded*@
+    <title>@Html.Raw(ViewBag.Title)</title>
+    <meta name="description" content="@Html.Raw(ViewBag.MetaDescription)" />
+    @if (ViewBag.Keywords != null)
+    {
+        <meta name="keywords" content="@Html.Raw(ViewBag.Keywords)" />
+    }
+
+    @if (ViewBag.ShareUrl != null && ViewBag.ShareTitle != null && ViewBag.ShareDescription != null && ViewBag.ShareImage != null)
+    {
+        <meta property="og:url" content="@ViewBag.ShareUrl" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="@ViewBag.ShareTitle" />
+        <meta property="og:description" content="@ViewBag.ShareDescription" />
+        <meta property="og:image" content="@ViewBag.ShareImage" />
+        //Pre-caching avoid https://developers.facebook.com/docs/sharing/best-practices#tags
+        if (@ViewBag.ShareImageWidth != null)
+        {
+            <meta property="og:image:width" content="@ViewBag.ShareImageWidth" />
+        }
+        if (@ViewBag.ShareImageHeight != null)
+        {
+            <meta property="og:image:height" content="@ViewBag.ShareImageHeight" />
+        }
+    }
+
+    <link href="~/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="~/css/bootstrap-override.css" rel="stylesheet" />
+    @RenderSection("nextprev", required: false)
+
+    <style>
+        /*https://www.w3docs.com/snippets/css/how-to-crop-and-center-an-image-automatically-in-css.html*/
+        .center-cropped {
+            object-fit: cover;
+            object-position: center;
+            height: 200px;
+            width: 100%;
+            /*padding-bottom: 10px;*/
+        }
+
+        .linkDiv {
+            color: black;
+            text-decoration: none;
+        }
+
+        li.selected {
+            background-color: #efefef;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+
+        <!--fixed-top-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand me-2" href="@Url.Action("Index", "Home")">
+                    <img src="~/Images/DecorationImages/apartamente24.png"
+                         height="50"
+                         alt="apartamente24"
+                         loading="lazy" />
+
+                    @*<img height="50" class="d-sm-none" src="~/Images/apartamente24small.png" /><span class="bi bi-arrow-down"></span>*@
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @*https://stackoverflow.com/questions/28247310/bootstrap-mobile-menu-icon-change-to-x-close*@
+                @*<a class="navbar-toggler collapsed border-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" data-toggle="collapse" data-target="#collapsingNavbar">
+                <span> </span>
+                <span> </span>
+                <span> </span>
+                </a>*@
+
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-start">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown d-block d-lg-none">
+                                <a class="nav-link dropdown-toggle" href="#" id="nav-dropdown3" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <b><span class="bi bi-person-check"></span> @User.Identity.Name.Split('@')[0]@*@User.Identity.Name.Substring(0, 5)..*@</b>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="nav-dropdown3">
+                                    <li><a class="dropdown-item" href="@Url.Action("EditUserDetails", "Manage")"><i class="bi bi-gear-fill"></i> Detalii Cont</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Administrare")"><i class="bi bi-view-stacked"></i> Anunțurile mele</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Mesaje")"><i class="bi bi-envelope-fill"></i> Mesaje</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "SuperAdmin")">Admin</a></li>
+                                    }
+
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <li><a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Deconectare</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item d-block d-lg-none">
+                                <a class="nav-link" href="@Url.Action("Register", "Account")">
+                                    <i class="bi bi-person-plus"></i> Crează Cont
+                                </a>
+                            </li>
+                            <li class="nav-item d-block d-lg-none">
+                                <a class="nav-link" href="@Url.Action("Login", "Account")">
+                                    <i class="bi bi-person"></i> Login
+                                </a>
+                            </li>
+                        }
+
+                        <li class="nav-item d-block d-lg-none">
+                            <a class="nav-link active" href="@Url.Action("Index", "Home")">Prima Pagină</a>
+                        </li>
+
+                        <li class="nav-item dropdown d-block d-lg-none">
+                            <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="bi bi-cash-coin"></span> Cumpără
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Vanzare/prop-Apartament"><i class="bi bi-building"></i> Cumpără Apartament</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Vanzare/prop-Garsoniera"><i class="bi bi-house-door-fill"></i> Cumpără Garsonieră</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Vanzare/prop-Casa"><i class="bi bi-house-heart-fill"></i> Cumpără Casă</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Vanzare/prop-Teren"><i class="bi bi-layers"></i> Cumpără Teren</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown d-block d-lg-none">
+                            <div class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="bi bi-cash-stack"></span> Închiriază
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Inchiriere/prop-Apartament"><i class="bi bi-building"></i> Închiriază Apartament</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Inchiriere/prop-Garsoniera"><i class="bi bi-house-door-fill"></i> Închiriază Garsonieră</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Inchiriere/prop-Casa"><i class="bi bi-house-heart-fill"></i> Închiriază Casă</a></li>
+                                <li><a class="dropdown-item" href="/Anunturi/Lista/gen-Inchiriere/prop-Teren"><i class="bi bi-layers"></i> Închiriază Teren</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item d-none d-sm-block">
+                            <a class="nav-link active" href="@Url.Action("Index", "Home")">Anunțuri</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Stiri")">Știri</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index","AgentiiImobiliare")">Agenții</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="nav-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Companii
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="nav-dropdown">
+                                <li><a class="dropdown-item" href="@Url.Action("Index","AgentiiImobiliare")">Agenții Imobiliare</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "AnsambluriRezidentiale")">Ansambluri Rezidențiale</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                    <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary">
+                        <span class="bi bi-pin"></span> Adaugă Anunț Gratuit
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarCollapse2">
+                    <div class="d-flex align-items-center flex-wrap">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="nav-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-check"></i> @User.Identity.Name.Split('@')[0]
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="nav-dropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("EditUserDetails", "Manage")"><i class="bi bi-gear-fill"></i> Detalii Cont</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Administrare")"><i class="bi bi-view-stacked"></i> Anunțurile mele</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Mesaje")"><i class="bi bi-envelope-fill"></i> Mesaje</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <li><a class="dropdown-item" href="@Url.Action("Index", "SuperAdmin")">Admin</a></li>
+                                    }
+
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <li><a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Deconectare</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mt-2 mt-md-0">
+                                <a href="@Url.Action("Register", "Account")" class="btn px-3 me-2">
+                                    <i class="bi bi-person-plus"></i> Crează Cont
+                                </a>
+
+                                <a href="@Url.Action("Login", "Account")" class="btn px-3 me-2">
+                                    <i class="bi bi-person"></i> Login
+                                </a>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+
+    @if (TempData["FooterStatus"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show mb-0" role="alert">
+            @TempData["FooterStatus"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div id="mainContent">
+        @RenderSection("featured", required: false)
+        @*<div class="visible-xs" style="background: none repeat scroll 0 0 rgba(255, 255, 255, 0.75); border-radius: 2px; width: 200px; display: block; margin: 0 auto; text-align: center">
+        <a class="anchor-link-spanner" href="@Url.Action(" Index", "Home" )" style="background-color: rgba(255, 255, 255, 0.1);"><img style="width: 190px" src="~/Images/DecorationImages/apartamente24.png" alt="Anunturi Imobiliare Romania" /></a>
+        </div>*@
+
+        @if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success">
+                <div class="container">
+                    <h2><span class="glyphicon glyphicon-ok-circle"></span> @ViewBag.Message</h2>
+                </div>
+            </div>
+        }
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                <div class="container">
+                    <h2><span class="glyphicon glyphicon-ok-circle"></span> @TempData["Message"]</h2>
+                </div>
+            </div>
+        }
+        @if (TempData["WarningMessage"] != null)
+        {
+            <div class="alert alert-warning">
+                <div class="container">
+                    <h2><span class="glyphicon glyphicon-info-sign"></span> @TempData["WarningMessage"]</h2>
+                </div>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                <div class="container">
+                    <h2><span class="glyphicon glyphicon-exclamation-sign"></span> @TempData["ErrorMessage"]</h2>
+                </div>
+            </div>
+        }
+        @RenderBody()
+
+    </div>
+
+
+
+    <!-- FOOTER -->
+    <footer id="main-footer" class="py-3 py-md-5 bg-primary text-white mt-auto">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col ml-auto">
+                    <a href="@Url.Action("Contact","Home")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Contact</a>
+                    <a href="@Url.Action("TermenisiConditii","Home")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Termeni și condiții</a>
+                    <a href="@Url.Action("DespreCookies","Home")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Cookies</a>
+                    <a href="@Url.Action("Despre","Home")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Despre</a>
+                    <a href="@Url.Action("Index","Stiri")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Știri</a>
+                    <a href="@Url.Action("Index","AgentiiImobiliare")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Agenții</a>
+                    <a href="@Url.Action("Index", "AnsambluriRezidentiale")" class="btn btn-link text-white"><span class="bi bi-chevron-right"></span>&nbsp;Ansambluri Rezidentiale</a>
+                    @*<a class="btn btn-link text-white" data-bs-toggle="collapse" data-bs-target="#collapseDespreApartamente24" aria-expanded="false"><span class="bi bi-chevron-right"></span>&nbsp;Despre apartamente24.ro</a>*@
+                </div>
+
+                <div class="d-flex justify-content-center align-items-center flex-wrap">
+                    <a class="mx-4 my-4" href="@Url.Action("Index", "Home")">
+                        <img style="max-width:290px;" src="~/Images/DecorationImages/apartamente24_jos_alb.png" alt="apartamente 24" />
+                    </a>
+
+                    <a class="mx-4 my-4" href="https://www.facebook.com/apartamente24/" title="Urmariți-ne pe Facebook">
+                        <i style="font-size: 32px; color: white" class="bi bi-facebook mt-2"></i>
+                    </a>
+                </div>
+
+                <p class="mt-2">
+                    &copy; @DateTime.Now.Year - apartamente24.ro
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    @*@if (TempData["FooterStatus"] != null)
+    {
+    <div class="alert alert-warning alert-dismissible fade show mb-0" role="alert">
+    @TempData["FooterStatus"]
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    }*@
+    @*-----------------------------------------Scripts-----------------------------------------------------*@
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        document.querySelectorAll('[data-bs-toggle="popover"]')
+            .forEach(function (popover) {
+                new bootstrap.Popover(popover)
+            })
+
+        $(function () {
+            $(".clearInputTextBtn").on("click", function () {
+                $(this).prev('input').val('');
+                $(this).prev('input').focus();
+            });
+        });
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

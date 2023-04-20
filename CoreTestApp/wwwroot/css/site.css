@@ -1,2 +1,378 @@
 ﻿body {
+    background-color: #fff;
+    color: #333;
+    font-size: 13px;
+    font-family: "Trebuchet MS",Verdana,Helvetica,Sans-Serif;
 }
+
+#body {
+    padding-bottom: 35px;
+}
+
+::selection {
+    background: #5EAB1F;
+    color: white;
+}
+
+.localitatiSearchResult {
+    position: absolute;
+    display: none;
+    background-color: white;
+    z-index: 20;
+    text-align: left;
+    width: 280px;
+    font-size: 1.2em;
+    padding-left: 5px;
+    border: 1px solid rgb(183, 183, 183);
+    border-radius: 4px
+}
+
+    .localitatiSearchResult > li.selected {
+        background-color: rgb(239, 239, 239);
+    }
+
+::-moz-selection {
+    background: #5EAB1F; /* Gecko Browsers */
+    color: white;
+}
+
+ul.ui-autocomplete {
+    list-style: none;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+.tipOfertaIconContainer {
+    display: inline-block;
+    width: 57px;
+}
+
+.tipOfertaIcon {
+    height: 50px;
+}
+
+#custom-dropdown-tipoferta li {
+    font-weight: bold;
+    cursor: pointer;
+    width: 300px;
+}
+
+/*Bootstrap customization start*/
+/*Glyphicon colors*/
+.red {
+    color: rgba(208, 19, 19, 1);
+}
+
+.green {
+    color: green;
+}
+
+.btn {
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2em;
+}
+
+.btn-success {
+    color: white !important;
+}
+
+.btn-light {
+    border: 1px solid transparent;
+    border-color: #67a0d7;
+    background-color: #fff;
+}
+
+    .btn-light:hover {
+        background-color: #faf7fd;
+    }
+
+.seoLinksContainer a {
+    text-decoration: none;
+}
+
+/*Bootstrap customization end*/
+
+a {
+    color: #333;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #333;
+    }
+
+.navbar-default {
+    background-color: white;
+    color: black;
+    background-image: none;
+    background-repeat: no-repeat;
+    filter: none;
+}
+
+.navbar-nav > li > a {
+    font-size: 18px;
+    /*font-weight: bold;*/
+    text-decoration: none;
+    color: #5EAB1F !important;
+    line-height: 5px;
+}
+
+.combobox {
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1.1em;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1) inset;
+    border: none;
+    background-color: rgb(239, 239, 239);
+}
+
+/*http://cssarrowplease.com/ start---------------------------------------------------*/
+.selectBox {
+    margin-top: 5px;
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+    li:hover {
+        opacity: 0.6; /* css standard */
+        filter: alpha(opacity=60); /* internet explorer */
+    }
+
+.selectBox:after, .selectBox:before {
+    bottom: 100%;
+    left: 20%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.selectBox:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: white;
+    border-width: 10px;
+    margin-left: -10px;
+}
+
+.selectBox:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #5EAB1F;
+    border-width: 11px;
+    margin-left: -11px;
+}
+
+/*http://cssarrowplease.com/ end------------------------------------------------------*/
+
+
+/*select box which simultes combobox start---------------------------------------------------*/
+
+.selectBoxSimulator {
+    display: inline-block;
+}
+
+    .selectBoxSimulator ul {
+        height: auto;
+        max-height: 350px;
+        overflow-x: hidden
+    }
+
+    .selectBoxSimulator li {
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .selectBoxSimulator .selBoxSelected {
+        background-color: lightgrey;
+    }
+
+/*select box which simultes combobox end---------------------------------------------------*/
+
+.actionLinkButton {
+    background-color: #5eab1f;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.3em;
+    font-weight: 600;
+    padding: 7px;
+    margin-right: 8px;
+    margin-top: 18px;
+    width: auto;
+    color: white !important;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.warningActionLinkButton {
+    background-color: rgb(237, 134, 134);
+}
+
+header, footer, hgroup,
+nav, section {
+    display: block;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+    color: #000;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.75em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+h4 {
+    font-size: 1.1em;
+}
+
+h5, h6 {
+    font-size: 1em;
+}
+
+
+/* main layout
+----------------------------------------------------------*/
+
+.main-content {
+    padding-left: 10px;
+    padding-top: 0px;
+}
+
+footer {
+    clear: both;
+    background-color: #e2e2e2;
+    /*expand to bottom of page if height of body is small*/
+    box-shadow: 0px 500px 0px 500px #e2e2e2;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"],
+textarea {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 1.2em;
+    padding: 5px;
+    max-width: 350px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1) inset;
+    border-radius: 4px;
+}
+
+.field-validation-error,
+.validation-summary-errors {
+    color: red;
+}
+
+/* floating label controls
+----------------------------------------------------------*/
+
+/*DAPI added white background*/
+.form-group {
+    background-color: white;
+}
+
+.floating-label-form-group {
+    font-size: 14px;
+    position: relative;
+    margin-bottom: 0;
+    margin-top: 5px;
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+    .floating-label-form-group input,
+    .floating-label-form-group textarea {
+        z-index: 1;
+        position: relative;
+        padding-right: 0;
+        padding-left: 0;
+        border: none;
+        border-radius: 0;
+        font-size: 1.2em;
+        background: none;
+        box-shadow: none !important;
+        resize: none;
+    }
+
+    .floating-label-form-group label {
+        display: block;
+        z-index: 0;
+        position: relative;
+        top: 2em;
+        margin: 0;
+        font-size: 0.85em;
+        line-height: 1.764705882em;
+        vertical-align: middle;
+        vertical-align: baseline;
+        opacity: 0;
+        -webkit-transition: top 0.3s ease, opacity 0.3s ease;
+        -moz-transition: top 0.3s ease, opacity 0.3s ease;
+        -ms-transition: top 0.3s ease, opacity 0.3s ease;
+        transition: top 0.3s ease, opacity 0.3s ease;
+    }
+
+    .floating-label-form-group::not(:first-child) {
+        padding-left: 14px;
+        border-left: 1px solid #eeeeee;
+    }
+
+.floating-label-form-group-with-value label {
+    top: 0;
+    opacity: 1;
+}
+
+.floating-label-form-group-with-focus label {
+    color: #0085a1;
+}
+
+form .row:first-child .floating-label-form-group {
+    border-top: 1px solid #eeeeee;
+}
+/*floating label controls end---------------------------------------------------*/
+
+
+/* DAPI touch checkbox
+----------------------------------------------------------*/
+.touchCheckbox {
+    margin-top: 10px;
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+    .touchCheckbox span {
+        font-size: 2.0em;
+        vertical-align: middle;
+    }
+
+    .touchCheckbox label {
+        padding-top: 10px;
+        vertical-align: middle;
+    }
+
+    .touchCheckbox .glyphicon-check {
+        color: green;
+    }
+
+    .touchCheckbox .glyphicon-unchecked {
+        /*color: red;*/
+    }
+/*DAPI touch checkbox end---------------------------------------------------*/

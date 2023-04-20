@@ -1,14 +1,395 @@
 ﻿@model HomeViewModel
 
+@{
+    Layout = "_LayoutB5";
+}
 
-<div class="row">
-    @foreach (var anunt in Model.Anunturi)
-    {
-        <div>
-            <h2>@anunt.Title</h2>
-            <h3>@anunt.Descriere</h3>
-            <a class="btn btn-secondary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-pieId ="@anunt.Id"> + Add to Favorites</a>
-            <a class="btn-info" asp-controller="Home" asp-action="Details" asp-route-id="@anunt.Id">Detalii</a>
+<style>
+    .jumbotron-homepage {
+        background: url('~/Images/homebackground3.jpg') no-repeat center;
+        background-position: center center;
+        border-radius: 10px;
+    }
+
+    .jumbotron {
+        /*        box-shadow: inset 0 0 0 100vw rgba(0, 0, 0, 0.1);*/
+        /*height: 40vh;*/
+        height: 600px;
+        background-size: cover;
+    }
+
+    .card-cover {
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #212529;
+        opacity: .2
+    }
+
+    .rounded-5 {
+        border-radius: 1rem;
+    }
+
+    .bg-dark {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity)) !important;
+    }
+</style>
+
+@{
+    //var judetAnunturiDict = (Dictionary<string, int>)ViewBag.TotalNumberAnunturiPeJudete;
+    //var totalAnunturi = judetAnunturiDict.Sum(x => x.Value);
+    var totalAnunturi = 0;
+}
+
+<div class="container-fluid jumbotron jumbotron-homepage py-5 g-1">
+    <div class="container text-center g-0">
+        <h1 class="display-3 fw-bold text-white" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">Ești aproape acasă</h1>
+        <div class="offset-md-2 col-md-10 col-lg-8">
+            <h4 class="mb-3 text-white" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">Gasește locuința potrivită</h4>
+            <div class="card p-2">
+                <div id="searchDiv" class="d-flex flex-wrap">
+                    <div class="pb-1 me-2">
+                        <input type="hidden" id="TipOferta2" value="2" />
+                        @*https://stackoverflow.com/questions/37901159/mvc-model-binding-for-bootstrap-button-group*@
+                        <div id="TipOfertaSelectControl" class="input-group input-group-lg flex-nowrap">
+                            <input type="hidden" id="TipOfertaGenSelect" value="Toate" />
+                            <label class="btn btn-outline-secondary" data-val="Vanzare">
+                                <input class="form-check-input" type="radio" name="Model.TipOferta" value="Vanzare">
+                                <span>Vanzare</span>
+                            </label>
+                            <label class="btn btn-outline-secondary" data-val="Inchiriere">
+                                <input class="form-check-input" type="radio" name="Model.TipOferta" value="Inchiriere">
+                                <span>Inchiriere</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pb-1">
+                        <div id="TipProprietateSelectControl" class="input-group input-group-lg">
+                            <input type="hidden" id="TipProprietateSelect" value="Toate" />
+                            <button id="TipProprietateDropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-building"></i> Apartament</button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item" data-val="Apartament">
+                                    <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare1" id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1"><i class="bi bi-building"></i> Apartament</label>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="dropdown-item" data-val="Garsoniera">
+                                    <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault2">
+                                    <label class="form-check-label" for="flexRadioDefault2"><i class="bi bi-house-door-fill"></i> Garsoniera</label>
+                                </li>
+                                <li class="dropdown-item" data-val="Casa">
+                                    <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault3">
+                                    <label class="form-check-label" for="flexRadioDefault3"><i class="bi bi-house-heart-fill"></i> Casa</label>
+                                </li>
+                                <li class="dropdown-item" data-val="Teren">
+                                    <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault4">
+                                    <label class="form-check-label" for="flexRadioDefault4"><i class="bi bi-layers"></i> Teren</label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <span style="flex-grow:1"></span>
+                    <a class="btn" href="@(Url.Content("~/") + "Anunturi/Lista")">
+                        <strong>@totalAnunturi</strong> Anunțuri total
+                    </a>
+                </div>
+
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <ul id="localitatiSearchResult" class="dropdown-menu w-75" style="margin-top: 50px; margin-left: 30px">
+                    </ul>
+                    <input id="searchBox" style="min-width: 160px" type="text" autocomplete="off" class="form-control col-xs-12" placeholder="Localitate">
+                    <button type="button" class="clearInputTextBtn btn bg-transparent" aria-label="clearLocalitateInputName" style="margin-left: -60px; z-index: 100;">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    <button id="searchButton" class="btn btn-primary" name="searchButton">Caută</button>
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+
+<section id="About" class="my-2 my-md-5 text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="info-header mb-5">
+                    <h1 class="text-primary pb-3">
+                        Adaugă Anunț Gratuit in 5 minute
+                    </h1>
+                    <p class="lead">
+                        Indiferent dacă cumpărați, vindeți sau închiriați, vă putem ajuta să mergeți mai departe.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <a href="@Url.Action("AnuntEditare","Administrare")" class="card-body linkDiv">
+                        @*<img src="~/Images/img/person2.jpg" alt="" class="img-fluid rounded-circle w-50 mb-3">*@
+                        <h3 class="mb-4">Postează anunț</h3>
+                        @*<h5 class="text-muted">Co-Writer</h5>*@
+                        <div class="d-flex align-items-center">
+                            <img src="~/Images/DecorationImages/anunt_adauga.svg" style="max-width: 100px;" alt="adauga anunt" />
+                            <p class="mx-2">Adăugați anunțul de vânzare sau de închiriat. Este gratis. Nelimitat!</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <a href="@Url.Action("Lista","Anunturi")" class="card-body linkDiv">
+                        @*<img src="~/Images/img/person2.jpg" alt="" class="img-fluid rounded-circle w-50 mb-3">*@
+                        <h3 class="mb-4">Evaluează-ți casa</h3>
+                        @*<h5 class="text-muted">Co-Writer</h5>*@
+                        <div style="display: flex; align-items: center;">
+                            <img src="~/Images/DecorationImages/anunt_evalueaza.svg" style="max-width: 100px;" alt="evalueaza proprietate" />
+                            <p class="mx-2">Aflați cât valorează casa dvs. într-un mod ușor și gratuit.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card">
+                    <a href="@Url.Action("Lista","Anunturi")" class="card-body linkDiv">
+                        <h3 class="mb-4">Verifica prețuri imobiliare</h3>
+                        @*<h5 class="text-muted">Editor</h5>*@
+
+                        <div style="display: flex; align-items: center;">
+                            <img src="~/Images/DecorationImages/anunt_verifica.svg" style="max-width: 100px;" alt="verifica preturi" />
+                            <p class="mx-2">Aflați despre prețurile proprietăților și tendințele acestora în timp.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*<div class="container history">
+    <h2 class="pb-4 mb-2 mt-5">Ultimele Anunțuri</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+
+        @foreach (var anunt in ViewBag.LastAddedImobils)
+        {
+            <a href="@UrlBuilder.BuildAnuntPageUrl(anunt.Oras.Nume, anunt.TipProprietate, anunt.TipOfertaGen, anunt.Title, anunt.Id)" class="linkDiv col">
+                <div>
+                    <div class="card rounded mb-3 shadow-sm">
+                        <img class="card-img-top center-cropped" src="~/Images/uploadedPhotos/@anunt.FirstPhoto" alt="poza anunt @anunt.FirstPhoto">
+                        <div class="card-body">
+                            <div style="height: 55px">
+                                <h5 class="card-title">@anunt.Oras.Nume, @TipOfertaDisplayFormatter.GetDisplayString(anunt.TipProprietate, anunt.TipOfertaGen)</h5>
+                            </div>
+                            <p class="card-text" style="display: flex;">
+                                <span>@anunt.Suprafata m²</span>
+                                <span style="flex-grow:1"></span>
+                                @if (anunt.NumarCamere > 0)
+                                {
+                                    <span>@anunt.NumarCamere camere</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <p class="btn btn-primary">Detalii</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>
+
+<div class="container mb-4">
+    <div class="row">
+        <div class="col">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAnunturiJudete" aria-expanded="false" aria-controls="collapseExample">
+                <strong>@totalAnunturi</strong> anunțuri active <span class="bi bi-chevron-down"></span>
+            </button>
+            <div class="collapse" id="collapseAnunturiJudete">
+                <div class="card card-body mt-2">
+                    @{
+                        foreach (var judet in (List<Judet>)ViewBag.Judete)
+                        {
+                            if (judetAnunturiDict.ContainsKey(judet.Nume) && judetAnunturiDict[judet.Nume] > 0)
+                            {
+                                <a class="linkDiv" href="@(Url.Content("~/") + "Anunturi/judet-" + @judet.Nume)">
+                                    <div style="cursor: pointer">
+                                        <p class="availableJudet" style="width: 200px; display: inline-block">
+                                            @judet.Nume
+                                        </p>
+                                        @if (judetAnunturiDict.ContainsKey(@judet.Nume))
+                                        {
+                                            <span class="badge alert-success">@judetAnunturiDict[@judet.Nume] Anunțuri</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge alert-danger">0</span>
+                                        }
+                                    </div>
+                                </a>
+                                <hr style="margin: 5px 0 0 0" />
+                            }
+                        }
+                    }
+                </div>
+            </div>
+
+            <a class="btn float-end" href="@(Url.Content("~/") + "Anunturi/Lista")">
+                Toate anunțurile <span class="bi bi-collection-fill"></span>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.UltimeleStiri != null && ((List<Stire>)ViewBag.UltimeleStiri).Count > 0)
+{
+    var stiri = ViewBag.UltimeleStiri as List<Stire>;
+    <hr />
+
+
+    <div class="container px-4 py-1">
+        <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+
+            @foreach (var stire in stiri)
+            {
+                <a class="col linkDiv" href="@StiriUrls.BuildStirePageUrl(stire)">
+                    <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/Stiri/@stire.Poze.Split(';')[0]');">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                            <div class="overlay"></div>
+                            <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">@stire.Titlu</h2>
+                            <ul class="d-flex list-unstyled mt-auto">
+                                <li class="me-auto">
+                                    @*<img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">*@
+@*                                    <i class="bi bi-lightbulb"></i>
+                                </li>
+                                <li class="d-flex align-items-center me-3">
+                                    <small><i class="bi bi-newspaper"></i> Stiri</small>
+                                </li>
+                                <li class="d-flex align-items-center">
+                                    <small><i class="bi bi-calendar2-heart"></i> @stire.DateCreated.Date.ToString("dd/MM/yy")</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            }
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <a class="btn float-end" href="@Url.Action("Index", "Stiri")">
+                    Toate știrile <span class="bi bi-collection-fill"></span>
+                </a>
+            </div>
+        </div>
+    </div>*@
+
+    @*<div class="col-xs-12">
+            <a href="@Url.Action("Index", "Stiri")"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;Toate știrile...</a>
+        </div>*@
+@*}*@
+
+<hr />
+<div class="container my-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
+        <div class="col">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseApartamenteVanzare" aria-expanded="false" aria-controls="collapseExample">
+                Apartamente vânzare <span class="bi bi-chevron-down"></span>
+            </button>
+            <div class="collapse" id="collapseApartamenteVanzare">
+                <div class="card card-body mt-2">
+                    <a href="/Anunturi/Lista/judet-Cluj/Vanzare-Apartamente">Apartamente vânzare Cluj</a>
+                    <a href="/Anunturi/Lista/judet-Bucuresti-Ilfov/localitate-Bucuresti/tip-Vanzare-Apartamente/camere-2-3">Apartamente vânzare Bucuresti</a>
+                    <a href="/Anunturi/Lista/judet-Timis/localitate-Timisoara/tip-Vanzare-Apartamente">Apartamente vânzare Timisoara</a>
+                    <a href="/Anunturi/Lista/judet-Sibiu/localitate-Sibiu/tip-Vanzare-Apartamente">Apartamente vânzare Sibiu</a>
+                    <a href="/Anunturi/Lista/judet-Iasi/localitate-Iasi/tip-Vanzare-Apartamente">Apartamente vânzare Iasi</a>
+                    <a href="/Anunturi/Lista/judet-Constanta/localitate-Constanta/tip-Vanzare-Apartamente">Apartamente vânzare Constanta</a>
+                    <a href="/Anunturi/Lista/judet-Brasov/localitate-Brasov/tip-Vanzare-Apartamente">Apartamente vânzare Brasov</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseApartamenteInchiriere" aria-expanded="false" aria-controls="collapseExample">
+                Apartamente inchiriat <span class="bi bi-chevron-down"></span>
+            </button>
+            <div class="collapse" id="collapseApartamenteInchiriere">
+                <div class="card card-body mt-2">
+                    <a href="/Anunturi/Lista/judet-Cluj/localitate-Cluj-Napoca/tip-Inchiriat-Apartamente">Apartamente inchiriat Cluj-Napoca</a>
+                    <a href="/Anunturi/Lista/judet-Bucuresti-Ilfov/localitate-Bucuresti/tip-Inchiriat-Apartamente">Apartamente inchiriat Bucuresti</a>
+                    <a href="/Anunturi/Lista/judet-Timis/localitate-Timisoara/tip-Inchiriat-Apartamente">Apartamente inchiriat Timisoara</a>
+                    <a href="/Anunturi/Lista/judet-Sibiu/localitate-Sibiu/tip-Inchiriat-Apartamente">Apartamente inchiriat Sibiu</a>
+                    <a href="/Anunturi/Lista/judet-Iasi/localitate-Iasi/tip-Inchiriat-Apartamente">Apartamente inchiriat Iasi</a>
+                    <a href="/Anunturi/Lista/judet-Constanta/localitate-Constanta/tip-Inchiriat-Apartamente">Apartamente inchiriat Constanta</a>
+                    <a href="/Anunturi/Lista/judet-Brasov/localitate-Brasov/tip-Inchiriat-Apartamente">Apartamente inchiriat Brasov</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGarsonieraVanzare" aria-expanded="false" aria-controls="collapseExample">
+                Garsonieră vânzare <span class="bi bi-chevron-down"></span>
+            </button>
+            <div class="collapse" id="collapseGarsonieraVanzare">
+                <div class="card card-body mt-2">
+                    <a href="/Anunturi/Lista/judet-Cluj/localitate-Cluj-Napoca/tip-Vanzare-Garsoniere">Garsonieră vânzare Cluj-Napoca</a>
+                    <a href="/Anunturi/Lista/judet-Bucuresti-Ilfov/localitate-Bucuresti/tip-Vanzare-Garsoniere">Garsonieră vânzare Bucuresti</a>
+                    <a href="/Anunturi/Lista/judet-Timis/localitate-Timisoara/tip-Vanzare-Garsoniere">Garsonieră vânzare Timisoara</a>
+                    <a href="/Anunturi/Lista/judet-Sibiu/localitate-Sibiu/tip-Vanzare-Garsoniere">Garsonieră vânzare Sibiu</a>
+                    <a href="/Anunturi/Lista/judet-Iasi/localitate-Iasi/tip-Vanzare-Garsoniere">Garsonieră vânzare Iasi</a>
+                    <a href="/Anunturi/Lista/judet-Constanta/localitate-Constanta/tip-Vanzare-Garsoniere">Garsonieră vânzare Constanta</a>
+                    <a href="/Anunturi/Lista/judet-Brasov/localitate-Brasov/tip-Vanzare-Garsoniere">Garsonieră vânzare Brasov</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTerenVanzare" aria-expanded="false" aria-controls="collapseExample">
+                Teren vânzare <span class="bi bi-chevron-down"></span>
+            </button>
+            <div class="collapse" id="collapseTerenVanzare">
+                <div class="card card-body mt-2">
+                    <a href="/Anunturi/Lista/judet-Cluj/tip-Vanzare-Teren">Teren vânzare județul Cluj</a>
+                    <a href="/Anunturi/Lista/judet-Bucuresti-Ilfov/tip-Vanzare-Teren">Teren vânzare Bucuresti</a>
+                    <a href="/Anunturi/Lista/judet-Timis/tip-Vanzare-Teren">Teren vânzare județul Timis</a>
+                    <a href="/Anunturi/Lista/judet-Sibiu/tip-Vanzare-Teren">Teren vânzare județul Sibiu</a>
+                    <a href="/Anunturi/Lista/judet-Iasi/tip-Vanzare-Teren">Teren vânzare județul Iasi</a>
+                    <a href="/Anunturi/Lista/judet-Constanta/tip-Vanzare-Teren">Teren vânzare județul Constanta</a>
+                    <a href="/Anunturi/Lista/judet-Brasov/tip-Vanzare-Teren">Teren vânzare județul Brasov</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col my-4" style="background-color: #F9F9F9; text-align: center; padding: 10px">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+    }
+    else
+    {
+        <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
     }
 </div>
+
+
+
+@section Scripts {
+    <script>
+        var enableautorefresh = false;
+    </script>
+    @*@Html.Partial("_GenericAnunturiFilter")*@
+}

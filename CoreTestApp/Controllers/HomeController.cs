@@ -19,6 +19,12 @@ namespace CoreTestApp.Controllers
             return View(homeViewModel);
         }
 
+        public IActionResult IndexB5()
+        {
+            HomeViewModel homeViewModel = new HomeViewModel(_imobilRepository.AllImobils);
+            return View(homeViewModel);
+        }
+
         public IActionResult Details(int id)
         {
             var anunt = _imobilRepository.GetImobilById(id);

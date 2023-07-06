@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
+using Microsoft.AspNetCore.Identity;
 
 namespace CoreTestApp.Models
 {
@@ -27,23 +28,23 @@ namespace CoreTestApp.Models
 
         public string? Poze { get; set; }
 
-        //public Judet Judet { get; set; }
+        public Judet Judet { get; set; }
 
-        //public Oras Oras { get; set; }
+        public Oras Oras { get; set; }
 
-        //public Cartier Cartier { get; set; }
+        public Cartier Cartier { get; set; }
 
         [StringLength(80, ErrorMessage = "Adresa nu trebuie sa depaseasca 80 de caractere")]
         public string? Strada { get; set; }
 
-        //public TipOfertaGen TipOfertaGen { get; set; }
+        public TipOfertaGen TipOfertaGen { get; set; }
 
-        //public TipProprietate TipProprietate { get; set; }
+        public TipProprietate TipProprietate { get; set; }
 
-        //public UserProfile UserProfile { get; set; }
+        public UserProfile UserProfile { get; set; }
 
-        //[ForeignKey(nameof(UserProfile))]
-        //public string UserId { get; set; }
+        [ForeignKey(nameof(UserProfile))]
+        public string UserId { get; set; }
 
         //Se modifica la adaugarea anutului si la oricare actualizare
         [DisplayFormat(DataFormatString = "{0:dd/MM/yy HH:mm}")]
@@ -89,7 +90,7 @@ namespace CoreTestApp.Models
 
         public int NumarVizualizari { get; set; }
 
-        //public StareAprobare StareAprobare { get; set; }
+        public StareAprobare StareAprobare { get; set; }
 
         public double GoogleMarkerCoordinateLat { get; set; }
 
@@ -113,7 +114,7 @@ namespace CoreTestApp.Models
 
         public bool Finisat { get; set; }
 
-        //public PromovatLevel PromotedLevel { get; set; }
+        public PromovatLevel PromotedLevel { get; set; }
 
         public string? ObservatiiAdmin { get; set; }
 
@@ -160,18 +161,17 @@ namespace CoreTestApp.Models
                     return this.Poze.Split(';')[0];
                 }
 
-                return "imobiliare_apartament.jpg";
-                //switch (this.TipProprietate)
-                //{
-                //    case TipProprietate.Apartament:
-                //        return "imobiliare_apartament.jpg";
+                switch (this.TipProprietate)
+                {
+                    case TipProprietate.Apartament:
+                        return "imobiliare_apartament.jpg";
 
-                //    case TipProprietate.Teren:
-                //        return "imobiliare_teren.jpg";
+                    case TipProprietate.Teren:
+                        return "imobiliare_teren.jpg";
 
-                //    default:
-                //        return "imobiliare_no_image.jpg";
-                //}
+                    default:
+                        return "imobiliare_no_image.jpg";
+                }
             }
         }
 
@@ -187,5 +187,13 @@ namespace CoreTestApp.Models
                 return 0;
             }
         }
+    }
+
+    public enum PromovatLevel
+    {
+        Nepromovat = 0,
+        PromovatNormal = 1,
+        SuperPromovat = 2,
+        ExceptionalPromovat = 3
     }
 }

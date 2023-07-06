@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Views\Anunturi\" />
     <Folder Include="wwwroot\Images\DecorationImages\" />
   </ItemGroup>

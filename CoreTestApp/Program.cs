@@ -28,9 +28,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<UserProfile>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 

@@ -16,6 +16,9 @@ namespace CoreTestApp.Controllers
         public IActionResult Index()
         {
             HomeViewModel homeViewModel = new HomeViewModel(_imobilRepository.AllImobils);
+
+            var imobils = _imobilRepository.AllImobils.ToList();
+
             return View(homeViewModel);
         }
 

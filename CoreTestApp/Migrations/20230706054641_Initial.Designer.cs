@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreTestApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230706051308_Initial")]
+    [Migration("20230706054641_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1214,7 +1214,8 @@ namespace CoreTestApp.Migrations
                 {
                     b.HasOne("CoreTestApp.Models.Oras", "Oras")
                         .WithMany()
-                        .HasForeignKey("OrasSelect");
+                        .HasForeignKey("OrasSelect")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Oras");
                 });
@@ -1224,13 +1225,13 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasSelect")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Oras");
@@ -1243,7 +1244,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Oras");
@@ -1254,7 +1255,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Oras");
@@ -1265,7 +1266,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Imobil");
@@ -1276,25 +1277,25 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Cartier", "Cartier")
                         .WithMany()
                         .HasForeignKey("CartierId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.Judet", "Judet")
                         .WithMany()
                         .HasForeignKey("JudetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
                         .WithMany("Anunturi")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cartier");
@@ -1311,25 +1312,25 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.UserProfile", "FromUser")
                         .WithMany()
                         .HasForeignKey("FromUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.UserProfile", "ToUser")
                         .WithMany()
                         .HasForeignKey("ToUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.UserProfile", "UserContactForm")
                         .WithMany()
                         .HasForeignKey("UserContactFormId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FromUser");
@@ -1346,7 +1347,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Judet", "Judet")
                         .WithMany()
                         .HasForeignKey("JudetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Judet");
@@ -1357,13 +1358,13 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Imobil");
@@ -1376,7 +1377,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Imobil");
@@ -1387,7 +1388,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("UserProfile");
@@ -1398,13 +1399,13 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.Agentie", "Agentie")
                         .WithMany("AgentieImobiliaraUserProfiles")
                         .HasForeignKey("AgentieId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.Constructor", "Constructor")
                         .WithMany("ConstructorUserProfiles")
                         .HasForeignKey("ConstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Agentie");
@@ -1416,7 +1417,8 @@ namespace CoreTestApp.Migrations
                 {
                     b.HasOne("CoreTestApp.Models.UserProfile", null)
                         .WithMany("UserRatings")
-                        .HasForeignKey("UserProfileId");
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1424,7 +1426,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1433,7 +1435,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1442,7 +1444,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1451,13 +1453,13 @@ namespace CoreTestApp.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CoreTestApp.Models.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -1466,7 +1468,7 @@ namespace CoreTestApp.Migrations
                     b.HasOne("CoreTestApp.Models.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

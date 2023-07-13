@@ -114,6 +114,7 @@ namespace CoreTestApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                SetUserDefaults(user);
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -153,6 +154,31 @@ namespace CoreTestApp.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private void SetUserDefaults(UserProfile user)
+        {
+            user.Role = Role.NormalUser;
+            user.TipVanzator = TipVanzator.PersoanaFizica;
+            user.Picture = "";
+            user.ConfirmationToken = "";
+            user.StareUser = StareUser.NeConfirmat;
+            user.TrustedUser = false;
+            user.UserCreateDate = DateTime.Now;
+            user.Flags = "";
+            user.AbonatLaNewsLetter = true;
+            user.RestrictionatPrimireEmail = false;
+            user.NumeComplet = "John Doe";
+            user.ReceiveAdminReports = true;
+            user.NumeAgentieImobiliara = "";
+            user.IsAgentieAdmin = false;
+            user.DescriereAgent = "";
+            user.EmailConfirmed = false;
+            user.PhoneNumber = "0743277533";
+            user.PhoneNumberConfirmed = false;
+            user.TwoFactorEnabled = false;
+            user.LockoutEnabled = false;
+            user.AccessFailedCount = 0;
         }
 
         private UserProfile CreateUser()

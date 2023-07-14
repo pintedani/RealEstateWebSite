@@ -1,5 +1,6 @@
 ﻿using CoreTestApp.Models;
 using CoreTestApp.ViewModels;
+using Imobiliare.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Imobiliare.UI.Controllers

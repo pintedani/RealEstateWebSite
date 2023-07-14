@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Imobiliare.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
-namespace CoreTestApp.Models
+namespace Imobiliare.Repositories
 {
     public class ApplicationDbContext : IdentityDbContext<UserProfile>
     {
@@ -12,7 +13,7 @@ namespace CoreTestApp.Models
 
         }
 
-        public DbSet<Imobil> Imobils { get; set; }
+        public DbSet<Imobil> Imobile { get; set; }
 
         public DbSet<Judet> Judete { get; set; }
         public DbSet<Oras> Orase { get; set; }

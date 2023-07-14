@@ -3,8 +3,9 @@
   using System.Collections.Generic;
 
   using Entities;
+    using Imobiliare.Entities;
 
-  public interface IEmailManagerService
+    public interface IEmailManagerService
   {
     #region Email administration methods
 

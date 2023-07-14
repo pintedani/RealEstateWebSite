@@ -7,8 +7,4 @@
     <RootNamespace>Imobiliare.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj" />
-  </ItemGroup>
-
 </Project>

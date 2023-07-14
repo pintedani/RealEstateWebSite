@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {

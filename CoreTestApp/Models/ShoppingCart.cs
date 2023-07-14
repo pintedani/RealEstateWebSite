@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Imobiliare.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.IO.Pipelines;
 
 namespace Imobiliare.UI.Models

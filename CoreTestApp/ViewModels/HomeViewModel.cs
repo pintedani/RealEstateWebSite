@@ -1,6 +1,6 @@
 ﻿using CoreTestApp.Models;
 
-namespace CoreTestApp.ViewModels
+namespace Imobiliare.UI.ViewModels
 {
     public class HomeViewModel
     {

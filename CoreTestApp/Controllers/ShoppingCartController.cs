@@ -2,7 +2,7 @@
 using CoreTestApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoreTestApp.Controllers
+namespace Imobiliare.UI.Controllers
 {
     public class ShoppingCartController : Controller
     {

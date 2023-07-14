@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace CoreTestApp.TagHelpers
+namespace Imobiliare.UI.TagHelpers
 {
     /// <summary>
     /// TagHelpers are used for smaller reusable components, 

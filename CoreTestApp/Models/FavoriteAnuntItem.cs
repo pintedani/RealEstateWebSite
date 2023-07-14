@@ -1,4 +1,6 @@
-﻿namespace CoreTestApp.Models
+﻿using Imobiliare.Entities;
+
+namespace Imobiliare.UI.Models
 {
     public class FavoriteAnuntItem : Entity
     {

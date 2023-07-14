@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace CoreTestApp.Migrations
+namespace Imobiliare.UI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230711071536_setnullablecolumns")]

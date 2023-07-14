@@ -2,7 +2,7 @@ using CoreTestApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoreTestApp.Pages
+namespace Imobiliare.UI.Pages
 {
     public class CheckoutPageModel : PageModel
     {

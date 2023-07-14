@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace CoreTestApp.Pages
+namespace Imobiliare.UI.Pages
 {
     public class CheckoutCompletePageModel : PageModel
     {

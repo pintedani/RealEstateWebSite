@@ -1,4 +1,4 @@
-﻿namespace CoreTestApp.Models.HelperModels
+﻿namespace Imobiliare.UI.Models.HelperModels
 {
     public enum TempDataSeverity
     {

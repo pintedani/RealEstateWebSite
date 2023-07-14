@@ -1,4 +1,4 @@
-﻿namespace CoreTestApp.Models
+﻿namespace Imobiliare.UI.Models
 {
     public class OrderRepository : IOrderRepository
     {

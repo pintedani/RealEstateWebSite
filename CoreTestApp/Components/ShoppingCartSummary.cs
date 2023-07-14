@@ -2,7 +2,7 @@
 using CoreTestApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoreTestApp.Components
+namespace Imobiliare.UI.Components
 {
     /// <summary>
     /// This is a reusable component which has it's own data, injected with DI

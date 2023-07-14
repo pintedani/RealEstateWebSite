@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace CoreTestApp.Migrations
+namespace Imobiliare.UI.Migrations
 {
     /// <inheritdoc />
     public partial class setnullablecolumns : Migration

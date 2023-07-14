@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace CoreTestApp.Controllers
+namespace Imobiliare.UI.Controllers
 {
     public class ContactController : Controller
     {

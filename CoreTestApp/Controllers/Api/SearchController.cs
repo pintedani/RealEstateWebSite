@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoreTestApp.Controllers.Api
+namespace Imobiliare.UI.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]

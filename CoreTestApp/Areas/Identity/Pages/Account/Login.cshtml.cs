@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using CoreTestApp.Models;
 
-namespace CoreTestApp.Areas.Identity.Pages.Account
+namespace Imobiliare.UI.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

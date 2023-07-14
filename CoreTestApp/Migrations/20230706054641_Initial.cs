@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CoreTestApp.Migrations
+namespace Imobiliare.UI.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

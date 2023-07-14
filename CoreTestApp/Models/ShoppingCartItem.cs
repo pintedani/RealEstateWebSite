@@ -1,6 +1,6 @@
 ﻿using System.IO.Pipelines;
 
-namespace CoreTestApp.Models
+namespace Imobiliare.UI.Models
 {
     public class ShoppingCartItem
     {

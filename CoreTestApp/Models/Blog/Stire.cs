@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CoreTestApp.Models
+namespace Imobiliare.UI.Models
 {
   public class Stire : Entity
   {

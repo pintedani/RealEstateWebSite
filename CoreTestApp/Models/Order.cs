@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 
-namespace CoreTestApp.Models
+namespace Imobiliare.UI.Models
 {
     public class Order : Entity
     {

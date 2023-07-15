@@ -1,0 +1,102 @@
+﻿@model Imobiliare.Entities.SystemSettings
+
+@Html.Partial("_MenuSuperAdmin")
+
+<h2>Edit System Settings</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DefaultPageSizeAdminPageAnunturi, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DefaultPageSizeAdminPageAnunturi, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.DefaultPageSizeAdminPageAnunturi, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DefaultPageSizeAdminPageUsers, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DefaultPageSizeAdminPageUsers, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DefaultPageSizeAdminPageUsers, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DefaultPageSizeMainPages, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.DefaultPageSizeMainPages, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DefaultPageSizeMainPages, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AutoApproveAnunturi, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.AutoApproveAnunturi, new { style = "width: 100%; height: 50px", htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AutoApproveAnunturi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CapchaEnabled, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.CapchaEnabled, new { style = "width: 100%; height: 50px", htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CapchaEnabled, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UseFakeEmailManager, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.UseFakeEmailManager, new { style = "width: 100%; height: 50px", htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UseFakeEmailManager, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotifyAdminByEmailWhenUserContactsAnotherUser, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.NotifyAdminByEmailWhenUserContactsAnotherUser, new { style = "width: 100%; height: 50px", htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NotifyAdminByEmailWhenUserContactsAnotherUser, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotifyAdminByEmailWhenUserChangedAnuntByEmail, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.NotifyAdminByEmailWhenUserChangedAnuntByEmail, new {style = "width: 100%; height: 50px", htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.NotifyAdminByEmailWhenUserChangedAnuntByEmail, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AutoSendAnuntExpiratEmails, htmlAttributes: new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.AutoSendAnuntExpiratEmails, new {style = "width: 100%; height: 50px", htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.AutoSendAnuntExpiratEmails, "", new {@class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LogsRetrieveNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LogsRetrieveNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LogsRetrieveNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,472 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.Managers.ExtensionMethods
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.SuperAdminData
+<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
+@Html.Partial("_MenuSuperAdmin")
+
+<br />
+@using (Html.BeginForm("Index", "SuperAdmin", FormMethod.Get, new { date = new DateTime(), id = "PickForm" }))
+{
+    <div>
+        <input class="btn btn-success" type="button" value="Cauta Id" onclick="navigateToAnunt()" />
+        <input type="text" id="imobilIdSearchField" style="width: 50px" />
+        <input class="btn btn-success" type="button" value="Cauta Titlu" onclick="navigateToAnuntByTile()" />
+        <input type="text" id="titluAnuntSearchField" style="width: 200px" />
+        <hr />
+        <h4 style="display: inline-block; padding-left: 4px">From:</h4>
+        <input class="datepickerDate" name="LogStartDate" value="@(Model.ImobilFilter.PerioadaStart == DateTime.MinValue ? "" : Model.ImobilFilter.PerioadaStart.ToString("dd'/'MM'/'yyyy"))" type="text" size="10" style="width: 95px" />
+        <h4 style="display: inline-block; padding-left: 4px">To:</h4>
+        <input class="datepickerDate" name="LogEndDate" value="@(Model.ImobilFilter.PerioadaEnd == DateTime.MinValue ? "" : Model.ImobilFilter.PerioadaEnd.ToString("dd'/'MM'/'yyyy"))" type="text" size="10" style="width: 95px" />
+        <input onchange="$('#FiltareDupaDataAdaugareInitiala').prop('value', true); this.form.submit();" type="checkbox" id="FiltareDupaDataAdaugareInitiala" name="FiltareDupaDataAdaugareInitiala" @( Model.ImobilFilter != null && Model.ImobilFilter.FiltareDupaDataAdaugareInitiala ? "checked value=true" : "") />
+        <h4 style="display: inline-block; padding-left: 4px">byInitialDate</h4>
+        <h4 style="display: inline-block; padding-left: 4px">User:</h4>
+        <input type="text" id="UserName" name="UserName" value="@(Model.ImobilFilter.UserProfile == null ? "" : @Model.ImobilFilter.UserProfile.UserName)" style="width: 180px" />
+        <input class="btn btn-success" type="submit" value="Arata" />
+    </div>
+    <hr />
+    <select onchange="this.form.submit()" style="width: 145px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="JudetSelect">
+        <option value="0">Toate Judetele</option>
+        @foreach (var judet in Model.Judets)
+        {
+            <option @(Model.ImobilFilter.JudetId == judet.Id ? "selected=\"selected\"" : "") value="@judet.Id">@judet.Nume</option>
+        }
+    </select>
+
+    <h4 style="display: inline-block; padding-left: 4px">Localitate</h4>
+    <select onchange="this.form.submit()" style="margin-left: 3px; width: 145px" class="ui-corner-all ui-widget-shadow ui-widget" id="OrasSelect" name="OrasSelect">
+        <option value="0">--Toate--</option>
+        @foreach (var oras in Model.Orases)
+        {
+            <option @(Model.ImobilFilter.OrasId == oras.Id ? "selected=\"selected\"" : "") value="@oras.Id">@oras.Nume</option>
+        }
+    </select>
+
+    <h4 style="display: inline-block; padding-left: 4px">Cartier</h4>
+    <select onchange="this.form.submit()" style="margin-left: 3px; width: 145px" class="ui-corner-all ui-widget-shadow ui-widget" id="CartierSelect" name="CartierSelect">
+        <option value="0">--Toate--</option>
+        @foreach (var cartier in Model.Cartiers)
+        {
+            <option @(Model.ImobilFilter.CartierId == cartier.Id ? "selected=\"selected\"" : "") value="@cartier.Id">@cartier.Nume</option>
+        }
+    </select>
+    <text>User:</text>
+    <select onchange="this.form.submit()" style="width: 130px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="TipVanzatorSelect">
+        @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
+        {
+            <option @(Model.ImobilFilter != null && Model.ImobilFilter.TipVanzator == tipVanzator ? "selected=\"selected\"" : "") value="@tipVanzator">@tipVanzator</option>
+        }
+    </select>
+    <text>Stare:</text>
+    <select onchange="this.form.submit()" style="width: 110px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" id="StareAprobareSelect" name="StareAprobareSelect">
+        @foreach (StareAprobare stareAprobare in Enum.GetValues(typeof(StareAprobare)))
+        {
+            <option @(Model.ImobilFilter != null && Model.ImobilFilter.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+        }
+    </select>
+    @*<text>OnlyUsers</text>*@
+    <input onchange="$('#OnlyUserAnunturi').prop('value', true); this.form.submit();" type="checkbox" data-toggle="toggle" data-on="Users" data-off="Users" data-size="mini" id="OnlyUserAnunturi" name="OnlyUserAnunturi" @( Model.ImobilFilter != null && Model.ImobilFilter.OnlyUserAnunturi ? "checked value=true" : "") />
+    @*<input type="checkbox" checked data-toggle="toggle" data-on="Admin" data-off="Not Admin" data-size="mini">*@
+    @*<text>OnlyAdmin</text>*@
+    <input onchange="$('#OnlyAdminAnunturi').prop('value', true); this.form.submit();" type="checkbox" data-toggle="toggle" data-on="Admin" data-off="Admin" data-size="mini" id="OnlyAdminAnunturi" name="OnlyAdminAnunturi" @( Model.ImobilFilter != null && Model.ImobilFilter.OnlyAdminAnunturi ? "checked value=true" : "") />
+}
+@if (Model.Imobils.Count > 0)
+{
+    <h3>Anunturi: @Model.TotalNumberOfEntries</h3>
+    <div id="anunturi">
+        @foreach (var imobil in Model.Imobils)
+        {
+            <div class="row panel panel-primary anunt" style="width: 100%; min-height: 100px; border: 1px solid #a7d582; border-radius: 4px; margin-bottom: 5px;">
+                <div class="col-xs-12 col-sm-2" style="padding-top: 5px">
+                    @if (imobil.Poze != null)
+                    {
+                        <img onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="img-thumbnail center-cropped" style="height: 130px; cursor: pointer" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" />
+                        <div style="position: absolute; top: 7px; left: 8px; opacity: 0.8; width: 40px; background-color: #fff; font-weight: bold; font-size: 11px;">
+                            <span style="padding-left: 7px" class="glyphicon glyphicon-camera"></span>
+                            <b style="padding-left: 2px; font-size: 1.2em">@imobil.Poze.Split(';').Count()</b>
+                        </div>
+                        if (imobil.Poze.Split(';').Count() > 1)
+                        {
+                            @Html.ActionLink("delPoze", "ClearPhotosExceptFirst", "SuperAdmin", new { anuntId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "label label-danger", style = "display: inline-block; margin-top: 2px" })
+                        }
+                    }
+                    else
+                    {
+                        <img onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="img-thumbnail center-cropped" style="height: 130px; cursor: pointer" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" />
+                    }
+                    <input type="checkbox" class="anunturiCheckbox" id="checkbox @imobil.Id" />
+                </div>
+
+                <div onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="col-xs-12 col-sm-5" style="padding-top: 5px; cursor: pointer">
+                    <div class="col-xs-12 detalii2">
+                        <p style="margin: 0; white-space: nowrap; overflow: hidden">
+                            <b>@Html.DisplayFor(model => imobil.Id) @Html.DisplayFor(model => imobil.Title)</b>
+                        </p>
+                        <p style="margin: 0; white-space: nowrap; overflow: hidden">@Html.DisplayFor(model => imobil.Judet.Nume), @Html.DisplayFor(model => imobil.Oras.Nume), @Html.DisplayFor(model => imobil.TipProprietate), @Html.DisplayFor(model => imobil.Price)</p>
+
+                        @Html.ActionLink(imobil.UserProfile.UserName, "Index", "Administrare", new {userid = imobil.UserProfile.Id}, null)
+                        <br/>
+                        @if (imobil.StareAprobare == StareAprobare.Aprobat)
+                        {
+                            <span class="label label-success">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                        }
+                        else if (imobil.StareAprobare == StareAprobare.Dezactivat || imobil.StareAprobare == StareAprobare.Expirat || imobil.StareAprobare == StareAprobare.Respins)
+                        {
+                            <span class="label label-danger">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                        }
+                        else if (imobil.StareAprobare == StareAprobare.Vandut || imobil.StareAprobare == StareAprobare.InAsteptare)
+                        {
+                            <span class="label label-info">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                        }
+                        else
+                        {
+                            <span class="label label-danger">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                        }
+                        @switch (imobil.PromotedLevel)
+                        {
+                            case PromovatLevel.PromovatNormal:
+                                <span class="label label-success"><span class="glyphicon glyphicon-star"></span> promovat normal</span>
+                                break;
+                            case PromovatLevel.SuperPromovat:
+                                <span class="label label-success"><span class="glyphicon glyphicon-star"></span> super promovat</span>
+                                break;
+                            case PromovatLevel.ExceptionalPromovat:
+                                <span class="label label-success"><span class="glyphicon glyphicon-star"></span> exceptional promovat</span>
+                                break;
+                        }
+                        <span class="glyphicon glyphicon-eye-open"></span> @imobil.NumarVizualizari
+                        <br/>
+                        Adaugare/React: @Html.DisplayFor(model => imobil.DataAdaugare)
+                        <br/>
+                        Ad initiala: @Html.DisplayFor(model => imobil.DataAdaugareInitiala)
+                        @if (imobil.DataAprobare != null)
+                        {
+                            <br/>
+                            <text>Aprobare:</text>
+                            @Html.DisplayFor(model => imobil.DataAprobare)
+                        }
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-5 detalii3" style="padding-top: 15px">
+                    @if (imobil.StareAprobare == StareAprobare.InAsteptare)
+                    {
+                        <a class="js-aproba-anunt btn btn-success" data-anunt-id="@imobil.Id">
+                            <span class="glyphicon glyphicon-ok" data-anunt-id="@imobil.Id"></span> Aproba
+                        </a>
+                    }
+                    <a href="@Url.Action("AnuntEditare", "Administrare", new {id = imobil.Id})" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+                    @Html.HiddenFor(model => imobil.Id)
+                    <select style="width: 110px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget ChangeState">
+                        @foreach (StareAprobare stareAprobare in Enum.GetValues(typeof(StareAprobare)))
+                        {
+                            if (stareAprobare != StareAprobare.Toate)
+                            {
+                                <option @(imobil.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+                            }
+                        }
+                    </select>
+                    <a class="js-reactualizeaza-anunt btn btn-success" data-anunt-id="@imobil.Id">
+                        <span class="glyphicon glyphicon-refresh" data-anunt-id="@imobil.Id"></span> React
+                    </a>
+
+                    <p class="btn btn-success" style="display: inline-block; margin-top: 2px" onclick="emailDiv('@imobil.Id', '@imobil.UserProfile.UserName', '@imobil.ContactEmail', '@imobil.Title', '@imobil.UserId')">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                    </p>
+
+                    <a class="js-sterge-anunt btn btn-danger" data-anunt-id="@imobil.Id">
+                        <span class="glyphicon glyphicon-trash" data-anunt-id="@imobil.Id"></span>
+                    </a>
+                </div>
+                @if (!string.IsNullOrEmpty(imobil.ObservatiiAdmin))
+                {
+                    var observatii = imobil.ObservatiiAdmin.Split('|');
+                    <select class ="combobox" style="margin: 5px">
+                        <option>@observatii.Length - @observatii.Last().Truncate(45)</option>
+                        @foreach (var judet in observatii)
+                        {
+                            <option value="@judet">@judet</option>
+                        }
+                    </select>
+                }
+            </div>
+        }
+    </div>
+    <hr />
+    <select style="width: 110px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" id="StareAprobareSelectList" name="StareAprobareSelectList">
+        @foreach (StareAprobare stareAprobare in Enum.GetValues(typeof(StareAprobare)))
+        {
+            <option value="@stareAprobare">@stareAprobare</option>
+        }
+    </select>
+    <p id="anunturiSelectate" style="display: inline-block"></p>
+    <text>Schimba stare la toate anunturi selectate</text>
+
+    if (Model.NumberOfPages > 1)
+    {
+        <p style="margin: 10px 0 0 0">Pagina @Model.ImobilFilter.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+}
+else
+{
+    <h3>Nu exista imobile pentru criteriile selectate</h3>
+}
+
+<div id="light" class="white_content">
+    <a href="javascript:void(0)" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();">Inchide Fereastra</a>
+    @using (Html.BeginForm("SendEmailReactualizare", "SuperAdmin", FormMethod.Post))
+    {
+        <p style="display: inline-block">Anunt id:</p>
+        <input style="display: inline-block; width: 50px" id="emailConfirmareAnuntId" name="emailConfirmareAnuntId" readonly="readonly" />
+        <input type="hidden" style="display: inline-block; width: 50px" id="emailConfirmareUserId" name="emailConfirmareUserId" readonly="readonly" />
+        <p style="display: inline-block">Titlu:</p>
+        <input style="display: inline-block; width: 60%" id="emailConfirmareAnuntTitlu" name="emailConfirmareAnuntTitlu" readonly="readonly" />
+        <br />
+        <p style="display: inline-block">Email:</p>
+        <input style="display: inline-block; width: 30%" id="emailConfirmareAnuntEmail" name="emailConfirmareAnuntEmail" />
+        <select style="width: 30%; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" id="adresaEmailTip"></select>
+        <br />
+        <br />
+        <p style="display: inline-block">Template:</p>
+        <select style="width: 70%; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="EmailTemplateHumanReadableId">
+            @foreach (var emailTemplate in Model.EmailTemplates)
+            {
+                <option value="@emailTemplate.HumanReadableEmailIdentifier">@emailTemplate.HumanReadableEmailIdentifier</option>
+            }
+        </select>
+        @*<br/>
+            <br/>
+            <p style="display: inline-block">Mesaj:</p>
+            <textarea style="display: inline-block; min-height: 110px; width: 100%" id="emailConfirmareAnuntMesaj" name="emailConfirmareAnuntMesaj"></textarea>*@
+        <br />
+        <br />
+        <input type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />
+        <input type="submit" value="Trimite Email" onclick="if ($('#emailConfirmareAnuntEmail').val().indexOf('Nu are email definit') != -1) { return confirm('Adresa de email invalida, apasati cancel!!!'); }" />
+        <input type="button" value="Anuleaza" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();" />
+    }
+
+</div>
+<div id="fade" class="black_overlay"></div>
+
+<style>
+    .black_overlay {
+        display: none;
+        position: fixed;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index: 1001;
+        -moz-opacity: 0.4;
+        opacity: .40;
+        filter: alpha(opacity=40);
+    }
+
+    .white_content {
+        display: none;
+        position: fixed;
+        top: 25%;
+        left: 25%;
+        width: 50%;
+        height: 50%;
+        padding: 16px;
+        border: 10px solid #a7d582;
+        background-color: white;
+        z-index: 1002;
+        overflow: auto;
+    }
+</style>
+
+@section Scripts {
+    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+    @Html.Partial("_GenericPaging")
+    <script>
+        $(function () {
+            $(".ChangeState").change(function () {
+                //var url = "YourUrl/" + $(this).val(); //Append Id To URL
+                //window.location.replace(url);
+
+                var url = '@Url.Action("ChangeImobilState", "SuperAdmin", new {id = "__id__", stare = "__stare__", returnUrl = "__returnUrl__"})';
+                var tempPath = url.replace(/__id__/g, $(this).prev().val());
+                //&amp seems to be a general problema when passing params, therefore replace with simple &
+                var tempPath2 = tempPath.replace(/__stare__/g, $(this).val());
+                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g, "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));
+                window.location.href = finalPath;
+            });
+        });
+
+        function navigateToAnunt() {
+            var url = '@Url.Action("ApartamentDetalii", "Anunturi", new {imobilId = "__imobilId__"})';
+            if ($("#imobilIdSearchField").val() != 0) {
+                window.location = url.replace('__imobilId__', $("#imobilIdSearchField").val());
+            } else {
+                alert('Introduceti un Id!');
+            }
+        }
+
+        function navigateToAnuntByTile() {
+            var url = '@Url.Action("SearchAnuntByTitle", "SuperAdmin", new {titluAnunt = "__titluAnunt__" })';
+            if ($("#titluAnuntSearchField").val() != 0) {
+                window.location = url.replace('__titluAnunt__', $("#titluAnuntSearchField").val());
+            } else {
+                alert('Introduceti un titlu de anunt!');
+            }
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            //$("#emailTip").change(function () {
+            //    FormatFinalMesaj();
+            //});
+
+            $("#adresaEmailTip").change(function () {
+                $("#emailConfirmareAnuntEmail").val($("#adresaEmailTip").val());
+            });
+
+            $("#fade").on("click", function () {
+                $("#light").hide();
+                $("#fade").hide();
+            });
+
+            $(".datepickerDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                onSelect: function () {
+                    document.getElementById('PickForm').submit();
+                }
+            });
+        });
+
+        function emailDiv(imobilId, user, contactEmail, titlu, userId) {
+            $("#adresaEmailTip").children().remove();
+            document.getElementById('light').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+            $("#emailConfirmareAnuntId").val(imobilId);
+            $("#emailConfirmareAnuntTitlu").val(titlu);
+            $("#emailConfirmareUserId").val(userId);
+
+            if (contactEmail == '') {
+                contactEmail = "Nu are email definit la contact(evtl selectati celalalt email)";
+            }
+
+            var o1 = new Option(contactEmail, contactEmail);
+            $(o1).html(contactEmail);
+            $("#adresaEmailTip").append(o1);
+
+            var o = new Option(user, user);
+            /// jquerify the DOM object 'o' so we can use the html method
+            $(o).html(user);
+            $("#adresaEmailTip").append(o);
+
+            //FormatFinalMesaj();
+            $("#emailConfirmareAnuntEmail").val($("#adresaEmailTip").val());
+        }
+    </script>
+    <script>
+        var anunturiSelectate = new Array();
+        $(document).ready(function () {
+            $(".anunturiCheckbox").attr('checked', false);
+            $(".anunturiCheckbox").change(function () {
+                var n = $(this).attr('id').split(" ");
+                var id = n[n.length - 1];
+                if ($(this).is(":checked")) {
+                    anunturiSelectate.push(id);
+                } else {
+                    var indexToRemove = anunturiSelectate.indexOf(id);
+                    anunturiSelectate.splice(indexToRemove, 1);
+                }
+                $("#anunturiSelectate").text(anunturiSelectate.join(","));
+            });
+
+            $("#StareAprobareSelectList").change(function () {
+                var stareNoua = $(this).val();
+                var idList = anunturiSelectate.join(",");
+
+                var url = '@Url.Action("SchimbaStareMultipleAnunturi", "SuperAdmin", new {stareNoua = "__stareNoua__", ids = "__ids__", returnUrl = "__returnurl__"})';
+                var tempPath1 = url.replace(/__stareNoua__/g, stareNoua);
+                //&amp seems to be a general problema when passing params, therefore replace with simple &
+                var tempPath2 = tempPath1.replace(/&amp;ids=__ids__/g, "&ids=" + idList);
+                var currentUrl = encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri');
+                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnurl__/g, "&returnUrl=" + currentUrl);
+                window.location.href = finalPath;
+            });
+
+
+            //New webapi stuff
+            $(".js-reactualizeaza-anunt").click(function (e) {
+                var link = $(e.target);
+                $.post("/api/WebApiSuperAdmin/AnuntReactualizare", { AnuntId: link.attr("data-anunt-id") })
+                    .done(function () {
+                        //link.parents("li").fadeOut(function () {
+                        //    $(this).remove();
+                        //});
+
+                        link.closest(".anunt").css('backgroundColor', 'rgb(192, 254, 253)');
+                        var parentDiv = link.closest(".anunt");
+                        parentDiv.prependTo("#anunturi");
+
+                    })
+                    .fail(function () {
+                        alert("Something failed!");
+                    });
+            });
+
+            $(".js-aproba-anunt").click(function(e) {
+                var link = $(e.target);
+                $.post("/api/WebApiSuperAdmin/AnuntAprobat", { AnuntId: link.attr("data-anunt-id") })
+                    .done(function() {
+                        link.closest(".anunt").css('backgroundColor', 'rgb(116, 255, 116)');
+                        //Update text to Aprobat
+                        var span = link.closest(".anunt").find(".detalii2").find('span').first();
+                        span.switchClass("label-info", "label-success");
+                        span.text("Aprobat");
+                        //Hide buttons
+                        link.closest(".anunt").find(".detalii3").fadeOut();
+                        //Move to top
+                        var parentDiv = link.closest(".anunt");
+                        parentDiv.prependTo("#anunturi");
+                    })
+                    .fail(function() {
+                        alert("Something failed!");
+                    });
+            });
+
+            $(".js-sterge-anunt").click(function (e) {
+                var link = $(e.target);
+
+                bootbox.dialog({
+                    message: "Sunteti sigur ca doriti sa stergeti permanent anuntul?",
+                    title: "Confirm",
+                    buttons: {
+                        no: {
+                            label: "Nu",
+                            className: "btn-default",
+                            callback: function () {
+                                bootbox.hideAll();
+                            }
+                        },
+                        yes: {
+                            label: "Da",
+                            className: "btn-danger",
+                            callback: function () {
+                                $.post("/api/WebApiSuperAdmin/AnuntStergere", { AnuntId: link.attr("data-anunt-id") })
+                                    .done(function () {
+                                        link.closest(".anunt").css('backgroundColor', 'rgb(249, 0, 0)');
+                                        var parentDiv = link.closest(".anunt");
+                                        parentDiv.fadeOut();
+                                        //alert("OK!");
+                                    })
+                                    .fail(function () {
+                                        alert("Something failed!");
+                                    });
+                            }
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,69 @@
+﻿@model Imobiliare.UI.Models.SugestiiCautareData
+
+@{
+    ViewBag.Title = "Sugestii cautare";
+    ViewBag.MetaDescription = "Sugestii de cautare pentru site-ul de anunturi imobiliare apartamente24.";
+}
+
+<h3>Ne pare rau, nu am gasit rezultate pentru textul " @Model.Text "</h3>
+<br/><br/>
+@if (Model.Rezultate.Count > 0)
+{
+    <h3>Sau cautati unul dintre urmatoarele rezultate?</h3>
+    <br/>
+    foreach (var s in @Model.Rezultate)
+    {
+        @Html.ActionLink(s, "SearchForValue", "Anunturi", new { searchValue = s, tipOferta1 = "ApartamentVanzare" }, new { style = "font-size: 1.3em" })
+        <br/>
+    }
+}
+else
+{
+    <h3>Sau alegeti un judet</h3>
+    <br />
+    <br />
+    <div style="cursor: pointer; background-color: #F9F9F9; padding-bottom: 20px">
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Alba")"><h3 class="availableJudet">Alba</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Arad")"><h3 class="availableJudet">Arad</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Arges")"><h3 class="availableJudet">Arges</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Bacau")"><h3 class="availableJudet">Bacau</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Bihor")"><h3 class="availableJudet">Bihor</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Bistrita-Nasaud")"><h3 class="availableJudet">Bistrita-Nasaud</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Botosani")"><h3 class="availableJudet">Botosani</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Braila")"><h3 class="availableJudet">Braila</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Brasov")"><h3 class="availableJudet">Brasov</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Bucuresti-Ilfov")"><h3 class="availableJudet">Bucuresti-Ilfov</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Buzau")"><h3 class="availableJudet">Buzau</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Calarasi")"><h3 class="availableJudet">Calarasi</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Caras-Severin")"><h3 class="availableJudet">Caras-Severin</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Cluj")"><h3 class="availableJudet">Cluj</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Constanta")"><h3 class="availableJudet">Constanta</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Covasna")"><h3 class="availableJudet">Covasna</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Dambovita")"><h3 class="availableJudet">Dambovita</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Dolj")"><h3 class="availableJudet">Dolj</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Galati")"><h3 class="availableJudet">Galati</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Giurgiu")"><h3 class="availableJudet">Giurgiu</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Gorj")"><h3 class="availableJudet">Gorj</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Harghita")"><h3 class="availableJudet">Harghita</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Hunedoara")"><h3 class="availableJudet">Hunedoara</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Ialomita")"><h3 class="availableJudet">Ialomita</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Iasi")"><h3 class="availableJudet">Iasi</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Ilfov")"><h3 class="availableJudet">Ilfov</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Maramures")"><h3 class="availableJudet">Maramures</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Mehedinti")"><h3 class="availableJudet">Mehedinti</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Mures")"><h3 class="availableJudet">Mures</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Neamt")"><h3 class="availableJudet">Neamt</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Olt")"><h3 class="availableJudet">Olt</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Prahova")"><h3 class="availableJudet">Prahova</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Salaj")"><h3 class="availableJudet">Salaj</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Satu-Mare")"><h3 class="availableJudet">Satu-Mare</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Sibiu")"><h3 class="availableJudet">Sibiu</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Suceava")"><h3 class="availableJudet">Suceava</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Teleorman")"><h3 class="availableJudet">Teleorman</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Timis")"><h3 class="availableJudet">Timis</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Tulcea")"><h3 class="availableJudet">Tulcea</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Valcea")"><h3 class="availableJudet">Valcea</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Vaslui")"><h3 class="availableJudet">Vaslui</h3></a>
+        <a href="@(Url.Content("~/") + "Anunturi/judet-Vrancea")"><h3 class="availableJudet">Vrancea</h3></a>
+    </div>
+}

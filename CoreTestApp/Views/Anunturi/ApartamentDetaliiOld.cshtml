@@ -1,0 +1,950 @@
+﻿@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.Entities
+@using Imobiliare.UI.Utils
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.ApartamentDetaliiData
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorNoImobilAvailable))
+{
+    <h3 class="alert alert-danger">@ViewBag.ErrorNoImobilAvailable</h3>
+    return;
+}
+
+@{
+    string formattedTitle = HtmlHelpers.RemoveSpecialCharacters(Model.Imobil.Title, ' ', false, true) + " ";
+    formattedTitle += "- " + Model.Imobil.Id;
+    formattedTitle += " - " + TipOfertaDisplayFormatter.GetDisplayString(Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen);
+    formattedTitle = HttpUtility.HtmlDecode(formattedTitle);
+    ViewBag.Title = formattedTitle;
+
+    string metaDescription = TipOfertaDisplayFormatter.GetDisplayString(Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen);
+    metaDescription += " " + Model.Imobil.Oras.Nume;
+    if (Model.Imobil.Cartier != null)
+    {
+        metaDescription += ", " + Model.Imobil.Cartier.Nume;
+    }
+    if (Model.Imobil.NumarCamere > 0)
+    {
+        metaDescription += ", " + Model.Imobil.NumarCamere + " Camere";
+    }
+    if (Model.Imobil.Etaj > 0)
+    {
+        metaDescription += ", Etajul " + Model.Imobil.Etaj;
+    }
+    if (Model.Imobil.Suprafata > 0)
+    {
+        metaDescription += ", Suprafata " + Model.Imobil.Suprafata;
+    }
+    if (Model.Imobil.TipVanzator > 0)
+    {
+        metaDescription += ", " + TipVanzatorDisplayFormatter.GetDisplayString(Model.Imobil.TipVanzator);
+    }
+    if (Model.Imobil.VechimeImobil > 0)
+    {
+        metaDescription += ", Anul constructiei " + Model.Imobil.VechimeImobil;
+    }
+    ViewBag.MetaDescription = HttpUtility.HtmlDecode(metaDescription) + " - " + Model.Imobil.Id;
+
+    ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+    ViewBag.ShareTitle = formattedTitle;
+    ViewBag.ShareDescription = formattedTitle;
+    ViewBag.ShareImage = "http://www.apartamente24.ro/Images/uploadedPhotos/" + Model.Imobil.FirstPhoto;
+    ViewBag.ShareImageHeight = 480;
+    ViewBag.ShareImageWidth = 640;
+}
+
+<style type="text/css">
+    .checkboxBool {
+        width: 20px;
+        height: 15px;
+    }
+
+    .panel-heading {
+        font-weight: bolder;
+    }
+</style>
+
+@if (Request.UrlReferrer != null)
+{
+    <a class="btn btn-light" onclick="history.go(-1); return false;" href="#" style="margin: 5px 0 10px 0"><span class="glyphicon glyphicon-arrow-left"></span> Înapoi</a>
+}
+
+@if (@Model.Imobil.StareAprobare != StareAprobare.Aprobat)
+{
+    <div>
+        @if (@Model.Imobil.StareAprobare == StareAprobare.InAsteptare)
+        {
+            <h2 class="alert alert-success"><span class="glyphicon glyphicon-ok-circle"></span> Anunțul urmează a fi aprobat după ce va fi analizat de către un moderator.</h2>
+        }
+        else
+        {
+            <h2 class="alert alert-warning"><span class="glyphicon glyphicon-info-sign"></span> Stare Anunț: @Model.Imobil.StareAprobare</h2>
+        }
+    </div>
+}
+
+<div id="fb-root"></div>
+<script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=273830189442081";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+<div class="row panel panel-success">
+    <div class="panel-heading">Date Generale</div>
+    <div class="panel-body">
+        <div class="col-sm-6 col-md-6" style="font-size: 1.3em; font-weight: bold !important; vertical-align: top;">
+            @if (@Model.Imobil.DataAdaugareInitiala.AddDays(14) > DateTime.Now)
+            {
+                <span style="color: #53b50a; font-weight: normal"> NOU </span>
+            }
+            @if (@Model.Imobil.PromotedLevel > PromovatLevel.Nepromovat)
+            {
+                <span style="color: #53b50a; font-weight: normal"> PROMOVAT </span>
+            }
+            <h1 style="width: 100%; font-size: 1em; margin-top: 5px; margin-bottom: 10px">@Model.Imobil.Title</h1>
+            @if (@Model.Imobil.Cartier != null)
+            {
+                <p>Cartier: @Model.Imobil.Cartier.Nume</p>
+            }
+            @if (!string.IsNullOrEmpty(@Model.Imobil.Strada))
+            {
+                <p>Strada: @Model.Imobil.Strada</p>
+            }
+            @if (@Model.Imobil.Oras != null)
+            {
+                <p>@Model.Imobil.Oras.Nume, @Model.Imobil.Judet.Nume</p>
+            }
+            <div class="fb-share-button"
+                 data-layout="button_count">
+            </div>
+        </div>
+        <hr class="visible-xs" />
+        <div class="col-sm-6 col-md-push-3 col-md-3" style="vertical-align: top">
+            @*div used for getting with jquery the id!!*@
+            <div class="descriereApartament" style="margin-bottom: 10px">
+                <p style="display: none" class="imobilIdClass">@Model.Imobil.Id</p>
+                <button class="salveazaAnunt btn btn-success">
+                    @{
+                        //Get cookie with saved anunturi to see if this anunt is saved
+                        var anunturiSalvate = new List<string>();
+                        var anunturiSalvateCookie = Request.Cookies["AnunturiSalvate"];
+                        if (anunturiSalvateCookie != null)
+                        {
+                            var formattedCookie = anunturiSalvateCookie.Value.Replace("%2C", ",");
+                            anunturiSalvate = new List<string>(formattedCookie.Split(','));
+                        }
+                    }
+                    @if (anunturiSalvate.Contains(Model.Imobil.Id.ToString()))
+                    {
+                        <span class="glyphicon glyphicon-heart red"></span>
+                        <p style="display: inline-block; margin:0 0 0 5px; cursor: pointer; font-size: 0.9em">Salvat</p>
+                    }
+                    else
+                    {
+                        <span class="glyphicon glyphicon-heart"></span>
+                        <p style="display: inline-block; margin:0 0 0 5px; cursor: pointer; font-size: 0.9em">Salvează</p>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.Imobil.Poze != null)
+{
+    <div class="row panel-success">
+        @foreach (var poza in @Model.Imobil.Poze.Split(';'))
+        {
+            <div class="col-xs-12 col-sm-6 col-md-4 img-thumbnail">
+                <a class="fancybox fancybox-thumbs anchor-link-spanner" href="~/Images/uploadedPhotos/@poza" data-fancybox-group="gallery" title="@Model.Imobil.Title">
+                    <img class="center-cropped" style="vertical-align: top; height: 200px" src="~/Images/uploadedPhotos/@poza" alt="@HtmlHelpers.RemoveSpecialCharacters(Model.Imobil.Title, ' ', false)" />
+                </a>
+            </div>
+        }
+    </div>
+    <br />
+}
+<div style="margin-bottom: 10px">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Ap 25 Reclama anunturi / categorii -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1474334984782094"
+         data-ad-slot="5459285763"
+         data-ad-format="auto"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
+<div class="row panel panel-success" style="font-size: 1.2em">
+    <div class="panel-heading">Detalii</div>
+    <div class="panel-body">
+        <div class="col-sm-12" style="margin-bottom: 20px">
+            <h3>@TipOfertaDisplayFormatter.GetDisplayString(Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) Id:@Model.Imobil.Id</h3>
+
+            <p style="width: 100%; margin-top: 10px">
+                <b>
+                    @Html.Raw(@Model.Imobil.Descriere.Replace(Environment.NewLine, "<br/>"))
+                </b>
+            </p>
+        </div>
+        <div class="col-sm-6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Preț:</td>
+                        <td><strong>@PriceFormatter.FormatPrice(Model.Imobil.Price) €</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Suprafață:</td>
+                        <td>@Model.Imobil.Suprafata mp</td>
+                    </tr>
+
+                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen))
+                    {
+                        <tr>
+                            <td>Număr camere:</td>
+                            <td>@(Model.Imobil.NumarCamere > 0 ? Model.Imobil.NumarCamere.ToString() : "-")</td>
+                        </tr>
+                    }
+                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Etaj, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen))
+                    {
+                        string etajeFormatat = "-";
+                        if (Model.Imobil.Etaj != 0)
+                        {
+                            switch (Model.Imobil.Etaj)
+                            {
+                                case -1:
+                                    etajeFormatat = "Mansarda";
+                                    break;
+                                case -4:
+                                    etajeFormatat = "-";
+                                    break;
+                                case -3:
+                                    etajeFormatat = "Demisol";
+                                    break;
+                                case -2:
+                                    etajeFormatat = "Parter";
+                                    break;
+                                default:
+                                    etajeFormatat = Model.Imobil.Etaj.ToString();
+                                    break;
+                            }
+                        }
+
+                        if (Model.Imobil.NumarTotalEtaje > 0)
+                        {
+                            etajeFormatat += " din " + Model.Imobil.NumarTotalEtaje + " Etaje";
+                        }
+                        <tr>
+                            <td>Etaj:</td>
+                            <td>@etajeFormatat</td>
+                        </tr>
+                    }
+                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBalcoane, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen))
+                    {
+                        string numarBalcoane;
+                        switch (Model.Imobil.NrBalcoane)
+                        {
+                            case 0:
+                            case null:
+                                numarBalcoane = "-";
+                                break;
+                            case -1:
+                                numarBalcoane = "Nu are balcon";
+                                break;
+                            default:
+                                numarBalcoane = Model.Imobil.NrBalcoane.ToString();
+                                break;
+                        }
+                        <tr>
+                            <td>Număr Balcoane:</td>
+                            <td>@numarBalcoane</td>
+                        </tr>
+                    }
+                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBai, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen))
+                    {
+                        string numarBai = Model.Imobil.NrBai > 0 ? Model.Imobil.NrBai.ToString() : "-";
+                        <tr>
+                            <td>Număr băi:</td>
+                            <td>@numarBai</td>
+                        </tr>
+                    }
+
+                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AnulConstructiei, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen))
+                    {
+                        string vechime = Model.Imobil.VechimeImobil > 0 ? Model.Imobil.VechimeImobil.ToString() : "-";
+                        <tr>
+                            <td>Vechime Imobil:</td>
+                            <td>@vechime</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>Data adăugării:</td>
+                        <td>@Model.Imobil.DataAdaugare.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                    @*<tr>
+                            <td>Valabilitate:</td>
+                            <td>@Model.Imobil.Valabilitate zile (@Model.Imobil.DataAdaugare.AddDays(@Model.Imobil.Valabilitate).ToString("dd/MM/yyyy"))</td>
+                        </tr>*@
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6 col-md-push-2">
+            @if (Model.Imobil.Negociabil)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.Negociabil ? "glyphicon-check" : "glyphicon-unchecked") @(Model.Imobil.Negociabil ? "green" : "red")"></span> Negociabil
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AerConditionat, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.AerConditionat)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.AerConditionat ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.AerConditionat ? "green":"red")"></span> Aer Condiționat
+                </p>
+            }
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Centralatermica, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.CT)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.CT ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.CT ? "green":"red")"></span> Centrală termică
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Garaj, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.Garaj)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.Garaj ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.Garaj ? "green":"red")"></span> Garaj
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocParcare, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.LocParcare)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.LocParcare ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.LocParcare ? "green":"red")"></span> Loc Parcare
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Decomandat, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.Decomandat)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.Decomandat ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.Decomandat ? "green":"red")"></span> Decomandat
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Finisat, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.Finisat)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.Finisat ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.Finisat ? "green":"red")"></span> Finisat
+                </p>
+            }
+
+            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocInPivnita, Model.Imobil.TipProprietate, Model.Imobil.TipOfertaGen) && Model.Imobil.LocInPivnita)
+            {
+                <p>
+                    <span style="font-size: 1.3em" class="glyphicon @(Model.Imobil.LocInPivnita ? "glyphicon-check":"glyphicon-unchecked") @(Model.Imobil.LocInPivnita ? "green":"red")"></span> Loc In Pivnița
+                </p>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row panel panel-success">
+    <div class="panel-heading">Contact</div>
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-6 col-md-5" style="padding-left: 15px">
+            <p>Tip Vânzator: @TipVanzatorDisplayFormatter.GetDisplayString(Model.Imobil.TipVanzator)</p>
+
+            @if (Model.UserProfile.Agentie != null)
+            {
+                <a href="@AgentiiImobiliareUrls.AgentieImobiliaraUrl(Model.UserProfile.Agentie, Model.Imobil.Oras)">
+                    Agenție imobiliară: @Model.UserProfile.Agentie.Nume
+                </a>
+                if (!string.IsNullOrEmpty(Model.UserProfile.Agentie.PozaAgentie))
+                {
+                    <a href="@AgentiiImobiliareUrls.AgentieImobiliaraUrl(Model.UserProfile.Agentie, Model.Imobil.Oras)">
+                        <div style="max-height: 110px; max-width: 170px">
+                            <img style="max-height: 110px; max-width: 170px" src="~/Images/LogoAgentii/@Model.UserProfile.Agentie.PozaAgentie" />
+                        </div>
+                    </a>
+                    <br />
+                    <br />
+                    <div class="clearfix"></div>
+                }
+            }
+
+            @if (Model.UserProfile.Role != Role.Administrator && Model.UserProfile.TipVanzator != TipVanzator.PersoanaFizica)
+            {
+                <a href="@Url.Action("AnunturiUtilizator", "Anunturi", new {userId = @Model.UserProfile.Id})">
+                    <div>
+                        @if (!string.IsNullOrEmpty(Model.UserProfile.Picture))
+                        {
+                            <img style="max-height: 100px; max-width: 100px; display: inline-block" src="~/Images/profileImages/@Model.UserProfile.Picture" />
+                        }
+                        else
+                        {
+                            <img style="max-height: 100px; max-width: 100px; display: inline-block" src="~/Images/DecorationImages/profile-icon.png" />
+                        }
+                    </div>
+                </a>
+
+                if (!string.IsNullOrEmpty(Model.UserProfile.NumeComplet))
+                {
+                    <p style="display: inline-block">Agent: @Model.UserProfile.NumeComplet</p>
+                }
+            }
+
+            <hr />
+            <p id="TelefonContact">
+                <span class="glyphicon glyphicon-phone"></span>&nbsp;Telefon: <span style="font-size: 1em; cursor: pointer" class="label label-success" id="contactVanzatorButton">07.. Arata Telefon</span>
+            </p>
+            <hr />
+
+            @if (Model.UserProfile.Role != Role.Administrator)
+            {
+                <a href="@Url.Action("AnunturiUtilizator", "Anunturi", new { userId = @Model.UserProfile.Id })">Arată anunțurile utilizatorului</a>
+                <br />
+                <br />
+            }
+            <a data-toggle="modal" data-target="#modalRaporteazaAnuntInvalid" style="cursor: pointer"><span class="glyphicon glyphicon-exclamation-sign red"></span> Raportează Anunț Invalid</a>
+
+            <hr class="visible-xs" />
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-7" @*style="border-left: 1px solid #a7d582;"*@>
+            @*<input type="button" class="btn btn-success" value="Arata Telefon" id="contactVanzatorButton" />*@
+            @if (!String.IsNullOrEmpty(Model.Imobil.ContactEmail))
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
+                    {
+                        <div class="panel panel-success">
+                            <div class="panel-heading">Trimite mesaj vanzatorului</div>
+                            <div class="panel-body">
+                                <input type="hidden" value="@Model.Imobil.Id" name="IdAnuntVanzator" />
+                                <br />
+                                <div class="form-group col-xs-12 floating-label-form-group controls">
+                                    <label>Mesaj</label>
+                                    <textarea rows="4" style="max-width: 600px; width: 100%" id="MesajCumparator" name="MesajCumparator" placeholder="Mesaj" class="form-control">Buna ziua, Am gasit anuntul Dumneavoastra cu titlul @Model.Imobil.Title pe apartamente24.ro. Va rog sa-mi trimiteti informatii suplimentare. Va multumesc.</textarea>
+                                </div>
+
+                                <input type="hidden" value="@Model.Imobil.Id" />
+
+                                <div class="clearfix"></div>
+                                @*Recaptcha is reset in hideContactFormProgress*@
+                                @*<div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag"></div>*@
+
+                                <div style="margin-top: 10px">
+                                    <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
+                                    <p id="loadingMessage" style="display: none">Va rugam asteptati</p>
+                                    <input class="btn btn-success" type="submit" id="TrimiteMesajButton" value="Trimite Mesaj" />
+                                    <div id="resultMesajVanzator" style="color: blue"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <a data-toggle="modal" data-target="#modalAdaugaAnuntLogin" class="btn btn-light"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Trimite Mesaj Vanzatorului</a>
+                }
+            }
+            else
+            {
+                <p><span class="glyphicon glyphicon-envelope red"></span>&nbsp;Email contact nespecificat</p>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row panel panel-success">
+    <div class="panel-heading">Localizare</div>
+    <div class="panel-body">
+        @if (Model.Imobil.GoogleMarkerCoordinates != null)
+        {
+            @*<div id="mapMode" style="margin-bottom: 10px; position: relative; cursor: pointer; width: 175px; background-color: white; box-shadow: none">
+                    <img class="img-rounded" src="~/Images/DecorationImages/hartaGoogleIcon.JPG" style="width: 175px" />
+                    <p style="position: absolute; left: 37px; top: 32px; background-color: white; opacity: 0.9; padding: 5px; border-radius: 3px">
+                        <span class="glyphicon glyphicon-map-marker"></span> Vezi pe hartă
+                    </p>
+                </div>
+                <div style="position: relative">
+                    <div id="map_canvas_detaliiap" style="margin-top: 20px; box-shadow: 4px 4px 3px #888888">
+                    </div>
+                </div>*@
+
+            <div style="position: relative">
+                <div style="position: absolute; margin:auto">
+                    <div id="mapMode" style="margin-bottom: 10px; position: relative; cursor: pointer; width: 175px; background-color: white; box-shadow: none">
+                        <img class="img-rounded" src="~/Images/DecorationImages/hartaGoogleIcon.JPG" style="width: 175px" />
+                        <p style="position: absolute; left: 37px; top: 32px; background-color: white; opacity: 0.9; padding: 5px; border-radius: 3px">
+                            <span class="glyphicon glyphicon-map-marker"></span> Vezi pe hartă
+                        </p>
+                    </div>
+                </div>
+                <div id="map_canvas_detaliiap" style="margin-top: 20px; box-shadow: 4px 4px 3px #888888">
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <img src="~/Images/harta.png" style="margin-top: 10px; padding-left: 10px"><h3 style="display: inline-block; margin-left: 10px">Locație Indisponibilă pe Hartă</h3>
+            </div>
+        }
+    </div>
+
+</div>
+
+@if (Model.AnunturiSimilare.Count > 0)
+{
+    <div class="row panel panel-success">
+        <div class="panel-heading">Anunțuri similare</div>
+        <div class="panel-body">
+            @{
+                var anunturiSimilare = Model.AnunturiSimilare;
+                if (anunturiSimilare.Count > 3)
+                {
+                    anunturiSimilare = anunturiSimilare.GetRange(0, 3);
+                }
+            }
+
+            @foreach (var imobil in anunturiSimilare)
+            {
+            <a href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)" class="col-sm-4">
+                <div class="imageBox" style="text-decoration: none;">
+                    <img class="center-cropped" style="padding: 10px; height: 180px;" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)" />
+                    <div style="padding: 20px">
+                        <div style="height: 30px">
+                            <p>@imobil.Judet.Nume, @imobil.Oras.Nume, @TipOfertaDisplayFormatter.GetDisplayString(imobil.TipProprietate, imobil.TipOfertaGen)</p>
+                        </div>
+                        <h3 style="font-size: 1.4em">68.500€</h3>
+                        @if (imobil.NumarCamere > 0)
+                        {
+                            <p style="margin-bottom: 0px; padding-top: 10px">@imobil.Suprafata m² &nbsp;&nbsp;&nbsp;&nbsp;@imobil.NumarCamere camere</p>
+                        }
+                        else
+                        {
+                            <p style="margin-bottom: 0px; padding-top: 10px">@imobil.Suprafata m²</p>
+                        }
+                    </div>
+                </div>
+            </a>
+            }
+        </div>
+    </div>
+}
+
+@*Show for admin possibility to edit anunt from here*@
+@if (Model.IsCurrentUserAdmin)
+{
+    <div class="row alert alert-info" style="margin-top: 20px">
+        @Html.ActionLink("Editare", "AnuntEditare", "Administrare", new { id = Model.Imobil.Id }, new { @class = "btn btn-success" })
+        @Html.ActionLink("Edit User", "UserEditare", "SuperAdmin", new { userid = Model.Imobil.UserId }, new { @class = "btn btn-success" })
+    </div>
+}
+<div style="margin: 20px 0">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Ap 25 Reclama anunturi / categorii -->
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-1474334984782094"
+         data-ad-slot="5459285763"
+         data-ad-format="auto"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+<section class="main-content container">
+    <h3 style="margin-bottom: 10px">Cele mai căutate rezultate</h3>
+    @{ var judetName = Model.Imobil.Judet.Nume; }
+    <div class="col-xs-12 col-sm-6 col-md-4 " style="border-right: 1px solid #a7d582; margin-bottom: 10px">
+        <p style="font-size: 0.9em; margin-bottom: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente">Apartamente vanzare @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/camere-1-1">Apartamente vanzare 1 camera @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/camere-2-2">Apartamente vanzare 2 camere @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/camere-3-3">Apartamente vanzare 3 camere @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/camere-4-4">Apartamente vanzare 4 camere @judetName</a>
+        </p>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4 " style="border-right: 1px solid #a7d582; margin-bottom: 10px">
+        <p style="font-size: 0.9em; margin-bottom: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Apartamente">Apartamente inchiriat @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Apartamente/camere-1-1">Apartamente inchiriat 1 camera @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Apartamente/camere-2-2">Apartamente inchiriat 2 camere @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Apartamente/camere-3-3">Apartamente inchiriat 3 camere @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Teren">Teren de vanzare in @judetName</a>
+        </p>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-4" style="margin-bottom: 10px">
+        <p style="font-size: 0.9em; margin-bottom: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Garsoniere">Garsoniera vanzare @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Garsoniere">Garsoniera inchiriat @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/vanzator-Persoane-Fizice">Apartamente persoane fizice @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/vanzator-Agentii-Imobiliare">Apartamente agentii imobiliare @judetName</a>
+        </p>
+        <p style="font-size: 0.9em; margin-bottom: 0px; margin-top: 0px;">
+            <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Case">Case de vanzare @judetName</a>
+        </p>
+    </div>
+</section>
+
+<div class="row" style="background-color: #F9F9F9; text-align: center; padding: 10px; margin-top: 5px">
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <a data-toggle="modal" data-target="#modalAdaugaAnuntLogin" class="btn btn-light"><span class="glyphicon glyphicon-plus red"></span>&nbsp;Adaugă Anunț Gratuit</a>
+    }
+    else
+    {
+        <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-light"><span class="glyphicon glyphicon-plus red"></span>&nbsp;Adaugă Anunț Gratuit</a>
+    }
+</div>
+
+<!-- Modal Raporteaza anunt invalid-->
+<div class="modal fade" id="modalRaporteazaAnuntInvalid" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Raportează anunț invalid</h4>
+            </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("TrimiteMesajAbuzAnunt", "Home",
+new AjaxOptions
+{
+UpdateTargetId = "resultMesajAbuz",
+InsertionMode = InsertionMode.Replace,
+OnBegin = "showContactFormProgressAbuz",
+OnSuccess = "hideContactFormProgressAbuz"
+}))
+                {
+                    <div>
+                        <input type="radio" name="SelectAbuzRadioButtons" value="Anuntul nu mai este valid" style="width: 30px" checked="checked">
+                        <p style="display: inline-block">Anunțul nu mai este valid</p>
+                        <br />
+                        <input type="radio" name="SelectAbuzRadioButtons" value="Date de contact invalide" style="width: 30px">
+                        <p style="display: inline-block">Date de contact invalide</p>
+                        <br />
+                        <input type="radio" name="SelectAbuzRadioButtons" value="Datele anuntului nu corespund" style="width: 30px">
+                        <p style="display: inline-block">Datele anunțului nu corespund</p>
+                        <br />
+
+                        <p style="display: inline-block; padding: 0 19px 0 0">Email:</p>
+                        <input type="text" value="Emailul tau" id="EmailContactAbuz" name="EmailContact" />
+                        <input type="hidden" value="@Model.Imobil.Id" name="IdAnuntVanzator" />
+                        <input type="hidden" value="@Model.Imobil.Title" name="TitluAnunt" />
+                        <p>Mesaj</p>
+                        <textarea rows="4" id="MesajAbuzCumparator" name="MesajAbuzCumparator" style="width: 100%"></textarea>
+
+                        @*Recaptcha is reset in hideContactFormProgressAbuz*@
+                        <div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag"></div>
+                        <br />
+                        <img id="loadingGifAbuz" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
+                        <p id="loadingMessageAbuz" style="display: none">Va rugam asteptati</p>
+                        <input class="btn btn-success" type="submit" id="TrimiteMesajButtonAbuz" value="Trimite Mesaj" />
+                        <div id="resultMesajAbuz" style="color: blue"></div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Închide</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Styles.Render("~/Content/fancyBoxAndUploadifycss")
+    @Scripts.Render("~/bundles/fancyBoxAndUploadify")
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?hl=ro" async defer></script>
+    <script>
+        $(document).ready(function () {
+
+            $("#mapMode").on("click",
+                function() {
+                    initialize();
+                    $("#mapMode").hide();
+                });
+
+              //Display history
+              var anunturiVizualizateList = new CookieList("AnunturiVizualizate", 0);
+              if (anunturiVizualizateList.items().length === 4) {
+                var first = anunturiVizualizateList.items()[0];
+                var alreadyInList = false;
+                for (var i = anunturiVizualizateList.items().length - 1; i >= 0; i--) {
+                  if (anunturiVizualizateList.items()[i].split('|')[0] === '@Model.Imobil.Id') {
+                    alreadyInList = true;
+                  }
+                }
+                if (!alreadyInList) {
+                  anunturiVizualizateList.remove(first);
+                  anunturiVizualizateList.add("@Model.Imobil.Id" + "|" + "@Model.Imobil.Price" + "|" + "@Model.Imobil.FirstPhoto");
+                }
+              } else {
+                anunturiVizualizateList.add("@Model.Imobil.Id" + "|" + "@Model.Imobil.Price" + "|" + "@Model.Imobil.FirstPhoto");
+              }
+
+              $('.fancybox').fancybox({
+                padding: 0,
+                openEffect: 'elastic'
+              });
+
+              // Change title type, overlay closing speed
+              $(".fancybox-effects-a").fancybox({
+                helpers: {
+                  title: {
+                    type: 'outside'
+                  },
+                  overlay: {
+                    speedOut: 0
+                  }
+                }
+              });
+
+              $('.fancybox-thumbs').fancybox({
+                prevEffect: 'none',
+                nextEffect: 'none',
+
+                closeBtn: true,
+                arrows: true,
+                nextClick: true,
+
+                helpers: {
+                  thumbs: {
+                    width: 50,
+                    height: 50
+                  }
+                }
+              });
+
+              $('.fancybox-buttons').fancybox({
+                openEffect: 'none',
+                closeEffect: 'none',
+
+                prevEffect: 'none',
+                nextEffect: 'none',
+
+                closeBtn: false,
+
+                helpers: {
+                  title: {
+                    type: 'inside'
+                  },
+                  buttons: {}
+                },
+
+                afterLoad: function() {
+                  this.title = 'Image ' +
+                    (this.index + 1) +
+                    ' of ' +
+                    this.group.length +
+                    (this.title ? ' - ' + this.title : '');
+                }
+              });
+
+              $("#hideContactVanzatorButton").hide();
+              $("#contactForm").hide();
+
+              $("#contactVanzatorButton").click(function() {
+                $("#contactForm").fadeIn();
+
+                //get telefon Number
+                $.getJSON('@Url.Action("RetrieveTelefon", "Home")',
+                  { anuntId: @Model.Imobil.Id },
+                  function(telefon) {
+                    $("#TelefonContact").html('<span class="glyphicon glyphicon-phone"></span>Telefon: ' + telefon);
+                  });
+                $("#hideContactVanzatorButton").show();
+                $("#contactVanzatorButton").hide();
+              });
+
+              $("#hideContactVanzatorButton").click(function() {
+                $("#contactForm").fadeOut();
+                $("#contactVanzatorButton").show();
+                $("#hideContactVanzatorButton").hide();
+              });
+
+              $("#fade").on("click",
+                function() {
+                  $("#light").hide();
+                  $("#fade").hide();
+                });
+
+              $("#EmailCumparator").on("click",
+                function() {
+                  $("#EmailCumparator").val('');
+                });
+              $("#TelefonCumparator").on("click",
+                function() {
+                  $("#TelefonCumparator").val('');
+                });
+              $("#TrimiteMesajButton").on("click",
+                function() {
+                  $("#resultMesajVanzator").html("");
+                });
+
+              $("#EmailContactAbuz").on("click",
+                function() {
+                  $("#EmailContactAbuz").val('');
+                });
+
+              $("#TrimiteMesajButtonAbuz").on("click",
+                function() {
+                  $("#resultMesajAbuz").html("");
+                });
+            });
+
+            function showContactFormProgress() {
+              $('#loadingGif').show();
+              $('#loadingMessage').show();
+              $("#TrimiteMesajButton").hide();
+            }
+
+            function hideContactFormProgress() {
+              $('#loadingGif').hide();
+              $('#loadingMessage').hide();
+              $("#TrimiteMesajButton").show();
+              //TODO Do not rely on "Eroare" text
+              if ($('#resultMesajVanzator').text().indexOf("Eroare") == -1) {
+                $("#EmailCumparator").val("Emailul tau");
+                $("#TelefonCumparator").val("Telefonul tau");
+                $("#MesajCumparator").val('');
+                $("#resultMesajVanzator").css("color", "blue");
+              } else {
+                //Keep values for editing
+                $("#resultMesajVanzator").css("color", "red");
+              }
+
+              //Reset Recaptcha here and in hideContactFormProgressAbuz
+              grecaptcha.reset();
+
+              //Show status message
+              alert($('#resultMesajVanzator').text());
+            }
+
+            function showContactFormProgressAbuz() {
+              if (grecaptcha.getResponse()) {
+                $('#loadingGifAbuz').show();
+                $('#loadingMessageAbuz').show();
+                $("#TrimiteMesajButtonAbuz").hide();
+                return true;
+              } else {
+                alert("Vă rugăm bifați căsuta că nu sunteți robot");
+                return false;
+              }
+            }
+
+            function hideContactFormProgressAbuz() {
+              $('#loadingGifAbuz').hide();
+              $('#loadingMessageAbuz').hide();
+              $("#TrimiteMesajButtonAbuz").show();
+
+              if ($('#resultMesajAbuz').text().indexOf("Eroare") == -1) {
+                $("#EmailContactAbuz").val("Emailul tau");
+                $("#MesajAbuzCumparator").val('');
+                $("#resultMesajAbuz").css("color", "blue");
+              } else {
+                //Keep values for editing
+                $("#resultMesajAbuz").css("color", "red");
+              }
+
+              //Reset Recaptcha here and in hideContactFormProgress
+              grecaptcha.reset();
+            }
+    </script>
+    @if (Model.Imobil.GoogleMarkerCoordinates != null)
+    {
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvy0awt3m-qB2Ko9ZQfNYqvZO6FNy-Ns" type="text/javascript"></script>
+        <script>
+              function initialize() {
+                var mapOptions = {
+                  zoom: 13,
+                  scrollwheel: false,
+                  streetViewControl: false,
+                  center: new google.maps.LatLng(46.777248, 23.599889)
+                };
+                var map = new google.maps.Map(document.getElementById('map_canvas_detaliiap'),
+                  mapOptions);
+
+                var lat = '@Model.Imobil.GoogleMarkerCoordinates.Split(',')[0]';
+                //alert('@Model.Imobil.GoogleMarkerCoordinates.Split(',')[1]');
+                var longu = '@Model.Imobil.GoogleMarkerCoordinates.Split(',')[1]';
+
+                  placeMarker(new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, "")), map);
+              }
+
+              function placeMarker(position, map) {
+                //depends on url how many slashes / it has
+                var image = '../../../../Images/markerApartment5.png';
+                var marker = new google.maps.Marker({
+                  position: position,
+                  map: map,
+                  icon: image
+                  });
+                map.panTo(position);
+                attachSecretMessage(marker, map);
+              }
+
+            function attachSecretMessage(marker, map) {
+                  //TODO: DAPI Check if we can remove the if
+                var image = '';
+                @if (true)
+                {
+                  <text>
+                    image = 'uploadedPhotos/' + '@Model.Imobil.FirstPhoto';
+                  </text>
+                }
+
+                var infowindow = new google.maps.InfoWindow(
+                {
+                  content:
+                    '<b>@Model.Imobil.Price €</b><br/> @Model.Imobil.Suprafata MP <br/> <img class="img img-rounded" alt="poza proprietate" width="100" src=\'/Images/' + image + '\'/>',
+                  size: new google.maps.Size(170, 170)
+                });
+                google.maps.event.addListener(marker,
+                  'click',
+                  function() {
+                    infowindow.open(map, marker);
+                  });
+                infowindow.open(map, marker);
+              }
+
+              //google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+    }
+}

@@ -1,12 +1,16 @@
-﻿@model HomeViewModel
+﻿@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.Entities
+@using Imobiliare.UI.Utils.UrlSeoFormatters
 
 @{
-    Layout = "_LayoutB5";
+    ViewBag.Title = "Anunturi Imobiliare Gratuite, Apartamente Vanzare Inchiriere";
+    ViewBag.MetaDescription = "Apartamente, Garsoniere, Case sau Terenuri de vanzare sau inchiriere din Romania. Anunturi imobiliare gratuite si actualizate pe apartamente24.ro";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
 }
 
 <style>
     .jumbotron-homepage {
-        background: url('Images/homebackground3.jpg') no-repeat center;
+        background: url('../../Images/homebackground3.jpg') no-repeat center;
         background-position: center center;
         border-radius: 10px;
     }
@@ -45,9 +49,8 @@
 </style>
 
 @{
-    //var judetAnunturiDict = (Dictionary<string, int>)ViewBag.TotalNumberAnunturiPeJudete;
-    //var totalAnunturi = judetAnunturiDict.Sum(x => x.Value);
-    var totalAnunturi = 0;
+    var judetAnunturiDict = (Dictionary<string, int>)ViewBag.TotalNumberAnunturiPeJudete;
+    var totalAnunturi = judetAnunturiDict.Sum(x => x.Value);
 }
 
 <div class="container-fluid jumbotron jumbotron-homepage py-5 g-1">
@@ -180,7 +183,7 @@
     </div>
 </section>
 
-@*<div class="container history">
+<div class="container history">
     <h2 class="pb-4 mb-2 mt-5">Ultimele Anunțuri</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-4 g-4">
 
@@ -275,7 +278,7 @@
                             <ul class="d-flex list-unstyled mt-auto">
                                 <li class="me-auto">
                                     @*<img src="https://github.com/twbs.png" alt="Bootstrap" width="32" height="32" class="rounded-circle border border-white">*@
-@*                                    <i class="bi bi-lightbulb"></i>
+                                    <i class="bi bi-lightbulb"></i>
                                 </li>
                                 <li class="d-flex align-items-center me-3">
                                     <small><i class="bi bi-newspaper"></i> Stiri</small>
@@ -297,12 +300,12 @@
                 </a>
             </div>
         </div>
-    </div>*@
+    </div>
 
     @*<div class="col-xs-12">
             <a href="@Url.Action("Index", "Stiri")"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;Toate știrile...</a>
         </div>*@
-@*}*@
+}
 
 <hr />
 <div class="container my-4">
@@ -385,11 +388,143 @@
     }
 </div>
 
+@*<a type="button" href="shoppingbasket.html" class="btn btn-success float-end"
+       data-bs-toggle="offcanvas" data-bs-target="#shoppingCart" aria-controls="shoppingCart">
+        Add to cart
+    </a>*@
 
+@*<div class="offcanvas offcanvas-start shopping-cart-offcanvas" data-bs-scroll="true" tabindex="-1"
+         id="shoppingCart" aria-labelledby="shoppingCartLabel">
+
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="shoppingCartLabel">Your shopping cart</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Pie name</th>
+                            <th>Quantity</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Total</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-sm-8 col-md-6">
+                                <div class="media">
+                                    <img class="mr-3 thumbnail img-fluid" width="75"
+                                         src="images/products/pumpkinpiesmall.jpg" alt="pumpkin pie">
+                                    <div class="media-body">
+                                        <h5 class="mt-0 media-heading text-primary">Pumpkin pie</h5>
+                                        <span>Status: </span><span class="text-success">
+                                            <strong>
+                                                In
+                                                Stock
+                                            </strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-md-1" style="text-align: center">
+                                <input type="number" class="form-control" value="2">
+                            </td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>$29.90</strong></td>
+                            <td class="col-sm-1 col-md-1">
+                                <button type="button" class="btn btn-danger">
+                                    X
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-8 col-md-6">
+                                <div class="media">
+                                    <img class="mr-3 thumbnail" width="75" src="images/products/applepiesmall.jpg"
+                                         alt="apple pie">
+                                    <div class="media-body">
+                                        <h5 class="mt-0 media-heading text-primary">Apple pie</h5>
+                                        <span>Status: </span><span class="text-warning">
+                                            <strong>
+                                                Last
+                                                items
+                                            </strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-md-1" style="text-align: center">
+                                <input type="number" class="form-control" value="1">
+                            </td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
+                            <td class="col-sm-1 col-md-1">
+                                <button type="button" class="btn btn-danger">
+                                    X
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right">
+                                <h5>Subtotal</h5>
+                            </td>
+                            <td class="text-center">
+                                <h5><strong>$44.85</strong></h5>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right">
+                                <h5>Shipping</h5>
+                            </td>
+                            <td class="text-center">
+                                <h5><strong>$10.00</strong></h5>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right">
+                                <h3>Total</h3>
+                            </td>
+                            <td class="text-center">
+                                <h3><strong>$54.85</strong></h3>
+                            </td>
+                            <td></td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <form class="m-1">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Promo code">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary">Redeem</button>
+                    </div>
+                </div>
+            </form>
+            <a type="button" href="order.html" class="m-1 btn btn-success">
+                Go to order page
+            </a>
+
+            <a type="button" href="" class="m-1 btn btn-danger" data-bs-toggle="modal"
+               data-bs-target="#cancelModal">
+                Clear your shopping cart
+            </a>
+
+        </div>
+    </div>*@
 
 @section Scripts {
     <script>
         var enableautorefresh = false;
     </script>
-    @*@Html.Partial("_GenericAnunturiFilter")*@
+    @Html.Partial("_GenericAnunturiFilter")
 }

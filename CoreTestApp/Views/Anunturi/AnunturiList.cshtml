@@ -1,0 +1,753 @@
+﻿@using System.Linq
+@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.Entities
+@using Imobiliare.UI.Utils
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.ImobilsData
+
+@{
+    string formattedTitle = "Anunturi Imobiliare";
+    //if (Model.ImobilFilter.TipProprietate != TipProprietate.Toate)
+    //{
+    //    formattedTitle = TipOfertaDisplayFormatter.GetDisplayStringPlurals(Model.ImobilFilter.TipProprietate, Model.ImobilFilter.TipOfertaGen);
+    //}
+    if (Model.ImobilFilter.TipProprietate != TipProprietate.Toate)
+    {
+        formattedTitle += " " + Model.ImobilFilter.TipProprietate;
+    }
+    if (Model.ImobilFilter.TipOfertaGen != TipOfertaGen.Toate)
+    {
+        formattedTitle += " " + Model.ImobilFilter.TipOfertaGen;
+    }
+    if (Model.ImobilFilter.JudetId != 0)
+    {
+        var judetName = Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId).Nume;
+
+        formattedTitle += " din " + judetName + ",";
+    }
+
+    if (Model.ImobilFilter.OrasId != 0)
+    {
+        var orasName = Model.Orases.First(x => x.Id == Model.ImobilFilter.OrasId).Nume;
+
+        formattedTitle += " " + orasName + ",";
+    }
+
+    if (Model.ImobilFilter.CartierId != 0)
+    {
+        var cartierName = Model.Cartiers.First(x => x.Id == Model.ImobilFilter.CartierId).Nume;
+        formattedTitle += " " + cartierName + ",";
+    }
+
+    if (Model.ImobilFilter.PretMin > 0)
+    {
+        formattedTitle += " pret minim " + Model.ImobilFilter.PretMin + " euro,";
+    }
+
+    if (Model.ImobilFilter.PretMax > 0)
+    {
+        formattedTitle += " pret maxim " + Model.ImobilFilter.PretMax + " euro,";
+    }
+
+    if (Model.ImobilFilter.CamereMin > 0)
+    {
+        formattedTitle += " minim " + Model.ImobilFilter.CamereMin + " camere,";
+    }
+
+    if (Model.ImobilFilter.CamereMax > 0)
+    {
+        formattedTitle += " maxim " + Model.ImobilFilter.CamereMax + " camere,";
+    }
+
+    if (Model.ImobilFilter.MpMin > 0)
+    {
+        formattedTitle += " suprafata minim " + Model.ImobilFilter.MpMin + " mp,";
+    }
+
+    if (Model.ImobilFilter.MpMax > 0)
+    {
+        formattedTitle += " suprafata maxima " + Model.ImobilFilter.MpMax + " mp,";
+    }
+
+    if (Model.ImobilFilter.TipVanzator > 0)
+    {
+        formattedTitle += " " + TipVanzatorDisplayFormatter.GetDisplayStringPlural(Model.ImobilFilter.TipVanzator) + ",";
+    }
+
+    if (Model.ImobilFilter.VechimeMaximaZile > 0)
+    {
+        formattedTitle += " adaugare ultimele " + Model.ImobilFilter.VechimeMaximaZile + " zile,";
+    }
+
+    if (Model.ImobilFilter.Page > 1)
+    {
+        var to = (Model.ImobilFilter.Page * 10) + 10;
+        formattedTitle += " anunturi " + Model.ImobilFilter.Page * 10 + " - " + to + ",";
+    }
+
+    ViewBag.Title = formattedTitle + " Anunturi Gratuite - apartamente24";
+
+    ViewBag.MetaDescription = formattedTitle + " Oferte Imobiliare. Cauta proprietatea dorita";
+
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div id="searchDiv" style="padding-top: 5px; border: 1px solid rgb(183, 183, 183); border-radius: 3px; background-color: #F9F9F9">
+    <input type="hidden" value="@Model.ImobilFilter.JudetId" id="JudetSelect" name="JudetSelect" />
+
+    <div class="d-md-flex flex-wrap">
+        <div class="ms-2">
+            <div class="input-group input-group-lg">
+                @*<span class="input-group-text"><i class="bi bi-search"></i></span>*@
+                <ul id="localitatiSearchResult" class="dropdown-menu w-75" style="margin-top: 50px; margin-left: 30px">
+                </ul>
+                <input id="searchBox" style="min-width: 160px" type="text" autocomplete="off" class="form-control col-xs-12" placeholder="Localitate">
+                <button type="button" class="clearInputTextBtn btn bg-transparent" style="margin-left: -60px; z-index: 100;" aria-label="clearLocalitateInputName">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <button id="searchButton" class="btn btn-secondary" name="searchButton"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+
+        <div class="d-sm-flex flex-wrap mt-1 mt-lg-0">
+            <div class="pb-1 mx-2">
+                @*https://stackoverflow.com/questions/37901159/mvc-model-binding-for-bootstrap-button-group*@
+                <div id="TipOfertaSelectControl" class="input-group input-group-lg flex-nowrap justify-content-center">
+                    <input type="hidden" id="TipOfertaGenSelect" value="@Model.ImobilFilter.TipOfertaGen" />
+                    <label class="btn btn-outline-secondary" data-val="Vanzare">
+                        <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipOfertaGen" value="Vanzare" @(Model.ImobilFilter.TipOfertaGen.ToString() == "Vanzare" ? "checked" : "")>
+                        <span>Vanzare</span>
+                    </label>
+                    <label class="btn btn-outline-secondary" data-val="Inchiriere">
+                        <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipOfertaGen" value="Inchiriere" @(Model.ImobilFilter.TipOfertaGen.ToString() == "Inchiriere" ? "checked" : "")>
+                        <span>Inchiriere</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="pb-1">
+                <div id="TipProprietateSelectControl" class="input-group input-group-lg flex-nowrap justify-content-center">
+                    <input type="hidden" id="TipProprietateSelect" value="@Model.ImobilFilter.TipProprietate" />
+                    <button id="TipProprietateDropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-building"></i> @Model.ImobilFilter.TipProprietate</button>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item" data-val="Apartament">
+                            <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipProprietate" value="Vanzare1" id="flexRadioDefault1" @(Model.ImobilFilter.TipProprietate.ToString() == "Apartament" ? "checked" : "")>
+                            <label class="form-check-label" for="flexRadioDefault1"><i class="bi bi-building"></i> Apartament</label>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-item" data-val="Garsoniera">
+                            <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipProprietate" value="Vanzare2" id="flexRadioDefault2" @(Model.ImobilFilter.TipProprietate.ToString() == "Garsoniera" ? "checked" : "")>
+                            <label class="form-check-label" for="flexRadioDefault2"><i class="bi bi-house-door-fill"></i> Garsoniera</label>
+                        </li>
+
+                        <li class="dropdown-item" data-val="Casa">
+                            <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipProprietate" value="Vanzare2" id="flexRadioDefault3" @(Model.ImobilFilter.TipProprietate.ToString() == "Casa" ? "checked" : "")>
+                            <label class="form-check-label" for="flexRadioDefault3"><i class="bi bi-house-heart-fill"></i> Casa</label>
+                        </li>
+
+                        <li class="dropdown-item" data-val="Teren">
+                            <input class="form-check-input" type="radio" name="Model.ImobilFilter.TipProprietate" value="Vanzare2" id="flexRadioDefault4" @(Model.ImobilFilter.TipProprietate.ToString() == "Teren" ? "checked" : "")>
+                            <label class="form-check-label" for="flexRadioDefault4"><i class="bi bi-layers"></i> Teren</label>
+                        </li>
+                    </ul>
+
+                    @*Needed for paging*@
+                    <div id="SearchAnunturiForm">
+
+                    </div>
+
+                    <button id="Filtre" class="btn btn-secondary position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#shoppingCart" aria-controls="shoppingCart">
+                        <i class="bi bi-sliders"></i> Filtre
+                        @if (Model.ImobilFilter.GetTotalNumberOfFilters > 0)
+                        {
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                @Model.ImobilFilter.GetTotalNumberOfFilters
+                                <span class="visually-hidden">numar filtre</span>
+                            </span>
+                        }
+                    </button>
+                </div>
+
+                <div class="offcanvas offcanvas-start shopping-cart-offcanvas" data-bs-scroll="true" tabindex="-1"
+                     id="shoppingCart" aria-labelledby="shoppingCartLabel">
+
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="shoppingCartLabel">Filtre</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                                aria-label="Close"></button>
+                    </div>
+
+                    <hr />
+
+
+                    <div class="offcanvas-body">
+
+                        @if (Model.Cartiers.Count > 0)
+                        {
+                            @*datalist example
+                <div class="mb-2">
+                <label class="cart2" for="exampleDataList" class="form-label">Cartier</label>
+                <input type="hidden" id="CartierSelect" name="CartierSelect" value="@Model.ImobilFilter.CartierId" />
+                <input class="form-control" list="cartiereListOptions" id="exampleDataList" placeholder="Cautati cartier...">
+                <datalist id="cartiereListOptions" class="cart">
+                    @foreach (var cartier in Model.SelectableCartiersWithNumber)
+                    {
+                        <option class="cartierOption" data-cartierid="@cartier.Key.Id" @(Model.ImobilFilter.CartierId == cartier.Key.Id ? "selected=\"selected\"" : "")>@cartier.Key.Nume <span class="badge @(cartier.Value > 0 ? "bg-primary" : "bg-secondary")">@cartier.Value</span></option>
+                    }
+                </datalist>
+            </div>
+            <hr />*@
+                            <div class="input-group">
+                                <input type="hidden" id="CartierSelect" name="CartierSelect" value="@Model.ImobilFilter.CartierId" />
+                                <select id="cartierSelect2" class="form-select form-control" aria-label="Cartier">
+                                    <option value="0" @(Model.ImobilFilter.CartierId == 0 ? "selected" : "")>Cartier</option>
+                                    @foreach (var cartier in Model.SelectableCartiersWithNumber.Where(x => x.Value > 0))
+                                    {
+                                        <option class="cartierOption" value="@cartier.Key.Id" @(Model.ImobilFilter.CartierId == cartier.Key.Id ? "selected" : "")>@cartier.Key.Nume <span class="badge @(cartier.Value > 0 ? "bg-primary" : "bg-secondary")">@cartier.Value</span></option>
+                                    }
+                                </select>
+                                @*<button type="button" class="clearInputTextBtn btn bg-transparent" style="margin-left: -80px; z-index: 100;">
+                    <i class="bi bi-x-lg"></i>
+                </button>*@
+                            </div>
+                            <hr />
+                        }
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bi bi-currency-euro">&nbsp;Pret</span>
+                            <input id="pretMin" type="text" class="form-control" @(Model.ImobilFilter.PretMin > 0 ? "value=" + @Model.ImobilFilter.PretMin : "") placeholder="De la">
+                            <span class="input-group-text">-</span>
+                            <input id="pretMax" type="text" class="form-control" @(Model.ImobilFilter.PretMax > 0 ? "value=" + @Model.ImobilFilter.PretMax : "") placeholder="pana la">
+                        </div>
+                        <hr />
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bi bi-grid-1x2">&nbsp;Camere</span>
+                            <input id="camereMin" type="text" class="form-control" @(Model.ImobilFilter.CamereMin > 0 ? "value=" + @Model.ImobilFilter.CamereMin : "") placeholder="De la">
+                            <span class="input-group-text">-</span>
+                            <input id="camereMax" type="text" class="form-control" @(Model.ImobilFilter.CamereMax > 0 ? "value=" + @Model.ImobilFilter.CamereMax : "") placeholder="pana la">
+                        </div>
+                        <hr />
+                        <div class="input-group mb-3">
+                            <span class="input-group-text bi bi-layers">&nbsp;m²</span>
+                            <input id="mpMin" type="text" class="form-control" @(Model.ImobilFilter.MpMin > 0 ? "value=" + @Model.ImobilFilter.MpMin : "") placeholder="ex: 10">
+                            <span class="input-group-text">-</span>
+                            <input id="mpMax" type="text" class="form-control" @(Model.ImobilFilter.MpMax > 0 ? "value=" + @Model.ImobilFilter.MpMax : "") placeholder="ex: 80">
+                        </div>
+                        <hr />
+                        <select id="TipVanzatorSelect" class="form-select" aria-label="Tip vânzător">
+                            @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
+                            {
+                                <option value="@tipVanzator" @(Model.ImobilFilter.TipVanzator == tipVanzator ? "selected" : "")>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                            }
+                        </select>
+                        @*<div class="selectBoxSimulator dropdown">
+                            <input type="hidden" id="TipVanzatorSelect" name="TipVanzatorSelect" value="@Model.ImobilFilter.TipVanzator" />
+                            <button class="combobox" style="width: 160px" type="button" data-toggle="dropdown">
+                                @TipVanzatorDisplayFormatter.GetDisplayString(Model.ImobilFilter.TipVanzator)
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
+                                {
+                                    <li @(Model.ImobilFilter.TipVanzator == tipVanzator ? "class = selBoxSelected" : "") data-listvalue="@tipVanzator">@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</li>
+                                }
+                            </ul>
+                        </div>*@
+                        <hr />
+
+                        @*https://stackoverflow.com/questions/52894166/bootstrap-4-search-input-x-clear-search*@
+                        @*<div class="input-group">
+            <input type="text" class="form-control" placeholder="Search...">
+            <button type="button" class="btn bg-transparent" style="margin-left: -40px; z-index: 100;">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>*@
+                        <div class="d-flex justify-content-end">
+                            <button id="ResetFilters" class="m-1 btn btn-light">
+                                Reseteaza
+                            </button>
+                            <button onclick="SearchForValue()" class="m-1 btn btn-primary">
+                                Filtreaza
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <span class="flex-md-grow-1"></span>
+
+        <div class="pb-1 mx-2 d-flex">
+            @*https://stackoverflow.com/questions/37901159/mvc-model-binding-for-bootstrap-button-group*@
+            <div id="ModDisplayControl" class="input-group input-group-lg flex-nowrap justify-content-center">
+                <input type="hidden" id="mapMode" value="@Model.MapMode" />
+                <label id="ListModeSelectButton" class="btn @(string.IsNullOrEmpty(Model.MapMode) ? "btn-secondary" : "btn-outline-secondary")" data-val="false">
+                    @*<input class="form-check-input" type="radio" name="Model.TipOferta" value="Vanzare" checked>*@
+                    <span class="bi bi-map"> Lista</span>
+                </label>
+                <label id="MapModeSelectButton" class="btn @(string.IsNullOrEmpty(Model.MapMode) ? "btn-outline-secondary" : "btn-secondary")" " data-val="true">
+                    @*<input class="form-check-input" type="radio" name="Model.TipOferta" value="Inchiriere">*@
+                    <span class="bi bi-pin-map"> Harta</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.MapMode))
+{
+    <div class="row">
+        <div id="map" class="white_content_map col-md-7">
+            <div class="col-xs-12 col-sm-8">
+                <p style="margin: 3px">Se afișează <b style="color: red">doar</b> anunțurile pentru care s-a specificat pozitia pe hartă. <span id="timpUpdatareHarta"></span></p>
+                <p>Total anunturi cu locatie specificata pe harta: <span id="anunturiVenite"></span></p>
+            </div>
+            <div id="map_canvas_getFiltered" style="width: 100%; height:800px">
+            </div>
+        </div>
+        <div class="col-md-5 mt-2">
+            <div id="AjaxAnuntList">
+                @Html.Partial("_AjaxAnuntListB5")
+            </div>
+            @if (Model.NumberOfPages > 1)
+            {
+                <div class="text-center" style="text-align: center">
+                    <p style="margin: 10px 0 0 0">Pagina @Model.ImobilFilter.Page din @Model.NumberOfPages</p>
+                    <div class="mt-4">
+                        <nav>
+                            <ul class="pagination pagination-lg d-flex flex-wrap" style="margin-top: 5px"></ul>
+                        </nav>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="container">
+    @if (string.IsNullOrEmpty(Model.MapMode))
+    {
+        <div class="row" id="ListaAnunturiContainer">
+            <div class="col-md-9" id="listaAnunturi">
+
+                <div class="my-4 d-flex justify-content-around">
+                    @{
+                        var summaryHeader = string.Empty;
+                    }
+
+                    @if (Model.ImobilFilter.JudetId != 0)
+                    {
+                        summaryHeader = "Județul " + @Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId).Nume + ">";
+                    }
+
+                    @if (Model.ImobilFilter.OrasId != 0 && Model.Orases.FirstOrDefault(x => x.Id == Model.ImobilFilter.OrasId) != null)
+                    {
+                        summaryHeader += "  " + @Model.Orases.First(x => x.Id == Model.ImobilFilter.OrasId).Nume + ">";
+                    }
+                    @if (Model.ImobilFilter.CartierId != 0)
+                    {
+                        summaryHeader += "  " + @Model.Cartiers.First(x => x.Id == Model.ImobilFilter.CartierId).Nume + ">";
+                    }
+
+                    @if (Model.ImobilFilter.TipProprietate != 0)
+                    {
+                        summaryHeader += "  " + @TipOfertaDisplayFormatter.GetDisplayStringPlurals(Model.ImobilFilter.TipProprietate, Model.ImobilFilter.TipOfertaGen);
+                    }
+
+                    <span>@summaryHeader</span>
+                    <span><b>@Model.TotalNumberOfEntries</b> Rezultate</span>
+                </div>
+
+                <div id="AjaxAnuntList">
+                    @Html.Partial("_AjaxAnuntListB5")
+                </div>
+                @if (Model.NumberOfPages > 1)
+                {
+                    <div class="text-center" style="text-align: center">
+                        <p style="margin: 10px 0 0 0">Pagina @Model.ImobilFilter.Page din @Model.NumberOfPages</p>
+                        <div class="mt-4">
+                            <nav>
+                                <ul class="pagination pagination-lg d-flex flex-wrap" style="margin-top: 5px"></ul>
+                            </nav>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-3 hidden-xs hidden-sm my-4" id="bannerDiv">
+                <p>
+                    <b>Ultimele Anunțuri:</b>
+                </p>
+                <div class="d-flex flex-wrap">
+                    @if (Model.LastAddedImobils != null && Model.LastAddedImobils.Count > 0)
+                    {
+                        foreach (var imobil in @Model.LastAddedImobils)
+                        {
+                            <a style="width: 155px" class="card rounded mb-3 mx-1 shadow-sm linkDiv" href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)">
+                                <img class="center-cropped" style="height: 100px" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)" />
+                                <div class="p-1">
+                                    <p>@TipOfertaDisplayFormatter.GetDisplayString(imobil.TipProprietate, imobil.TipOfertaGen)</p>
+                                    <div>
+                                        <div style="height: 70px">
+                                            <p>@imobil.Price €</p>
+                                            @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, imobil.TipProprietate, imobil.TipOfertaGen) && imobil.NumarCamere > 0)
+                                            {
+                                                <p>@imobil.NumarCamere Camere</p>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p>@imobil.Judet.Nume, @imobil.Oras.Nume</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ImobilFilter.JudetId != 0)
+    {
+        var judetName = Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId).Nume;
+        <section class="row">
+            <hr />
+            <h3 style="margin-bottom: 10px">Cele mai populare căutări</h3>
+
+            @{
+                Oras orasSelectat = null;
+                if (Model.ImobilFilter.OrasId != 0)
+                {
+                    orasSelectat = Model.Orases.First(x => x.Id == Model.ImobilFilter.OrasId);
+                }
+            }
+            @if (orasSelectat != null && !orasSelectat.LocalitateMica)
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 ">
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)">Apartamente vânzare @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-1-1">Apartamente vânzare 1 cameră @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-2-2">Apartamente vânzare 2 camere @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-3-3">Apartamente vânzare 3 camere @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-4-4">Apartamente vânzare 4 camere @orasSelectat.Nume</a><br />
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 ">
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)">Apartamente închiriat @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-1-1">Apartamente închiriat 1 cameră @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-2-2">Apartamente închiriat 2 camere @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-3-3">Apartamente închiriat 3 camere @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Teren, TipOfertaGen.Vanzare)">Teren de vânzare în @orasSelectat.Nume</a><br />
+
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Garsoniera, TipOfertaGen.Vanzare)">Garsonieră vânzare @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Garsoniera, TipOfertaGen.Inchiriere)">Garsonieră închiriat @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/vanzator-@TipVanzatorDisplayFormatter.GetDisplayStringForUrlPlural(TipVanzator.PersoanaFizica)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)">Apartamente persoane fizice @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/vanzator-@TipVanzatorDisplayFormatter.GetDisplayStringForUrlPlural(TipVanzator.AgentieImobiliara)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)">Apartamente agenții imobiliare @orasSelectat.Nume</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/localitate-@HtmlHelpers.RemoveSpecialCharacters(orasSelectat.Nume, '-', false)/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Casa, TipOfertaGen.Vanzare)">Case de vânzare @orasSelectat.Nume</a><br />
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 ">
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente">Apartamente vânzare @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-1-1">Apartamente vânzare 1 camera @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-2-2">Apartamente vânzare 2 camere @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-3-3">Apartamente vânzare 3 camere @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/camere-4-4">Apartamente vânzare 4 camere @judetName</a><br />
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-Inchiriat-Apartamente">Apartamente închiriat @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-1-1">Apartamente închiriat 1 camera @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-2-2">Apartamente închiriat 2 camere @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Inchiriere)/camere-3-3">Apartamente închiriat 3 camere @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Teren, TipOfertaGen.Vanzare)">Teren de vânzare în @judetName</a><br />
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Garsoniera, TipOfertaGen.Vanzare)">Garsonieră vânzare @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Garsoniera, TipOfertaGen.Inchiriere)">Garsonieră închiriat @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/vanzator-@TipVanzatorDisplayFormatter.GetDisplayStringForUrlPlural(TipVanzator.PersoanaFizica)">Apartamente persoane fizice @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Apartament, TipOfertaGen.Vanzare)/vanzator-@TipVanzatorDisplayFormatter.GetDisplayStringForUrlPlural(TipVanzator.AgentieImobiliara)">Apartamente agenții imobiliare @judetName</a><br />
+                    <a href="/Anunturi/Lista/judet-@judetName/tip-@TipOfertaDisplayFormatter.GetDisplayStringForUrlPlural(TipProprietate.Casa, TipOfertaGen.Vanzare)">Case de vânzare @judetName</a><br />
+                </div>
+            }
+        </section>
+    }
+
+    @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+    {
+        <div style="margin: 20px 0">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- Ap 25 Reclama anunturi / categorii -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1474334984782094"
+                 data-ad-slot="5459285763"
+                 data-ad-format="auto"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    }
+
+    @if (Model.ImobilFilter.OrasId != 0)
+    {
+        var selOras = Model.Orases.FirstOrDefault(x => x.Id == Model.ImobilFilter.OrasId);
+        if (selOras != null)
+        {
+            if (!string.IsNullOrEmpty(selOras.DescriereLocalitate))
+            {
+                <div class="row my-3 mx-1">
+                    @Html.Raw(HttpUtility.HtmlDecode(selOras.DescriereLocalitate))
+                </div>
+            }
+        }
+    }
+
+
+    @if (Model.ImobilFilter.JudetId != 0 && Model.ImobilFilter.GetTotalNumberOfFilters == 0)
+    {
+        <section class="row mt-3">
+            <h3 style="margin-bottom: 10px">Anunțuri pe localități din @Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId).Nume</h3>
+            @foreach (var oras in Model.SelectableOrasesWithNumber.Where(x => x.Value > 0).OrderByDescending(x => x.Value))
+            {
+                if (!oras.Key.LocalitateMica)
+                {
+                    <div class="col-sm-4 col-md-3 col-lg-2" style="padding-bottom: 5px"><a class="linkDiv" href="/Anunturi/Lista/judet-@oras.Key.Judet.Nume/localitate-@oras.Key.Nume">@oras.Key.Nume <span class="badge bg-secondary">@oras.Value</span></a></div>
+                }
+            }
+        </section>
+    }
+
+    @*Acest cod ia in considerare ca orasul este setat, deoarece agentiile se arata doar daca si orasul este selectat*@
+    @if (ViewBag.AgentiiImobiliare != null)
+    {
+        <hr />
+        <h3 style="margin-bottom: 10px">Agentii imobiliare:</h3>
+        var agentii = (List<Agentie>)ViewBag.AgentiiImobiliare;
+        var oras = agentii.First().Oras;
+        @*foreach (var agenty in agentii)
+            {
+            <div style="display: inline-block; padding-left: 5px">
+
+                <img style="max-height: 110px; max-width: 170px" src="~/Images/LogoAgentii/@agenty.PozaAgentie" />
+            </div>
+            }*@
+
+        <a class="linkDiv" href="@AgentiiImobiliareUrls.AgentiiImobiliaraUrl(oras)">Arata agentiile pentru @oras.Nume. In total: <span class="badge bg-secondary">@agentii.Count</span> agentii imobiliare.</a>
+    }
+
+    <div class="col my-4" style="background-color: #F9F9F9; text-align: center; padding: 10px">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+        }
+        else
+        {
+            <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Html.Partial("_GenericPagingB5")
+
+    <script>
+        var enableautorefresh = true;
+    </script>
+    @Html.Partial("_GenericAnunturiFilter")
+
+    <script type="text/javascript">
+        $(function () {
+            @if (Model.ImobilFilter.JudetId != 0)
+            {
+                if (Model.ImobilFilter.OrasId != 0)
+                {
+                    var oras = Model.Orases.First(x => x.Id == Model.ImobilFilter.OrasId);
+                    var judet = Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId);
+                    <text>
+                    $("#searchBox").val("@oras.Nume" + " | " + "@judet.PrescurtareAuto");
+
+                    //set cookie with searched value
+                    //$.cookie('cookieLastSearchedLocalitate', $(".searchBox").val(), { expires: 30, path: '/' });
+
+                    $("#OrasSelectButton").text("@oras.Nume");
+                    $("#OrasSelect").val("@oras.Id");
+                    </text>
+                }
+                else
+                {
+                    var judet = Model.Judets.First(x => x.Id == Model.ImobilFilter.JudetId);
+                    <text>
+                    $("#searchBox").val("@judet.Nume" + " (tot judetul)");
+                    </text>
+                }
+            }
+
+            $("#MapModeSelectButton").click(function () {
+                //var selectedOferta = $(this).data("listvalue");
+                $("#mapMode").val("true");
+                SearchForValue();
+            });
+
+            $("#ListModeSelectButton").click(function () {
+                //var selectedOferta = $(this).data("listvalue");
+                $("#mapMode").val("");
+                SearchForValue();
+            });
+
+            $('#cartierSelect2').change(function () {
+                var value = $(this).val();
+                $("#CartierSelect").val(value);
+            });
+
+            $("#ResetFilters").click(function () {
+                $("#camereMin").val("0");
+                $("#camereMax").val("0");
+                $("#pretMin").val("0");
+                $("#pretMax").val("0");
+                $("#mpMin").val("0");
+                $("#mpMax").val("0");
+                $("#page").val("0");
+                $("#CartierSelect").val("0");
+
+                SearchForValue();
+            });
+         });
+    </script>
+
+    @if (!string.IsNullOrEmpty(Model.MapMode))
+    {
+        @*-------------------------------------Google Maps-------------------------------------------------------------------------*@
+
+        @*<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>*@
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvy0awt3m-qB2Ko9ZQfNYqvZO6FNy-Ns" type="text/javascript"></script>
+        <script>
+            $(function () {
+                console.log("loading map");
+                loadMap();
+                resizeMap();
+
+                $(window).resize(function () {
+                    if ($("#map").is(":visible")) {
+                        resizeMap();
+                    }
+                });
+            });
+
+      var map; //<-- This is now available to both event listeners and the initialize() function
+      var ii = 0;
+      var gmarkers = [];
+      var firstMapLoad = true;
+
+      function loadMap() {
+        firstMapLoad = true;
+        var lat = '@Model.GpsCoordinates.Split(',')[0]';
+        var longu = '@Model.GpsCoordinates.Split(',')[1]';
+
+        var mapOptions = {
+          //Fara  ' ca nu mai merge
+          zoom: @Model.ZoomLevel,
+          scrollwheel: true,
+          streetViewControl: false,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          center: new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, ""))
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas_getFiltered'), mapOptions);
+
+        google.maps.event.addListener(map,
+          'idle',
+            function() {
+            ii++;
+            $('#timpUpdatareHarta').text(ii);
+
+            for (i = 0; i < gmarkers.length; i++) {
+              gmarkers[i].setMap(null);
+            }
+            gmarkers.length = 0;
+
+            loadAnunturi();
+          });
+      }
+
+            function loadAnunturi() {
+                $.ajax({
+                    url: '@Url.Action("GetAnunturiForLocalitate", "Anunturi")',
+                    type: "POST",
+                    data: {
+                        imobilFilter: @Html.Raw(Json.Encode(Model.ImobilFilter)),
+                        latLong: encodeURIComponent(map.getBounds())
+                    },
+                    success: function (data) {
+                        //$('#timpUpdatareHarta').text(data);
+                        console.log("success getting anunturi");
+                        if (data.length > 0) {
+                            var infowindow = null;
+                            var allImo = data.split('|');
+                            //alert(allImo.length);
+                            $("#anunturiVenite").text(allImo.length - 1);
+                            for (var i = 0; i < allImo.length - 1; i++) {
+                                //var imobilData = allImo[i].split(';'); -- nu merge ca pune tot acelasi marker
+                                var split = allImo[i].split(';')[4].split(','); //Cu s mic split in loc de Split!!! aici doar
+                                var image = "http://" + location.host + '/Images/markerApartment5.png';
+                                //Do not use with ../../Images/markerApartment5.png because works only sometimes based on filters
+                                var marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(split[0].replace(/\(/g, ""), split[1].replace(/\)/g, "")),
+                                    map: map,
+                                    icon: image
+                                });
+                                (function (marker, i) {
+                                    // add click event
+                                    google.maps.event.addListener(marker,
+                                        'click',
+                                        function () {
+                                            if (infowindow) {
+                                                infowindow.close();
+                                            }
+                                            var formattedContent =
+                                                '<div style="cursor:pointer" onclick=\'document.location.href = "/Localitate-' +
+                                                allImo[i].split(';')[6] +
+                                                '/' +
+                                                allImo[i].split(';')[7] +
+                                                '/' +
+                                                allImo[i].split(';')[5] +
+                                                '/' +
+                                                allImo[i].split(';')[0] +
+                                                '"\'><img class="img img-rounded" width="100" src=\'/Images/' +
+                                                '-5Replace' +
+                                                '\'/></div>' +
+                                                '<b>' +
+                                                allImo[i].split(';')[2] +
+                                                '€</b> ' +
+                                                allImo[i].split(';')[1] +
+                                                ' MP';
+
+                                            var anuntDiv = formattedContent.replace("-5Replace", "uploadedPhotos/" + allImo[i].split(';')[3]);;
+                                            infowindow = new google.maps.InfoWindow({
+                                                content: anuntDiv,
+                                                disableAutoPan: true
+                                            });
+                                            infowindow.open(map, marker);
+                                        });
+                                })(marker, i);
+                                gmarkers.push(marker);
+                            }
+
+                            firstMapLoad = false;
+                        }
+                    }
+                });
+            }
+
+            //Resize map after it is hidden
+            function resizeMap() {
+                console.log("resize");
+                var center = map.getCenter();
+                google.maps.event.trigger(map, "resize");
+                map.setCenter(center);
+            }
+        </script>
+    }
+}

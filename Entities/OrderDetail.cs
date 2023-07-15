@@ -1,6 +1,4 @@
-﻿using System.IO.Pipelines;
-
-namespace Imobiliare.UI.Models
+﻿namespace Imobiliare.Entities
 {
     public class OrderDetail : Entity
     {

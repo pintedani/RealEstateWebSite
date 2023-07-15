@@ -179,107 +179,107 @@ namespace Imobiliare.Utilities
         }
 
         //Not used currently
-        private static string InsertWaterMark(string pictureName, Imobil imobil)
-        {
-            var waterMarkedImage = GetFormattedImageName(imobil);
-            string initialPictureLocation = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
-            try
-            {
-                float horizontalResolution;
-                float verticalResolution;
-                int imgPhotoWidth;
-                using (var imgPhoto = Image.FromFile(initialPictureLocation)) { imgPhotoWidth = imgPhoto.Width; horizontalResolution = imgPhoto.HorizontalResolution; verticalResolution = imgPhoto.VerticalResolution; }
+        //private static string InsertWaterMark(string pictureName, Imobil imobil)
+        //{
+        //    var waterMarkedImage = GetFormattedImageName(imobil);
+        //    string initialPictureLocation = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
+        //    try
+        //    {
+        //        float horizontalResolution;
+        //        float verticalResolution;
+        //        int imgPhotoWidth;
+        //        using (var imgPhoto = Image.FromFile(initialPictureLocation)) { imgPhotoWidth = imgPhoto.Width; horizontalResolution = imgPhoto.HorizontalResolution; verticalResolution = imgPhoto.VerticalResolution; }
 
-                using (Image imgWatermark = new Bitmap(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/DecorationImages"), "watermark.png")))
-                using (var bmWatermark = new Bitmap(initialPictureLocation))
-                {
-                    bmWatermark.SetResolution(horizontalResolution, verticalResolution);
-                    using (Graphics grWatermark = Graphics.FromImage(bmWatermark))
-                    {
-                        var imageAttributes = new ImageAttributes();
+        //        using (Image imgWatermark = new Bitmap(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/DecorationImages"), "watermark.png")))
+        //        using (var bmWatermark = new Bitmap(initialPictureLocation))
+        //        {
+        //            bmWatermark.SetResolution(horizontalResolution, verticalResolution);
+        //            using (Graphics grWatermark = Graphics.FromImage(bmWatermark))
+        //            {
+        //                var imageAttributes = new ImageAttributes();
 
-                        //The first step in manipulating the watermark image is to replace 
-                        //the background color with one that is trasparent (Alpha=0, R=0, G=0, B=0)
-                        //to do this we will use a Colormap and use this to define a RemapTable
-                        ColorMap colorMap = new ColorMap();
+        //                //The first step in manipulating the watermark image is to replace 
+        //                //the background color with one that is trasparent (Alpha=0, R=0, G=0, B=0)
+        //                //to do this we will use a Colormap and use this to define a RemapTable
+        //                ColorMap colorMap = new ColorMap();
 
-                        //My watermark was defined with a background of 100% Green this will
-                        //be the color we search for and replace with transparency
-                        colorMap.OldColor = Color.FromArgb(255, 0, 255, 0);
-                        colorMap.NewColor = Color.FromArgb(0, 0, 0, 0);
+        //                //My watermark was defined with a background of 100% Green this will
+        //                //be the color we search for and replace with transparency
+        //                colorMap.OldColor = Color.FromArgb(255, 0, 255, 0);
+        //                colorMap.NewColor = Color.FromArgb(0, 0, 0, 0);
 
-                        ColorMap[] remapTable = { colorMap };
+        //                ColorMap[] remapTable = { colorMap };
 
-                        imageAttributes.SetRemapTable(remapTable, ColorAdjustType.Bitmap);
+        //                imageAttributes.SetRemapTable(remapTable, ColorAdjustType.Bitmap);
 
-                        //The second color manipulation is used to change the opacity of the 
-                        //watermark.  This is done by applying a 5x5 matrix that contains the 
-                        //coordinates for the RGBA space.  By setting the 3rd row and 3rd column 
-                        //to 0.3f we achive a level of opacity
-                        float[][] colorMatrixElements =
-                        {
-                            new float[] { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
-                            new float[] { 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-                            new float[] { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
-                            new float[] { 0.0f, 0.0f, 0.0f, 1.0f, 0.0f },
-                            new float[] { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f }
-                        };
-                        var wmColorMatrix = new ColorMatrix(colorMatrixElements);
+        //                //The second color manipulation is used to change the opacity of the 
+        //                //watermark.  This is done by applying a 5x5 matrix that contains the 
+        //                //coordinates for the RGBA space.  By setting the 3rd row and 3rd column 
+        //                //to 0.3f we achive a level of opacity
+        //                float[][] colorMatrixElements =
+        //                {
+        //                    new float[] { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
+        //                    new float[] { 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
+        //                    new float[] { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
+        //                    new float[] { 0.0f, 0.0f, 0.0f, 1.0f, 0.0f },
+        //                    new float[] { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f }
+        //                };
+        //                var wmColorMatrix = new ColorMatrix(colorMatrixElements);
 
-                        imageAttributes.SetColorMatrix(wmColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+        //                imageAttributes.SetColorMatrix(wmColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-                        //For this example we will place the watermark in the upper right
-                        //hand corner of the photograph. offset down 10 pixels and to the 
-                        //left 10 pixles
+        //                //For this example we will place the watermark in the upper right
+        //                //hand corner of the photograph. offset down 10 pixels and to the 
+        //                //left 10 pixles
 
-                        int phWidth = imgPhotoWidth;
-                        int wmWidth = imgWatermark.Width;
-                        int wmHeight = imgWatermark.Height;
-                        int xPosOfWm = ((phWidth - wmWidth) - 10);
-                        int yPosOfWm = 10;
+        //                int phWidth = imgPhotoWidth;
+        //                int wmWidth = imgWatermark.Width;
+        //                int wmHeight = imgWatermark.Height;
+        //                int xPosOfWm = ((phWidth - wmWidth) - 10);
+        //                int yPosOfWm = 10;
 
-                        grWatermark.DrawImage(
-                            imgWatermark,
-                            new Rectangle(xPosOfWm, yPosOfWm, wmWidth, wmHeight),
-                            //Set the detination Position
-                            0,
-                            // x-coordinate of the portion of the source image to draw. 
-                            0,
-                            // y-coordinate of the portion of the source image to draw. 
-                            wmWidth,
-                            // Watermark Width
-                            wmHeight,
-                            // Watermark Height
-                            GraphicsUnit.Pixel,
-                            // Unit of measurment
-                            imageAttributes); //ImageAttributes Object
-                    }
+        //                grWatermark.DrawImage(
+        //                    imgWatermark,
+        //                    new Rectangle(xPosOfWm, yPosOfWm, wmWidth, wmHeight),
+        //                    //Set the detination Position
+        //                    0,
+        //                    // x-coordinate of the portion of the source image to draw. 
+        //                    0,
+        //                    // y-coordinate of the portion of the source image to draw. 
+        //                    wmWidth,
+        //                    // Watermark Width
+        //                    wmHeight,
+        //                    // Watermark Height
+        //                    GraphicsUnit.Pixel,
+        //                    // Unit of measurment
+        //                    imageAttributes); //ImageAttributes Object
+        //            }
 
-                    //replace new image to file syste
-                    bmWatermark.Save(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), waterMarkedImage), ImageFormat.Jpeg);
-                }
-            }
-            catch (Exception exception)
-            {
-                log.ErrorFormat("Error applying watermark to image {0}, error {1}", pictureName, exception.Message);
+        //            //replace new image to file syste
+        //            bmWatermark.Save(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), waterMarkedImage), ImageFormat.Jpeg);
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        log.ErrorFormat("Error applying watermark to image {0}, error {1}", pictureName, exception.Message);
 
-                //Use non watermarkedImage instead if not created
-                return pictureName;
-            }
+        //        //Use non watermarkedImage instead if not created
+        //        return pictureName;
+        //    }
 
-            //Delete initial image
-            try
-            {
-                if (File.Exists(initialPictureLocation))
-                    File.Delete(initialPictureLocation);
-            }
-            catch (Exception exception)
-            {
-                log.ErrorFormat("Error deleting initial image {0} after applying watermark, error {1}", initialPictureLocation, exception.Message);
-            }
+        //    //Delete initial image
+        //    try
+        //    {
+        //        if (File.Exists(initialPictureLocation))
+        //            File.Delete(initialPictureLocation);
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        log.ErrorFormat("Error deleting initial image {0} after applying watermark, error {1}", initialPictureLocation, exception.Message);
+        //    }
 
-            return waterMarkedImage;
-        }
+        //    return waterMarkedImage;
+        //}
 
         private static string GetFormattedImageName(Imobil imobil)
         {

@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Formular de contact. Contactează-ne";
+    ViewBag.MetaDescription = "Formular de contact. Scrie un mesaj.";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    <hgroup class="title mt-2">
+        <h1>@ViewBag.Title.</h1>
+    </hgroup>
+
+    <br />
+    <br />
+    @using (Ajax.BeginForm("TrimiteMesajContact", "Home", new AjaxOptions
+    {
+        UpdateTargetId = "statusTrimitereEmail",
+        //Confirm = "Apasati OK pentru a confirma trimiterea mesajului!",
+        InsertionMode = InsertionMode.Replace,
+        OnBegin = "showContactFormProgress",
+        OnSuccess = "hideContactFormProgress"
+    }))
+    {
+
+        <div class="form-group floating-label-form-group controls">
+            <input type="email" id="EmailContact" name="EmailContact" placeholder="Email" class="form-control" />
+        </div>
+
+        <div class="form-group floating-label-form-group controls my-4">
+            <input type="text" id="TelefonContact" name="TelefonContact" placeholder="Telefonul tau" class="form-control" />
+        </div>
+
+
+        <div class="form-group floating-label-form-group controls">
+            <textarea rows="4" id="MesajContact" name="MesajContact" placeholder="Mesaj" class="form-control"></textarea>
+        </div>
+        <div class="clearfix"></div>
+        @*Recaptcha is reset in hideContactFormProgress*@
+        <div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag" style="margin-top: 10px"></div>
+
+        <div style="margin-top: 10px">
+            <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
+            <p id="loadingMessage" style="display: none">Va rugam asteptati</p>
+            <button type="submit" class="btn btn-primary" id="TrimiteMesajButton"><span class="glyphicon glyphicon-send"></span> Trimite Mesaj</button>
+            <div id="statusTrimitereEmail" style="color: blue"></div>
+        </div>
+    }
+
+</div>
+
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?hl=ro" async defer></script>
+    <script>
+        $(document).ready(function () {
+            $("#EmailContact").on("click", function () {
+                $("#EmailContact").val('');
+            });
+            $("#TelefonContact").on("click", function () {
+                $("#TelefonContact").val('');
+            });
+            $("#TrimiteMesajButton").on("click", function () {
+                $("#statusTrimitereEmail").html("");
+            });
+        });
+
+        function showContactFormProgress() {
+            $('#loadingGif').show();
+            $('#loadingMessage').show();
+            $("#TrimiteMesajButton").hide();
+        }
+
+        function hideContactFormProgress() {
+            $('#loadingGif').hide();
+            $('#loadingMessage').hide();
+            $("#TrimiteMesajButton").show();
+            if ($('#statusTrimitereEmail').text().indexOf("Eroare") == -1) {
+                $("#EmailContact").val('Emailul tau');
+                $("#TelefonContact").val('Telefonul tau');
+                $("#MesajContact").val('');
+                $("#statusTrimitereEmail").css("color", "blue");
+            } else {
+                //Keep values for editing
+                $("#statusTrimitereEmail").css("color", "red");
+            }
+
+            //Reset Recaptcha
+            grecaptcha.reset();
+
+            //Show status message
+            alert($('#statusTrimitereEmail').text());
+        }
+    </script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

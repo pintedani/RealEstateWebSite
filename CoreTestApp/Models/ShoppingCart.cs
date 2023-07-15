@@ -1,4 +1,5 @@
-﻿using Imobiliare.Repositories;
+﻿using Imobiliare.Entities;
+using Imobiliare.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Pipelines;
 

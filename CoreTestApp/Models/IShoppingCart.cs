@@ -1,4 +1,5 @@
-﻿using System.IO.Pipelines;
+﻿using Imobiliare.Entities;
+using System.IO.Pipelines;
 
 namespace Imobiliare.UI.Models
 {

@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Imobiliare.UI.Models
+namespace Imobiliare.Entities
 {
     public class Order : Entity
     {

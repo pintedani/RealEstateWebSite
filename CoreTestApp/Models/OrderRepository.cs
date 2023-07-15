@@ -1,4 +1,7 @@
-﻿namespace Imobiliare.UI.Models
+﻿using Imobiliare.Entities;
+using Imobiliare.Repositories;
+
+namespace Imobiliare.UI.Models
 {
     public class OrderRepository : IOrderRepository
     {

@@ -1,0 +1,55 @@
+﻿@model Imobiliare.Entities.SystemSettings
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+    ViewBag.Title = "Setari sistem";
+}
+
+<h2>SystemSettings</h2>
+
+<br /><br />
+<p>
+    @Html.ActionLink("Editeaza", "Editeaza" , "SystemSettings", null, new {@class = "btn btn-success"})
+</p>
+
+<div>
+    @Html.DisplayNameFor(model => model.DefaultPageSizeAdminPageAnunturi)
+    @Html.DisplayFor(model => model.DefaultPageSizeAdminPageAnunturi)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.DefaultPageSizeAdminPageUsers)
+    @Html.DisplayFor(model => model.DefaultPageSizeAdminPageUsers)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.DefaultPageSizeMainPages)
+    @Html.DisplayFor(model => model.DefaultPageSizeMainPages)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.AutoApproveAnunturi)
+    @Html.DisplayFor(model => model.AutoApproveAnunturi)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.CapchaEnabled)
+    @Html.DisplayFor(model => model.CapchaEnabled)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.UseFakeEmailManager)
+    @Html.DisplayFor(model => model.UseFakeEmailManager)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.NotifyAdminByEmailWhenUserContactsAnotherUser)
+    @Html.DisplayFor(model => model.NotifyAdminByEmailWhenUserContactsAnotherUser)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.NotifyAdminByEmailWhenUserChangedAnuntByEmail)
+    @Html.DisplayFor(model => model.NotifyAdminByEmailWhenUserChangedAnuntByEmail)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.AutoSendAnuntExpiratEmails)
+    @Html.DisplayFor(model => model.AutoSendAnuntExpiratEmails)
+</div>
+<div>
+    @Html.DisplayNameFor(model => model.LogsRetrieveNumber)
+    @Html.DisplayFor(model => model.LogsRetrieveNumber)
+</div>

@@ -1,0 +1,182 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.ImobilsData
+
+@{
+    ViewBag.Title = "Administrare anunturi";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+
+    @Html.Partial("_MenuUserProfileB5")
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="d-flex flex-wrap">
+            <h3 class="me-2">Salut, @Model.UserProfile.UserName.</h3>
+            <h3>Anunțuri: <span class="badge alert-success">@Model.TotalNumberOfEntries</span></h3>
+            <span style="flex-grow:1"></span>
+            <a href="/Administrare/AnuntEditare" class="btn btn-primary mb-2">
+                <span class="bi bi-pin"></span> Adaugă Anunț Gratuit
+            </a>
+        </div>
+
+        using (Html.BeginForm("Index", "Administrare", FormMethod.Get, new { date = new DateTime(), id = "PickForm" }))
+        {
+            <input type="hidden" id="userIdSelect" name="userIdSelect" value="@Model.UserProfile.UserName" />
+        }
+
+        if (Model.Imobils.Count > 0)
+        {
+            foreach (var imobil in Model.Imobils)
+            {
+                <div class="row anunt" style="min-height: 105px; border: 1px solid #a7d582; border-radius: 4px; box-shadow: 3px 3px 2px #888888; margin-bottom: 7px; ">
+                    <div onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="col-xs-12 col-sm-2" style="height: 100%; cursor: pointer">
+                        <img class="img-thumbnail center-cropped" style="height: 120px" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" />
+                    </div>
+
+                    <div class="no-pad-xs col-xs-12 col-sm-10" style="padding-top: 5px">
+                        <div class="col-xs-12 col-sm-4">
+                            <p style="margin: 0; white-space: nowrap; overflow: hidden"><b>@Html.DisplayFor(model => imobil.Id) Titlu: @Html.DisplayFor(model => imobil.Title)</b></p>
+                            <div style="white-space: nowrap; overflow: hidden; display: inline-block; margin-bottom: -7px">
+                                <p style="margin: 0; white-space: nowrap; overflow: hidden; display: inline-block">@Html.DisplayFor(model => imobil.Judet.Nume), @Html.DisplayFor(model => imobil.Oras.Nume)</p>
+                                @if (imobil.Cartier != null)
+                                {
+                                    <p style="margin: 0; white-space: nowrap; overflow: hidden; display: inline-block">, @Html.DisplayFor(model => imobil.Cartier.Nume)</p>
+                                }
+                            </div>
+                            <p style="margin: 0">@Html.DisplayFor(model => imobil.TipProprietate) @Html.DisplayFor(model => imobil.Price) euro</p>
+                            <p style="margin: 0">Data Adaugare: @Html.DisplayFor(model => imobil.DataAdaugare)</p>
+                            Stare Aprobare:
+                            @if (imobil.StareAprobare == StareAprobare.Aprobat)
+                            {
+                                <span class="label label-success">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                            }
+                            else if (imobil.StareAprobare == StareAprobare.Dezactivat || imobil.StareAprobare == StareAprobare.Expirat || imobil.StareAprobare == StareAprobare.Respins)
+                            {
+                                <span class="label label-danger">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                            }
+                            else if (imobil.StareAprobare == StareAprobare.Vandut || imobil.StareAprobare == StareAprobare.InAsteptare)
+                            {
+                                <span class="label label-info">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                            }
+                            else
+                            {
+                                <span class="label label-danger">@Html.DisplayFor(model => imobil.StareAprobare)</span>
+                            }
+                            @switch (imobil.PromotedLevel)
+                            {
+                                case PromovatLevel.PromovatNormal:
+                                    <span class="label label-success"><span class="bi bi-star"></span> promovat normal</span>
+                                    break;
+                                case PromovatLevel.SuperPromovat:
+                                    <span class="label label-success"><span class="bi bi-star"></span> super promovat</span>
+                                    break;
+                                case PromovatLevel.ExceptionalPromovat:
+                                    <span class="label label-success"><span class="bi bi-star"></span> exceptional promovat</span>
+                                    break;
+                            }
+                        </div>
+                        <div class="no-pad-xs col-xs-12 col-sm-8 btn-group">
+                            <a class="btn btn-primary" href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)">
+                                <span class="bi bi-eye"></span>
+                            </a>
+                            @if (imobil.StareAprobare != StareAprobare.Respins)
+                            {
+                                @Html.ActionLink("Editare", "AnuntEditare", "Administrare", new { id = imobil.Id }, new { @class = "btn btn-primary" })
+                            }
+                            @if (imobil.StareAprobare != StareAprobare.InAsteptare && imobil.StareAprobare != StareAprobare.Respins)
+                            {
+                                if (imobil.StareAprobare != StareAprobare.Dezactivat && imobil.StareAprobare != StareAprobare.Expirat)
+                                {
+                                    if (imobil.DataAdaugare.Day != DateTime.Now.Day)
+                                    {
+                                        @Html.ActionLink("Reactualizare", "ApartamentReactualizare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-primary", onclick = "return confirm('Reactualizati Anuntul?')" })
+                                    }
+                                    else
+                                    {
+                                        //Hack to return to Index
+                                        @Html.ActionLink("Reactualizare", "Index", "Administrare", new { imobilId = imobil.Id }, new { @class = "btn btn-primary", onclick = "return confirm('Reactualizarea Anunturilor se poate face maxim o data pe zi!')" })
+                                    }
+                                }
+
+                                if (imobil.StareAprobare == StareAprobare.Aprobat || imobil.StareAprobare == StareAprobare.InAsteptare)
+                                {
+                                    @Html.ActionLink("Dezactivare", "Deactivare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-warning", onclick = "return confirm('Sunteti sigur ca doriti sa dezactivati anuntul? Acesta nu va mai fii vizibil pe site pana la reactivare.')" })
+                                }
+                                else if (imobil.StareAprobare == StareAprobare.Dezactivat || imobil.StareAprobare == StareAprobare.Expirat)
+                                {
+                                    @Html.ActionLink("ReActivare", "ReActivare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-primary" })
+                                }
+                            }
+
+                            <a class="js-sterge-anunt btn btn-danger" data-anunt-id="@imobil.Id">
+                                <span class="bi bi-trash" data-anunt-id="@imobil.Id"></span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            if (Model.NumberOfPages > 1)
+            {
+                <p style="margin: 10px 0 0 0">Pagina @Model.ImobilFilter.Page din @Model.NumberOfPages</p>
+                <nav>
+                    <ul class="pagination pagination-lg"></ul>
+                </nav>
+            }
+        }
+        else
+        {
+            @*<p>Nu exista anunturi conform criteriilor selectate</p>*@
+            <h2 class="alert alert-warning" style="color: #1885F0">Nu aveți anunțuri adăugate.</h2>
+        }
+    }
+
+</div>
+
+@section Scripts {
+    @Html.Partial("_GenericPagingB5")
+
+    <script type="text/javascript">
+        //Initialize JQuery UI
+        $(function () {
+            $(".js-sterge-anunt").click(function (e) {
+                var link = $(e.target);
+
+                bootbox.dialog({
+                    message: "Sunteti sigur ca doriti sa stergeti permanent anuntul?",
+                    title: "Confirm",
+                    buttons: {
+                        no: {
+                            label: "Nu",
+                            className: "btn-default",
+                            callback: function () {
+                                bootbox.hideAll();
+                            }
+                        },
+                        yes: {
+                            label: "Da",
+                            className: "btn-danger",
+                            callback: function () {
+                                $.post("/api/WebApiAdmin/AnuntStergere", { AnuntId: link.attr("data-anunt-id") })
+                                    .done(function () {
+                                        link.closest(".anunt").css('backgroundColor', 'rgb(249, 0, 0)');
+                                        var parentDiv = link.closest(".anunt");
+                                        parentDiv.fadeOut();
+                                        //alert("OK!");
+                                    })
+                                    .fail(function () {
+                                        alert("Eroare la stergerea anuntului!");
+                                    });
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+}

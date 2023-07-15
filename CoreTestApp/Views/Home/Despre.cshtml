@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewBag.Title = "Despre apartamente24.ro";
+    ViewBag.MetaDescription = "Site de anunturi imobiliare gratuite apartamente24.ro. Cauta anunturi imobiliare gratuite in Bucuresti, Cluj Napoca, Timisoara, Brasov, Constanta, Iasi. Cauta apartamente, garsoniere, terenuri de vanzare sau inchiriere";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<style>
+    .card-cover {
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: #212529;
+        opacity: .2
+    }
+
+    .rounded-5 {
+        border-radius: 1rem;
+    }
+
+    .bg-dark {
+        --bs-bg-opacity: 1;
+        background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity)) !important;
+    }
+</style>
+
+<div class="container px-4 py-1">
+
+    <h1>Anunturi imobiliare gratuite, apartamente24.ro</h1>
+
+    <p>
+        Ce este <b style="cursor: pointer" onclick="var url = '@Url.Action("Index", "Home")'; window.location.href = url;">apartamente24.ro</b>? <b>apartamente24.ro</b> este un site de anunțuri imobiliare care vă ajută să vindeți sau să cumpărați orice tip de oferte imobiliare.
+        Cum? Dându-vă posibilitatea de a adăuga anunțuri <b>GRATUITE</b> astfel încât să găsiți un cumpărător. Pentru cumpărători vă oferim o gamă
+        variată de anunțuri imobiliare astfel incât sa găsiți proprietatea dorită. Pentru Vânzători vă oferim posibilitatea de a adăuga anunțuri
+        cât mai detaliate, fie că sunteți persoană fizică, fie agenție imobiliară.
+    </p>
+    <p>
+        De ce să adaugi un anunț pe <b>apartamente24.ro</b>? Deoarece este absolut gratuit, adăugarea de anunțuri este cât se poate de simplă, iar conținutul site-ului este
+        cât mai intuitiv posibil.
+    </p>
+
+    <p>
+        Cauta anunturi imobiliare in Bucuresti, Cluj Napoca, Timisoara, Constanta, Iasi, Brasov si in toate celelalte localitati din Romania. Vinde sau inchiriaza apartamentul tau pe apartamente24.ro
+    </p>
+
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Cluj">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/clujnapoca.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Cluj Napoca</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                        @*<li class="d-flex align-items-center me-3">
+                                <small><i class="bi bi-newspaper"></i> Stiri</small>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <small><i class="bi bi-calendar2-heart"></i> bau</small>
+                            </li>*@
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Bucuresti-Ilfov">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/bucuresti.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Bucuresti</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Sibiu">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/sibiu.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Sibiu</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Brasov">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/brasov.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Brasov</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Timis">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/timisoara.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Timis</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a class="col linkDiv" href="/Anunturi/Lista/judet-Constanta">
+            <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-5 shadow-lg" style="background-image: url('../../Images/DecorationImages/constanta.jpg'); ">
+                <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1" style="text-shadow: 2px 4px 3px rgba(0,0,0,0.3)">
+                    <div class="overlay"></div>
+                    <h2 class="position-relative pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">Anunturi imobiliare Constanta</h2>
+                    <ul class="d-flex list-unstyled mt-auto">
+                        <li class="me-auto">
+                            <i class="bi bi-lightbulb"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn float-end" href="/Anunturi/Lista">
+                Toate anunturile <span class="bi bi-collection-fill"></span>
+            </a>
+        </div>
+    </div>
+</div>

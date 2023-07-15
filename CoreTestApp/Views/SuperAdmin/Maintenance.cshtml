@@ -1,0 +1,124 @@
+﻿@Html.Partial("_MenuSuperAdmin")
+@model Imobiliare.UI.Models.SuperAdmin.MaintenanceData
+
+<h2>Maintenance</h2>
+<div class="row" style="padding: 0 10px; border: 1px solid rgb(183, 183, 183); border-radius: 3px; background-color: #F9F9F9">
+    <h3>Db usage - @Model.UsedDbInMb MB of @Model.MaxDbSizeInMb MB => @Model.UsedPercentage% Used</h3>
+
+    @{
+        var level = "info";
+        if (Model.UsedPercentage > 50 && Model.UsedPercentage < 75)
+        {
+            level = "warning";
+        }
+        else if (Model.UsedPercentage >= 75)
+        {
+            level = "danger";
+        }
+    }
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-@level progress-bar-striped" role="progressbar" aria-valuenow="@Model.UsedPercentage" aria-valuemin="0" aria-valuemax="100" style="width: @Model.UsedPercentage%">
+            <span class="sr-only">@Model.UsedPercentage% Used</span>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6">
+    @using (Html.BeginForm("DeleteLogsOlderThanDate", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm1" }))
+    {
+        <h3>Sterge toate logurile(Logs) mai vechi de data:</h3>
+        <input class="logDatePicker" name="logDate1" value="@DateTime.Today.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+        <label id=" "></label>
+        <input class="btn btn-danger" type="submit" value="Sterge" />
+    }
+
+    @using (Html.BeginForm("DeleteAuditTrailsOlderThanDate", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm2" }))
+    {
+        <h3>Sterge toate auditTrails mai vechi de data:</h3>
+        <input class="auditTrailDatePicker" name="logDate2" value="@DateTime.Today.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+        <input class="btn btn-danger" type="submit" value="Sterge" />
+    }
+</div>
+
+<div class="col-md-6">
+    @using (Html.BeginForm("DeletePozeForAnunturiOlderThanDate", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm2" }))
+    {
+        <h3>Sterge pozele(secundare - fara prima poza) pentru anunturi inactive mai vechi de data:</h3>
+        <input class="pozeDatePicker" name="logDate2" value="@DateTime.Today.AddDays(-200).ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+        <input class="btn btn-danger" type="submit" value="Sterge poze" />
+    }
+</div>
+
+<div class="col-md-12">
+    @using (Html.BeginForm("DeleteAnunturiVechiBulk", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm3" }))
+    {
+        <h3>Sterge anunturile expirate mai vechi de:</h3>
+        <input class="anunturiVechiDatePicker" name="logDate2" value="@DateTime.Today.AddDays(-600).ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+        <input class="btn btn-danger" type="submit" value="Sterge anunturi" />
+    }
+</div>
+<br />
+
+@section Scripts {
+    <script type="text/javascript">
+            //Initialize JQuery UI
+            $(function () {
+                $(".logDatePicker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    onSelect: function () {
+                        //document.getElementById('PickForm1').submit();
+                    }
+                });
+
+                $(".auditTrailDatePicker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    onSelect: function () {
+                        //document.getElementById('PickForm2').submit();
+                    }
+                });
+
+                $(".anunturiVechiDatePicker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    onSelect: function (date) {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetNumberDeleteAnunturiVechiBulk", "SuperAdmin")',
+                            data: {
+                                date: date
+                            },
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "html",
+                            success: function (data) {
+                                alert(data);
+                            },
+                            error: function () {
+                                alert("Eroare get nr of expired anunturi");
+                            }
+                        });
+                    }
+                });
+
+                $(".pozeDatePicker").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    onSelect: function (date) {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetNumberDeletePozeForAnunturiOlderThanDate", "SuperAdmin")',
+                            data: {
+                                date: date
+                            },
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "html",
+                            success: function (data) {
+                                alert(data);
+                            },
+                            error: function () {
+                                alert("Eroare get nr of images");
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
+}

@@ -1,0 +1,49 @@
+﻿@model Imobiliare.UI.Models.MassEmailData
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+    ViewBag.Title = "Send mass email";
+}
+
+<h3>Adauga lista de emailuri separate prin virgula. (Doar userii cu cont pe site vor primi email)</h3>
+
+@using (Html.BeginForm("SendMassEmailMessage", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
+{
+    <textarea name="listaEmails" id="listaEmails" style="max-width: 800px; height: 200px; width: 100%"></textarea>
+    <br/>
+    <button type="button" class="btn btn-success" id="GetAllUsersButton">Adauga toti userii</button>
+
+    <br />
+        <br />
+        <p style="display: inline-block">Template:</p>
+    <select style="max-width: 400px; width: 100%; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="EmailTemplateHumanReadableId">
+        @foreach (var emailTemplate in Model.EmailTemplates)
+        {
+            <option value="@emailTemplate.HumanReadableEmailIdentifier">@emailTemplate.HumanReadableEmailIdentifier</option>
+        }
+    </select>
+
+    <input type="submit" class="btn btn-success" value="Trimite"/>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+    //Initialize JQuery UI
+    $(function () {
+        $("#GetAllUsersButton").on("click", function () {
+            $.ajax({
+                url: '@Url.Action("GetAllUsersFromDBCommaSeparated", "SuperAdmin")',
+                type: 'POST',
+                data: {
+                },
+                success: function (data) {
+                    //alert(data);
+                    $("#listaEmails").html(data);
+                }
+            });
+        });
+    });
+
+    </script>
+}

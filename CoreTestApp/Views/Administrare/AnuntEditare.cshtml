@@ -1,0 +1,810 @@
+﻿@using System.Linq
+@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.Entities
+@model Imobiliare.UI.Models.ImobilViewModel
+
+@{
+    ViewBag.Title = "Editare Anunt";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<style>
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+<div class="container">
+    <h2 class="my-4">Adaugă/Editeaza Anunț</h2>
+
+    @if (!Model.IsModAdaugare && TipOfertaOptions.OptionVisible(AnuntOptiuni.Imagini, Model.TipProprietate, Model.TipOfertaGen))
+    {
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm p-2">
+            <div class="col-md-3">
+                <p id="AddPhotoMessage">
+                    Selectează Maxim 8 Poze
+                </p>
+                <br />
+                <div id="noFlashAvailableUploadDiv">
+                    @using (Html.BeginForm("AddImageNoAjax", "Administrare", FormMethod.Post, new { enctype = "multipart/form-data", id = "NoFlashUploadForm" }))
+                    {
+                        <input type="hidden" name="imobilId" value="@Model.Id" />
+                        <div onclick="$('#file').click()" style="cursor: pointer">
+                            @*<button type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> Adaugă Poză</button>*@
+                            <img style="width: 120px" src="~/Images/DecorationImages/picture-add-256x256.png" />
+                            @*<input style="width: 120px" class="btn btn-light" value="Adaugă Poză" />*@
+                        </div>
+                        <input type="file" name="file" id="file" style="opacity: 0" />
+                    }
+                </div>
+                @*<h3>Maxim 8 poze</h3>*@
+            </div>
+            <div class="col-md-6">
+                @using (Ajax.BeginForm("DeleteImage", "Administrare", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ImageArea" }))
+                {
+                    <input type="hidden" name="imobilId" value="@Model.Id" />
+                    <div id="ImageArea" class="col-md-6">
+                        @Html.Partial("_pozeEditAnuntPartial")
+                    </div>
+                }
+            </div>
+        </div>
+        <br />
+    }
+
+    @if (!Model.IsModAdaugare && TipOfertaOptions.OptionVisible(AnuntOptiuni.LocatiePeHarta, Model.TipProprietate, Model.TipOfertaGen))
+    {
+        <div class="row" style="border-top: 1px solid #a7d582; background-color: #F9F9F9; border-radius: 4px">
+            <p class="my-3">
+                Selectați o poziție pe hartă pentru o mai buna localizare a anuntului.<br />
+                Un singur click ajunge pentru a defini locația.
+            </p>
+            <div style="display: none" id="successActualizareDiv">
+                <h3 id="successActualizareText" style="color: blue">Poziție setată cu success!</h3>
+            </div>
+            <div id="map_canvas_editareap" style="height:300px">
+            </div>
+            <button style="display: none; margin-top: 7px" id="stergePozitieHartaBtn" class="btn btn-warning" onclick="clearMarker()">Șterge poziția de pe hartă</button>
+        </div>
+        <br />
+    }
+
+    @using (Html.BeginForm("AnuntEditare", "Administrare", FormMethod.Post, new { id = "ImobilAddForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        if (!Model.IsModAdaugare && Model.UserProfile.Role == Role.Administrator)
+        {
+            <div class="row alert alert-info" style="padding: 10px">
+                <div class="col-md-6">
+                    @Html.TextBoxFor(model => Model.ObservatiiAdmin, null, new { style = "display: inline-block; max-width: 800px; width: 100%" })
+                </div>
+                <div class="col-md-6">
+                    @if (Model.StareAprobare == StareAprobare.InAsteptare)
+                    {
+                        <a class="js-aproba-anunt btn btn-primary" data-anunt-id="@Model.Id">
+                            <span class="bi bi-ok" data-anunt-id="@Model.Id"></span> Aproba
+                        </a>
+                        <img id="aprobareAnuntLoadingIndicator" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" />
+                    }
+                    else
+                    {
+                        <select style="width: 110px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget ChangeState">
+                            @foreach (StareAprobare stareAprobare in Enum.GetValues(typeof(StareAprobare)))
+                            {
+                                if (stareAprobare != StareAprobare.Toate)
+                                {
+                                    <option @(Model.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+                                }
+                            }
+                        </select>
+                    }
+
+                    @Html.Label("Promovat:", null, new { style = "display: inline-block" })
+                    @{
+                        var itemsPromotedLevel = new List<SelectListItem>();
+                        itemsPromotedLevel.Add(new SelectListItem() { Text = "Nepromovat", Value = "0" });
+                        itemsPromotedLevel.Add(new SelectListItem() { Text = "Promovat Normal", Value = "1" });
+                        itemsPromotedLevel.Add(new SelectListItem() { Text = "Super Promovat", Value = "2" });
+                        itemsPromotedLevel.Add(new SelectListItem() { Text = "Exceptional Promovat", Value = "3" });
+                    }
+                    @Html.DropDownListFor(model => Model.PromotedLevel, new SelectList(itemsPromotedLevel, "Value", "Text"), new { @class = "ui-corner-all ui-widget-shadow ui-widget", style = "width:150px; margin-left: 5px" })
+                </div>
+            </div>
+        }
+
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.GoogleMarkerCoordinates)
+        <h3>Vă rugăm completați toate câmpurile relevante pentru o descriere completă a anunțului.     <small>Câmpurile margacte cu * sunt obligatorii.</small></h3>
+        <br />
+        <div class="row" style="border-top: 1px solid #a7d582; background-color: #F9F9F9; border-radius: 4px; padding: 10px">
+            <div class="no-pad-xs col-lg-7" style="display: inline-block; white-space: nowrap; overflow: hidden">
+
+                @Html.Label("Tip Proprietate *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                @*<div class="selectBoxSimulator dropdown" id="dropdownTipOfertaSelectButtonDiv">
+                        <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
+                        <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipProprietateSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            @Model.TipProprietate
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownTipProprietateSelectButton">
+                            @foreach (TipProprietate tipOfertaGen in Enum.GetValues(typeof(TipProprietate)).Cast<TipProprietate>().Except(new[] { TipProprietate.Toate }))
+                            {
+                                <li @(Model.TipProprietate == tipOfertaGen ? "class = selBoxSelected" : "") data-listvalue="@tipOfertaGen">@tipOfertaGen</li>
+                            }
+                        </ul>
+                    </div>*@
+
+                @*<div id="TipProprietateSelectControl" class="input-group input-group-lg">
+                        <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
+                        <button id="TipProprietateDropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-building"></i> Apartament</button>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-item" data-val="Apartament">
+                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare1" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1"><i class="bi bi-building"></i> Apartament</label>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li class="dropdown-item" data-val="Garsoniera">
+                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault2">
+                                <label class="form-check-label" for="flexRadioDefault2"><i class="bi bi-house-door-fill"></i> Garsoniera</label>
+                            </li>
+                            <li class="dropdown-item" data-val="Casa">
+                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault3">
+                                <label class="form-check-label" for="flexRadioDefault3"><i class="bi bi-house-heart-fill"></i> Casa</label>
+                            </li>
+                            <li class="dropdown-item" data-val="Teren">
+                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault4">
+                                <label class="form-check-label" for="flexRadioDefault4"><i class="bi bi-layers"></i> Teren</label>
+                            </li>
+                        </ul>
+                    </div>*@
+
+                <div class="pb-1 me-2">
+                    <div id="TipProprietateSelectControl" class="input-group input-group-lg flex-wrap">
+                        <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
+                        <label class="btn btn-outline-secondary" data-val="Apartament">
+                            <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Apartament" @(Model.TipProprietate == TipProprietate.Apartament ? "checked" : "")>
+                            <i class="bi bi-building"></i> <span> Apartament</span>
+                        </label>
+                        <label class="btn btn-outline-secondary" data-val="Casa">
+                            <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Casa" @(Model.TipProprietate == TipProprietate.Casa ? "checked" : "")>
+                            <i class="bi bi-house-heart-fill"></i> <span> Casa</span>
+                        </label>
+                        <label class="btn btn-outline-secondary" data-val="Garsoniera">
+                            <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Garsoniera" @(Model.TipProprietate == TipProprietate.Garsoniera ? "checked" : "")>
+                            <i class="bi bi-house-door-fill"></i> <span> Garsoniera</span>
+                        </label>
+                        <label class="btn btn-outline-secondary" data-val="Teren">
+                            <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Teren" @(Model.TipProprietate == TipProprietate.Teren ? "checked" : "")>
+                            <i class="bi bi-layers"></i> <span> Teren</span>
+                        </label>
+                    </div>
+                </div>
+
+                @Html.Label("Tip Ofertă *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+
+
+                <div class="pb-1 me-2">
+                    <input type="hidden" id="TipOferta2" value="2" />
+                    @*https://stackoverflow.com/questions/37901159/mvc-model-binding-for-bootstrap-button-group*@
+                    <div id="TipOfertaSelectControl" class="input-group input-group-lg flex-nowrap">
+                        <input type="hidden" id="TipOfertaGenSelect" name="TipOfertaGen" value="@Model.TipOfertaGen" />
+                        <label class="btn btn-outline-secondary" data-val="Vanzare">
+                            <input class="form-check-input" type="radio" name="Model.TipOferta" value="Vanzare" @(Model.TipOfertaGen == TipOfertaGen.Vanzare ? "checked" : "")>
+                            <span>Vanzare</span>
+                        </label>
+                        <label class="btn btn-outline-secondary" data-val="Inchiriere">
+                            <input class="form-check-input" type="radio" name="Model.TipOferta" value="Inchiriere" @(Model.TipOfertaGen == TipOfertaGen.Inchiriere ? "checked" : "")>
+                            <span>Inchiriere</span>
+                        </label>
+                    </div>
+                </div>
+
+                @{
+                    //Arata agentie imobiliara doar ptr userii noi creati
+                    //De vazut daca mai e ok dupa update la tip vanzator
+                    if (Model.UserProfile.Role != Role.Administrator)
+                    {
+                        Model.TipVanzator = Model.UserProfile.TipVanzator;
+                    }
+                }
+
+                @Html.Label("Tip Vânzator *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                @*<div class="selectBoxSimulator dropdown">
+                        <input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@Model.TipVanzator" />
+                        <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipVanzatorSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            @Model.TipVanzator
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownTipVanzatorSelectButton">
+                            @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
+                            {
+                                <li @(Model.TipVanzator == tipVanzator ? "class = selBoxSelected" : "") data-listvalue="@tipVanzator">@tipVanzator</li>
+                            }
+                        </ul>
+                    </div>*@
+
+                <select id="TipVanzatorSelect" name="TipVanzator" class="form-select" aria-label="Tip vânzător" style="max-width: 600px; width: 100%">
+                    @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
+                    {
+                        <option value="@tipVanzator" @(Model.TipVanzator == tipVanzator ? "selected" : "")>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                    }
+                </select>
+
+                <div style="display: inline-block; position: relative; width: 100%">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        @*Use locatie instead of Localitate to disable browser autocomplete based on label*@
+                        @{
+                            string oras = null;
+                            if (Model.Oras != null)
+                            {
+                                oras = Model.Oras.Nume + "|" + @Model.Judet.PrescurtareAuto;
+                            }
+                        }
+                        @Html.Label("Locație *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                        <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceți Localitate *" name="searchBox" @{if (oras != null) { <text> value="@oras" disabled</text>  } } />
+                        <input type="hidden" name="OrasId" id="OrasSelect" @{if (oras != null) { <text> value="@Model.OrasId" </text>  } } />
+                        @Html.ValidationMessageFor(model => Model.OrasId)
+                        <ul style="max-height: 450px; overflow-y: scroll" class="localitatiSearchResult dropdown-menu"></ul>
+                    </div>
+                    @{
+                        var schimbaLocalitateButtonStyle = "position: absolute; right: 5px; top: 56px; z-index: 30;";
+                        if (Model.OrasId == 0)
+                        {
+                            schimbaLocalitateButtonStyle += " display: none;";
+                        }
+                    }
+                    <div class="schimbaLocalitateButton" style="@schimbaLocalitateButtonStyle">
+                        <button type="button" class="btn btn-warning"><span class="bi bi-x"></span> Schimba</button>
+                    </div>
+                </div>
+
+                <div id="cartierSelectDiv" class="my-2" style="@(Model.Cartiere == null || !Model.Cartiere.Any() ? "display: none" : "")">
+                    @Html.Label("Cartier", new { style = "display:inline-block; width: 90px", @id = "CartierSelectLabel" })
+                    <select class="combobox valid form-select" data-val="true" data-val-number="The field CartierId must be a number." data-val-required="The CartierId field is required." id="CartierSelect" name="CartierId" style="width: 200px; display: inline-block" aria-required="true" aria-invalid="false" aria-describedby="CartierSelect-error">
+                        @if (Model.Cartiere != null)
+                        {
+                            foreach (var cartier in Model.Cartiere)
+                            {
+                                @*Hack to set a cartier
+                                    TODO DAPI: Check how this could be null, because at adaugare, cartier shall be set at adaugare if a localitate has a list of cartiere *@
+                                //if (Model.Cartier == null)
+                                //{
+                                //    Model.Cartier = Model.Cartiere.First();
+                                //}
+                                <option @(Model.CartierId == cartier.Id ? "selected" : "") value="@cartier.Id">@cartier.Nume</option>
+                            }
+                        }
+                    </select>
+                    <br />
+                    <br />
+                </div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    @Html.Label("Titlu *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                    @Html.TextBoxFor(model => Model.Title, new { style = "max-width: 600px; width: 100%", title = "Titlul anuntului cum va aparea pe site", placeholder = "Titlu *", @class = "form-control", data_toggle = "tooltip", autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => Model.Title)
+                </div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    @Html.Label("Descriere *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                    @Html.TextAreaFor(model => Model.Descriere, new { style = "max-width: 600px; width: 100%; height: 150px", title = "Completati descrierea anuntului", placeholder = "Descriere *", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => Model.Descriere)
+                </div>
+
+                <div>
+                    <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
+                        @Html.Label("Preț Euro *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                        @{
+                            //Necesar daca vine de la controller cu erori de validare din oarecare motiv
+                            string pretEuro = "";
+                            if (Model.Price != 0)
+                            {
+                                pretEuro = Model.Price.ToString();
+                            }
+                        }
+                        @Html.TextBoxFor(model => Model.Price, new { style = "max-width: 600px; width: 100%", title = "Completati pretul proprietatii(de ex 30000)", Value = pretEuro, onClick = "if(this.value == 0) {this.value=''}", placeholder = "Preț Euro *", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => Model.Price)
+                    </div>
+                    @*<div class="touchCheckbox col-xs-12 col-md-4">
+                            <span style="font-size: 1.8em" class="bi @(Model.Negociabil ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.Negociabil ? "true" : "false")" name="Negociabil">
+                            <label>Negociabil</label>
+                        </div>*@
+
+                    @*<div class="form-check my-4">
+                            <input class="form-check-input" type="checkbox" value="@(Model.Negociabil ? "true" : "false")" id="Negociabil" name="Negociabil">
+                            <label class="form-check-label" for="AbonatLaNewsLetter">Negociabil</label>
+                        </div>*@
+
+                    <div class="form-check">
+                        @Html.EditorFor(model => model.Negociabil, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="Negociabil">Negociabil</label>
+                    </div>
+                </div>
+                <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 10px">
+                    @Html.Label("Suprafață mp *", new { @class = "mt-4 mb-2" })
+                    @{
+                        string suprafata = "";
+                        if (Model.Suprafata != 0)
+                        {
+                            suprafata = Model.Suprafata.ToString();
+                        }
+                    }
+                    @Html.TextBoxFor(model => Model.Suprafata, new { style = "max-width: 600px; width: 100%", Value = suprafata, title = "Completati suprafata proprietatii in MP (doar cifre, fara spatii sau alte semne de punctuatie)", placeholder = "Suprafață mp *", @class = "form-control", autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => Model.Suprafata)
+                </div>
+
+                @{
+                    if (Model.UserProfile.Role != Role.Administrator)
+                    {
+                        //Arata telefon doar ptr cei ce nu sunt admin
+                        if (!string.IsNullOrWhiteSpace(Model.UserProfile.PhoneNumber))
+                        {
+                            Model.ContactTelefon = Model.UserProfile.PhoneNumber;
+                        }
+                        Model.ContactEmail = Model.UserProfile.UserName;
+                    }
+                }
+
+                <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
+                    @Html.Label("Contact Telefon *", new { @class = "mt-4 mb-2" })
+                    @Html.TextBoxFor(model => Model.ContactTelefon, new { style = "max-width: 600px; width: 100%", title = "Completati numarul de telefon de contact", placeholder = "Contact Telefon *", @class = "form-control", autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => Model.ContactTelefon)
+                </div>
+
+                <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
+                    @Html.Label("Contact Email", new { @class = "mt-4 mb-2" })
+                    @Html.TextBoxFor(model => Model.ContactEmail, new { style = "max-width: 600px; width: 100%", title = "Completati emailul de contact(de exemplu: exemplu@exemplu.com)", placeholder = "Contact Email", @class = "form-control", autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => Model.ContactEmail)
+                </div>
+                <br />
+                <br />
+            </div>
+            <div class="no-pad-xs col-lg-5 col-md-push-1 col-md-4">
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        @Html.Label("Număr Camere", new { @class = "mt-4 mb-2" })
+                        @Html.TextBoxFor(model => Model.NumarCamere, new { style = "max-width: 600px; width: 100%", placeholder = "Număr Camere", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => Model.NumarCamere)
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBai, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        @Html.Label("Număr băi", new { @class = "mt-4 mb-2" })
+                        @Html.TextBoxFor(model => Model.NrBai, new { style = "max-width: 600px; width: 100%", placeholder = "Număr băi", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => Model.NrBai)
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBalcoane, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        @Html.Label("Număr balcoane", new { @class = "mt-lg-4 mb-2" })
+                        @Html.TextBoxFor(model => Model.NrBalcoane, new { style = "max-width: 600px; width: 100%", placeholder = "Număr balcoane", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => Model.NrBalcoane)
+                    </div>
+                }
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    @Html.Label("Adresa", new { @class = "mt-4 mb-2" })
+                    @Html.TextBoxFor(model => Model.Strada, new { style = "max-width: 600px; width: 100%", placeholder = "Adresa", @class = "form-control", autocomplete = "off" })
+                    @Html.ValidationMessageFor(model => Model.Strada)
+                </div>
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AnulConstructiei, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        @Html.Label("Anul construcției", new { @class = "mt-4 mb-2" })
+                        @Html.TextBoxFor(model => Model.VechimeImobil, new { style = "max-width: 600px; width: 100%", placeholder = "Anul construcției", @class = "form-control", autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => Model.VechimeImobil)
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Etaj, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @Html.Label("Etaj", new { @class = "mt-4 mb-2" })
+                    <div>
+                        <div class="selectBoxSimulator dropdown">
+                            @if (Model.Etaj == 0)
+                            {
+                                Model.Etaj = -4;
+                            }
+                            @*<input type="hidden" id="EtajSelect" name="Etaj" value="@Model.Etaj" />*@
+                            @{
+                                var dictionary = new Dictionary<int, string>();
+                                dictionary.Add(-4, "Nespecificat");
+                                dictionary.Add(-3, "Demisol");
+                                dictionary.Add(-2, "Parter");
+                                dictionary.Add(1, "1");
+                                dictionary.Add(2, "2");
+                                dictionary.Add(3, "3");
+                                dictionary.Add(4, "4");
+                                dictionary.Add(5, "5");
+                                dictionary.Add(6, "6");
+                                dictionary.Add(7, "7");
+                                dictionary.Add(8, "8");
+                                dictionary.Add(9, "9");
+                                dictionary.Add(10, "10");
+                                dictionary.Add(11, "11");
+                                dictionary.Add(12, "12");
+                                dictionary.Add(13, "13");
+                                dictionary.Add(14, "14");
+                                dictionary.Add(-1, "Mansardă");
+
+                            }
+                            @*<button class="combobox dropdown-toggle" style="width: 110px" type="button" id="dropdownEtaj" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    @dictionary[Model.Etaj]
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownEtaj">
+                                    @foreach (var item in dictionary)
+                                    {
+                                        <li @(Model.Etaj == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@dictionary[item.Key]</li>
+                                    }
+                                </ul>*@
+
+                            <select id="EtajSelect" name="Etaj" class="form-select" aria-label="Etaj">
+                                @foreach (var etaj in dictionary)
+                                {
+                                    <option value="@etaj.Key" @(Model.Etaj == etaj.Key ? "selected" : "")>@etaj.Value</option>
+                                }
+                            </select>
+                        </div>
+
+                        @Html.Label("Numar total Etaje", new { @class = "mt-4 mb-2" })
+                        <div class="selectBoxSimulator dropdown">
+                            @{
+                                var dictionaryTotal = new Dictionary<int, string>();
+                                dictionaryTotal.Add(0, "Nespecificat");
+                                dictionaryTotal.Add(1, "1");
+                                dictionaryTotal.Add(2, "2");
+                                dictionaryTotal.Add(3, "3");
+                                dictionaryTotal.Add(4, "4");
+                                dictionaryTotal.Add(5, "5");
+                                dictionaryTotal.Add(6, "6");
+                                dictionaryTotal.Add(7, "7");
+                                dictionaryTotal.Add(8, "8");
+                                dictionaryTotal.Add(9, "9");
+                                dictionaryTotal.Add(10, "10");
+                                dictionaryTotal.Add(11, "11");
+                                dictionaryTotal.Add(12, "12");
+                                dictionaryTotal.Add(13, "13");
+                                dictionaryTotal.Add(14, "14");
+                            }
+                            @*<button class="combobox dropdown-toggle" style="width: 110px" type="button" id="dropdownTotalEtaje" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    @dictionaryTotal[Model.NumarTotalEtaje]
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownTotalEtaje">
+                                    @foreach (var item in dictionaryTotal)
+                                    {
+                                        <li @(Model.NumarTotalEtaje == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@dictionaryTotal[item.Key]</li>
+                                    }
+                                </ul>*@
+
+                            <select id="NumarTotalEtajSelect" name="NumarTotalEtaje" class="form-select" aria-label="Numar total Etaje">
+                                @foreach (var etaj in dictionaryTotal)
+                                {
+                                    <option value="@etaj.Key" @(Model.NumarTotalEtaje == etaj.Key ? "selected" : "")>@etaj.Value</option>
+                                }
+                            </select>
+                        </div>
+
+                        @*<p style="display: inline-block">Etaje</p>*@
+                    </div>
+                    <br />
+                }
+
+                <div class="clearfix"></div>
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AerConditionat, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.AerConditionat ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.AerConditionat ? "true" : "false")" name="AerConditionat">
+                            <label>Aer Condiționat</label>
+                        </div>*@
+                    <div class="form-check">
+                        @Html.EditorFor(model => model.AerConditionat, new { htmlAttributes = new { @class = "form-check-input" } })
+                        @*@Html.LabelFor(m => m.AerConditionat)*@
+                        <label for="AerConditionat">Aer Conditionat</label>
+                    </div>
+
+                }
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Centralatermica, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.CT ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.CT ? "true" : "false")" name="CT">
+                            <label>Centrală termică</label>
+                        </div>*@
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.CT, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="CT">Centrală termică</label>
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Garaj, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.Garaj ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.Garaj ? "true" : "false")" name="Garaj">
+                            <label>Garaj</label>
+                        </div>*@
+
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.Garaj, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="Garaj">Garaj</label>
+                    </div>
+                }
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocParcare, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.LocParcare ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.LocParcare ? "true" : "false")" name="LocParcare">
+                            <label>Loc Parcare</label>
+                        </div>*@
+
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.LocParcare, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="LocParcare">Loc Parcare</label>
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Decomandat, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.Decomandat ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.Decomandat ? "true" : "false")" name="Decomandat">
+                            <label>Decomandat</label>
+                        </div>*@
+
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.Decomandat, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="Decomandat">Decomandat</label>
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Finisat, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.Finisat ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.Finisat ? "true" : "false")" name="Finisat">
+                            <label>Finisat</label>
+                        </div>*@
+
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.Finisat, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="Finisat">Finisat</label>
+                    </div>
+                }
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocInPivnita, Model.TipProprietate, Model.TipOfertaGen))
+                {
+                    @*<div class="touchCheckbox">
+                            <span style="font-size: 1.8em" class="bi @(Model.LocInPivnita ? "bi-check" : "bi-unchecked")"></span>
+                            <input type="hidden" value="@(Model.LocInPivnita ? "true" : "false")" name="LocInPivnita">
+                            <label>Loc în pivniță</label>
+                        </div>*@
+
+                    <div class="form-check mt-2">
+                        @Html.EditorFor(model => model.LocInPivnita, new { htmlAttributes = new { @class = "form-check-input" } })
+                        <label for="LocInPivnita">Loc în pivniță</label>
+                    </div>
+                }
+                <br />
+                @Html.Label("Valabilitate:", new { style = "width: 90px" })
+                <div class="selectBoxSimulator dropdown">
+                    @*<input type="hidden" id="ValabilitateSelect" name="Valabilitate" value="@(Model.Valabilitate == 0 ? 60 : Model.Valabilitate)" />*@
+                    @{
+                        var dictionaryValabilitate = new Dictionary<int, string>();
+                        dictionaryValabilitate.Add(60, "60 de zile");
+                        dictionaryValabilitate.Add(30, "30 de zile");
+                        dictionaryValabilitate.Add(90, "90 de zile");
+                        dictionaryValabilitate.Add(120, "120 de zile");
+                        dictionaryValabilitate.Add(150, "150 de zile");
+                        dictionaryValabilitate.Add(160, "160 de zile");
+
+                        if (Model.Valabilitate == 0)
+                        {
+                            Model.Valabilitate = 60;
+                        }
+                    }
+                    @*<button class="combobox dropdown-toggle" style="width: 150px" type="button" id="dropdownValabilitate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            @dictionaryValabilitate[Model.Valabilitate == 0 ? 60 : Model.Valabilitate]
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownNumarBalcoane">
+                            @foreach (var item in dictionaryValabilitate)
+                            {
+                                <li @(Model.NrBalcoane == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@item.Value</li>
+                            }
+                        </ul>*@
+                    <select id="ValabilitateSelect" name="Valabilitate" class="form-select" aria-label="Valabilitate">
+                        @foreach (var item in dictionaryValabilitate)
+                        {
+                            <option value="@item.Key" @(Model.Valabilitate == item.Key ? "selected" : "")>@item.Value</option>
+                        }
+                    </select>
+
+                </div>
+
+                @*@Html.HiddenFor(model => Model.LinkExtern, new { @id = "LinkExtern" })*@
+            </div>
+        </div>
+
+        <div>
+            @Html.ValidationSummary()
+            <button type="submit" class="btn btn-primary submitButton my-2" value="Adauga Anunt">Salvează Anunț</button>
+            <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" />
+        </div>
+    }
+</div>
+
+@*-----------------------------------------Scripts-----------------------------------------------------*@
+
+@section Scripts {
+    @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+    <script>
+        $(function () {
+            $('#ImobilAddForm').submit(function (event) {
+                if ($('#OrasSelect').val() == "" || $('#OrasSelect').val() == "0") {
+                    event.preventDefault();                  
+                    alert("Vă rugăm selectați o localitate!");
+
+                }
+                else if ($(this).valid()) {
+                    $('.submitButton').attr("disabled", true).text("Va rugam asteptati...");
+                    $('#loadingGif').show();
+                }
+            });
+
+            //effect to show start point for data entry
+            //$("#dropdownTipOfertaSelectButtonDiv").effect("pulsate", {}, 200);
+            //$('#dropdownTipOfertaSelectButtonDiv').effect("highlight", {}, 1500);
+
+            //Initialize tooltips
+            $('[data-toggle="tooltip"]').tooltip({ 'placement': 'bottom' });
+
+            $("#TipProprietateSelectControl > .btn-outline-secondary").on("click", function () {
+                var selectedOferta = $(this).data("val");
+                $("#TipProprietateSelect").val(selectedOferta);
+            });
+
+            $("#TipOfertaSelectControl > .btn-outline-secondary").on("click", function () {
+                var selectedOferta = $(this).data("val");
+                $("#TipOfertaGenSelect").val(selectedOferta);
+            });
+        });
+    </script>
+
+    @if (!Model.IsModAdaugare)
+    {
+        <script>
+        $(".ChangeState").change(function() {
+        var url =
+          '@Url.Action("ChangeImobilState", "SuperAdmin", new { id = "__id__", stare = "__stare__", returnUrl = "__returnUrl__" })';
+        var tempPath = url.replace(/__id__/g, @Model.Id);
+        //&amp seems to be a general problema when passing params, therefore replace with simple &
+        var tempPath2 = tempPath.replace(/__stare__/g, $(this).val());
+        var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g,
+          "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));
+        window.location.href = finalPath;
+      });
+
+    $(".js-aproba-anunt").click(function (e) {
+        var link = $(e.target);
+        link.hide();
+        $("#aprobareAnuntLoadingIndicator").show();
+        $.post("/api/WebApiSuperAdmin/AnuntAprobat", { AnuntId: link.attr("data-anunt-id") })
+            .done(function () {
+                $("#aprobareAnuntLoadingIndicator").hide();
+                link.fadeOut();
+            })
+            .fail(function () {
+                alert("Something failed!");
+                $("#aprobareAnuntLoadingIndicator").hide();
+            });
+    });
+
+            $(function () {
+                if ($('.pozaImobil').length > 7) {
+                    $('#noFlashAvailableUploadDiv').hide();
+                    $('#AddPhotoMessage').hide();
+                }
+
+                $('.deletePozaButton').on("click",
+                    function () {
+                        if ($('.pozaImobil').length <= 8) {
+                            $('#noFlashAvailableUploadDiv').show();
+                            $('#AddPhotoMessage').show();
+                        }
+                    });
+
+                $("#file").change(function () {
+                    //alert($(this).val());
+                    $("#NoFlashUploadForm").submit();
+                });
+            });
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvy0awt3m-qB2Ko9ZQfNYqvZO6FNy-Ns" type="text/javascript"></script>
+        <script>
+            function initialize() {
+            var lat = '@Model.GpsCoordinates.Split(',')[0]';
+            var longu = '@Model.GpsCoordinates.Split(',')[1]';
+
+                var mapOptions = {
+                    zoom: @Model.ZoomLevel,
+                    scrollwheel: false,
+                    streetViewControl: false,
+                    center: new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, ""))
+                };
+
+      var map = new google.maps.Map(document.getElementById('map_canvas_editareap'), mapOptions);
+      @if (Model.GoogleMarkerCoordinates != null)
+      {
+          //Seems to work only with text, if not evaluates all conditions
+        <text>
+        var lat = '@Model.GoogleMarkerCoordinates.Split(',')[0]';
+        var longu = '@Model.GoogleMarkerCoordinates.Split(',')[1]';
+
+        placeMarker(new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, "")), map, false);
+        </text>
+      }
+
+              google.maps.event.addListener(map,
+        'click',
+          function (e) {
+              placeMarker(e.latLng, map, true);
+          });
+        }
+
+    var markersArray = [];
+
+    //clear all markers
+            function clearOverlays() {
+                for (var i = 0; i < markersArray.length; i++) {
+                    markersArray[i].setMap(null);
+                }
+                markersArray.length = 0;
+            }
+
+            function placeMarker(position, map, updateNeeded) {
+                clearOverlays();
+                //declare new marker
+                var image = '../../Images/markerApartment5.png';
+                var marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: image
+                });
+                map.panTo(position);
+                markersArray.push(marker);
+
+                if (updateNeeded) {
+                    $("#GoogleMarkerCoordinates").val(position);
+                }
+                $("#stergePozitieHartaBtn").fadeIn();
+            }
+
+            function clearMarker() {
+                $("#GoogleMarkerCoordinates").val('');
+                clearOverlays();
+                $("#successActualizareText").html(data);
+                $("#successActualizareDiv").show().delay(3000).fadeOut();
+                $("#stergePozitieHartaBtn").fadeOut();
+            }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+        </script>
+    }
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

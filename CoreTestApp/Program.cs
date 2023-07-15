@@ -1,14 +1,39 @@
-using CoreTestApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Imobiliare.Repositories;
+using Imobiliare.Entities;
+using Imobiliare.UI.Models;
+using Imobiliare.ServiceLayer.EmailService;
+using Imobiliare.Repositories.Interfaces;
+using Imobiliare.ServiceLayer.Interfaces;
+using Imobiliare.ServiceLayer.ExternalSiteContentParser;
+using Imobiliare.ServiceLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 //builder.Services.AddScoped<IImobilRepository, MockImobilRepository>();
-builder.Services.AddScoped<IImobilRepository, AnunturiRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IAnunturiRepository, AnunturiRepository>();
+builder.Services.AddScoped<IJudetRepository, JudetRepository>();
+builder.Services.AddScoped<IOrasRepository, OrasRepository>();
+builder.Services.AddScoped<ICartierRepository, CartierRepository>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<ILogsRepository, LogsRepository>();
+builder.Services.AddScoped<ISystemSettingsRepository, SystemSettingsRepository>();
+builder.Services.AddScoped<IStiriRepository, StiriRepository>();
+builder.Services.AddScoped<IAgentiiRepository, AgentiiRepository>();
+builder.Services.AddScoped<IConstructoriRepository, ConstructoriRepository>();
+builder.Services.AddScoped<IMesajRepository, MesajRepository>();
+builder.Services.AddScoped<IAnsambluriRepository, AnsambluriRepository>();
+builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
+builder.Services.AddScoped<IEmailManagerService, EmailManagerService>();
+builder.Services.AddScoped<IExternalSiteParserService, ExternalSiteParserService>();
+builder.Services.AddScoped<IRecaptchaValidator, RecaptchaValidator>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp => ShoppingCart.GetCart(sp));
 builder.Services.AddSession();

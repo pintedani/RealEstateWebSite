@@ -1,0 +1,121 @@
+﻿@model Imobiliare.Entities.UserProfile
+  
+<link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
+
+<h2>@Model.UserName</h2>
+@if (!string.IsNullOrEmpty(Model.Picture))
+{
+<img src="~/Images/profileImages/@Model.Picture" />
+}
+<hr />
+
+@using (Html.BeginForm("UpdateUserInfo", "SuperAdmin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+<fieldset>
+    <legend>UserProfile @Model.Id</legend>
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UserName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.UserName)
+        @Html.ValidationMessageFor(model => model.UserName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Role)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Role)
+        @Html.ValidationMessageFor(model => model.Role)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.PhoneNumber)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.PhoneNumber)
+        @Html.ValidationMessageFor(model => model.PhoneNumber)
+    </div>
+
+    @Html.HiddenFor(model => model.TipVanzator)
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.TrustedUser)
+    </div>
+    <div class="editor-field">
+        <input @(Model.TrustedUser ? "checked =\"checked\"" : "") data-toggle="toggle"
+               data-on="Da" data-off="Nu" data-size="mini" data-val="true"
+               id="TrustedUser" name="TrustedUser" type="checkbox"
+               data-width="130" value="true" />
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Picture)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Picture)
+        @Html.ValidationMessageFor(model => model.Picture)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.AgentieId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.AgentieId)
+        @Html.ValidationMessageFor(model => model.AgentieId)
+    </div>
+
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Flags)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Flags)
+        @Html.ValidationMessageFor(model => model.Flags)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.AbonatLaNewsLetter)
+    </div>
+    <div class="editor-field">
+
+        <input @(Model.AbonatLaNewsLetter ? "checked =\"checked\"" : "") data-toggle="toggle"
+               data-on="Abonat" data-off="Dezabonat" data-size="mini" data-val="true"
+               id="AbonatLaNewsLetter" name="AbonatLaNewsLetter" type="checkbox"
+               data-width="130" value="true" />
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.RestrictionatPrimireEmail)
+    </div>
+    <div class="editor-field">
+
+        <input @(Model.RestrictionatPrimireEmail ? "checked =\"checked\"" : "") data-toggle="toggle"
+               data-on="Restrictionat" data-off="Nerestrictionat" data-size="mini" data-val="true"
+               id="RestrictionatPrimireEmail" name="RestrictionatPrimireEmail" type="checkbox"
+               data-width="130" value="true" />
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.ReceiveAdminReports)
+    </div>
+    <div class="editor-field">
+        <input @(Model.ReceiveAdminReports ? "checked =\"checked\"" : "") data-toggle="toggle"
+               data-on="Da" data-off="Nu" data-size="mini" data-val="true"
+               id="ReceiveAdminReports" name="ReceiveAdminReports" type="checkbox"
+               data-width="130" value="true" />
+    </div>
+    <hr />
+    <p>
+        <input class="btn btn-success" type="submit" value="Salveaza" />
+    </p>
+</fieldset>
+}
+
+@section Scripts {
+  <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+}

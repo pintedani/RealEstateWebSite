@@ -1,0 +1,9 @@
+﻿@using Imobiliare.Entities
+@{
+    ViewBag.Title = "Stare Editare";
+}
+
+@if (@ViewBag.StareAprobare == StareAprobare.Aprobat)
+{
+    <a class="btn btn-success" href="http://www.apartamente24.ro/Anunturi/ApartamentDetalii?imobilId=@ViewBag.AnuntId">Vizualizati anuntul</a>
+}

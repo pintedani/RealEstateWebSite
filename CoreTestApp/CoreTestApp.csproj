@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Imobiliare.UI</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,13 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Anunturi\" />
     <Folder Include="wwwroot\Images\DecorationImages\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.csproj" />
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
+    <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj" />
   </ItemGroup>
 
 </Project>

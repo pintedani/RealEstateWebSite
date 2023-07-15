@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Threading;
-using Microsoft.AspNetCore.Identity;
 
 namespace Imobiliare.Entities
 {

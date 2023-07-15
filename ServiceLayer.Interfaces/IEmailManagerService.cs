@@ -1,87 +1,86 @@
 ﻿namespace Imobiliare.ServiceLayer.Interfaces
 {
-  using System.Collections.Generic;
+    using System.Collections.Generic;
 
-  using Entities;
-    using Imobiliare.Entities;
+    using Entities;
 
     public interface IEmailManagerService
-  {
-    #region Email administration methods
+    {
+        #region Email administration methods
 
-    IEnumerable<EmailTemplate> GetAllEmailTemplates();
+        IEnumerable<EmailTemplate> GetAllEmailTemplates();
 
-    EmailTemplate GetEmailTemplate(int id);
+        EmailTemplate GetEmailTemplate(int id);
 
-    //to diff between emails which are in the same category but admin choses from one of those on the UI
-    EmailTemplate GetEmailTemplate(string humanReadableId);
+        //to diff between emails which are in the same category but admin choses from one of those on the UI
+        EmailTemplate GetEmailTemplate(string humanReadableId);
 
-    void AddEmailTemplate(EmailTemplate emailTemplate);
+        void AddEmailTemplate(EmailTemplate emailTemplate);
 
-    void UpdateEmailTemplate(EmailTemplate emailTemplate);
+        void UpdateEmailTemplate(EmailTemplate emailTemplate);
 
-    void DeleteEmailTemplate(int id);
+        void DeleteEmailTemplate(int id);
 
-    #endregion
+        #endregion
 
-    #region To Admin notification Emails
+        #region To Admin notification Emails
 
-    EmailSendStatus NotifyAdminContactForm(string phone, string email, string message);
+        EmailSendStatus NotifyAdminContactForm(string phone, string email, string message);
 
-    EmailSendStatus NotifyAdminRaportAbuzAnunt(int anuntId, string mesaj, string selectAbuzTip, string emailContact, string titluAnunt);
+        EmailSendStatus NotifyAdminRaportAbuzAnunt(int anuntId, string mesaj, string selectAbuzTip, string emailContact, string titluAnunt);
 
-    EmailSendStatus NotifyAdminAnuntAdaugat(int anuntId, string titluAnunt, string userName);
+        EmailSendStatus NotifyAdminAnuntAdaugat(int anuntId, string titluAnunt, string userName);
 
-    EmailSendStatus NotifyAdminAnunturiAdaugate(int intervalOre, int numarAnunturi);
+        EmailSendStatus NotifyAdminAnunturiAdaugate(int intervalOre, int numarAnunturi);
 
-    //EmailSendStatus NotifyAdminAnuntReactualizat(int anuntId);
+        //EmailSendStatus NotifyAdminAnuntReactualizat(int anuntId);
 
-    //EmailSendStatus NotifyAdminAnuntDezactivat(int anuntId);
+        //EmailSendStatus NotifyAdminAnuntDezactivat(int anuntId);
 
-    #endregion
+        #endregion
 
-    #region From Admin to Anunt send email messages
+        #region From Admin to Anunt send email messages
 
-    EmailSendStatus AnuntRelatedEmail(string emailTemplateHumanReadableId, string titluAnunt, int anuntId, string userId, string emailrecipient, string mesajCustom);
+        EmailSendStatus AnuntRelatedEmail(string emailTemplateHumanReadableId, string titluAnunt, int anuntId, string userId, string emailrecipient, string mesajCustom);
 
-    EmailSendStatus AnunturiExpirateRelatedEmail(string emailrecipient, int numarAnunturiExpirate);
+        EmailSendStatus AnunturiExpirateRelatedEmail(string emailrecipient, int numarAnunturiExpirate);
 
-    EmailSendStatus AnuntAprobatRelatedEmail(string titluAnunt, int anuntId, string userId, string emailrecipient);
+        EmailSendStatus AnuntAprobatRelatedEmail(string titluAnunt, int anuntId, string userId, string emailrecipient);
 
-    #endregion
+        #endregion
 
-    #region From Admin to User send email Messages
+        #region From Admin to User send email Messages
 
-    EmailSendStatus UserRelatedEmail(string emailTemplateHumanReadableId, string userId, string emailrecipient);
+        EmailSendStatus UserRelatedEmail(string emailTemplateHumanReadableId, string userId, string emailrecipient);
 
-    #endregion
+        #endregion
 
-    #region User to User contact email Messages
+        #region User to User contact email Messages
 
-    EmailSendStatus SendAnuntCereDetaliiEmail(string email, int id, string title);
+        EmailSendStatus SendAnuntCereDetaliiEmail(string email, int id, string title);
 
-    #endregion
+        #endregion
 
-    #region Account confirmation email messages
+        #region Account confirmation email messages
 
-    EmailSendStatus UserAccountConfirmationEmail(string emailUser, string userId, string confirmationToken);
+        EmailSendStatus UserAccountConfirmationEmail(string emailUser, string userId, string confirmationToken);
 
-    EmailSendStatus UserPasswordResetEmail(string emailUser, string confirmationToken);
+        EmailSendStatus UserPasswordResetEmail(string emailUser, string confirmationToken);
 
-    EmailSendStatus UserAccountConfirmedWelcomeMessageEmail(string emailUser);
+        EmailSendStatus UserAccountConfirmedWelcomeMessageEmail(string emailUser);
 
-    EmailSendStatus ExternalLoginWelcomeMessageEmail(string emailUser, string localPassword);
+        EmailSendStatus ExternalLoginWelcomeMessageEmail(string emailUser, string localPassword);
 
-    #endregion
+        #endregion
 
-    #region Mass Email send email messages
+        #region Mass Email send email messages
 
-    EmailSendStatus MassEmailSendEmail(string emailUser, string emailTemplateHumanReadableId);
+        EmailSendStatus MassEmailSendEmail(string emailUser, string emailTemplateHumanReadableId);
 
-    #endregion
+        #endregion
 
-    EmailSendStatus SendAgentImobiliarContactEmail(string emailAgent, string mesaj, string emailCumparator, string telefonCumparator);
+        EmailSendStatus SendAgentImobiliarContactEmail(string emailAgent, string mesaj, string emailCumparator, string telefonCumparator);
 
-    void TrimitereRaportAdmin(List<UserProfile> adminWithRapoarteRecieveOption, string finalEmail);
-  }
+        void TrimitereRaportAdmin(List<UserProfile> adminWithRapoarteRecieveOption, string finalEmail);
+    }
 }

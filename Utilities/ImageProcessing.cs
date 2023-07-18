@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Managers.ExtensionMethods;
-using log4net;
+using Logging;
 
 namespace Imobiliare.Utilities
 {

@@ -1,8 +1,11 @@
 ﻿using Imobiliare.Entities;
+using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
+using Imobiliare.UI.BusinessLayer;
 using Imobiliare.UI.Models;
 using Imobiliare.UI.ViewModels;
+using Logging;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 

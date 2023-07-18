@@ -1,5 +1,8 @@
-﻿using CoreTestApp.Models;
-using Imobiliare.Entities;
+﻿using Imobiliare.Entities;
+using Imobiliare.Repositories.Interfaces;
+using Imobiliare.ServiceLayer.Interfaces;
+using Imobiliare.UI.Models;
+using Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +18,7 @@ namespace Imobiliare.UI.Controllers
 
         private readonly IEmailManagerService emailManagerService;
 
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AdministrareController));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AdministrareController));
 
         public AdministrareController(
           IUnitOfWork unitOfWork,

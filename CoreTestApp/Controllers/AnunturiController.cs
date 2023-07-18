@@ -6,6 +6,11 @@ using Imobiliare.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text.RegularExpressions;
+using Imobiliare.Managers.ExtensionMethods;
+using Imobiliare.UI.Utils.UrlSeoFormatters;
+using Imobiliare.UI.BusinessLayer;
+using Imobiliare.UI.Utils;
+using Logging;
 
 namespace Imobiliare.UI.Controllers
 {

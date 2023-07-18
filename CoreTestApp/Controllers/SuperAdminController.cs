@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
+using Imobiliare.Managers.ExtensionMethods;
+using Logging;
 
 namespace Imobiliare.UI.Controllers
 {

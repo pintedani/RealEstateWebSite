@@ -1,7 +1,8 @@
-﻿using System.Web.Mvc;
-using Imobiliare.Entities;
+﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
-using log4net;
+using Logging;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Imobiliare.UI.Controllers
 {

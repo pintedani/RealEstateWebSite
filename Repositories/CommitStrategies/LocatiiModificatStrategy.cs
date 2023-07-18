@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Caching;
 using Imobiliare.Entities;
-using log4net;
+using Logging;
 
 namespace Imobiliare.Repositories.CommitStrategies
 {

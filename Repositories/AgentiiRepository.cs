@@ -13,7 +13,7 @@ namespace Imobiliare.Repositories
 {
     public class AgentiiRepository : Repository<Agentie>, IAgentiiRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(UsersRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UsersRepository));
 
         public AgentiiRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(Agentie.Id)))
         {

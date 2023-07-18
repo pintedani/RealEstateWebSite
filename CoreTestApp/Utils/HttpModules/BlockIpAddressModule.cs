@@ -6,7 +6,7 @@ using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.UI.App_Start;
-using log4net;
+
 using Microsoft.Practices.Unity;
 
 namespace Imobiliare.UI.Utils.HttpModules

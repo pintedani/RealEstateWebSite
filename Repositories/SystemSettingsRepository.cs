@@ -6,7 +6,7 @@ namespace Imobiliare.Repositories
 {
     public class SystemSettingsRepository : Repository<SystemSettings>, ISystemSettingsRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SystemSettingsRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SystemSettingsRepository));
 
         public SystemSettingsRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(Entities.SystemSettings.Id)))
         {

@@ -1,6 +1,7 @@
 ﻿using Imobiliare.Entities;
+using Logging;
 using System.Collections.Generic;
-using Common.Logging;
+
 
 namespace Caching
 {

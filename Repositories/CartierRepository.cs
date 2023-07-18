@@ -8,7 +8,7 @@
   using Imobiliare.Repositories.Interfaces;
   public class CartierRepository : Repository<Cartier>, ICartierRepository
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(CartierRepository));
+    private static readonly ILog log = LogManager.GetLogger(typeof(CartierRepository));
 
     public CartierRepository(ApplicationDbContext dbContext)
       : base(dbContext, new SortSpec(nameof(Stire.Id)))

@@ -2,7 +2,7 @@
 using System.Linq;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.UI.BusinessLayer;
-using log4net;
+
 
 namespace Imobiliare.UI.Utils.UrlSeoFormatters
 {

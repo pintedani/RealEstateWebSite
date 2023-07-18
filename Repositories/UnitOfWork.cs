@@ -7,7 +7,7 @@ using System.Linq;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.CommitStrategies;
 using Imobiliare.Repositories.Interfaces;
-using log4net;
+
 
 namespace Imobiliare.Repositories
 {

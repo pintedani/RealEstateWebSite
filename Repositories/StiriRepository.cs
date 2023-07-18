@@ -14,7 +14,7 @@ namespace Imobiliare.Repositories
 {
     public class StiriRepository : Repository<Stire>, IStiriRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(StiriRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(StiriRepository));
 
         public StiriRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(Stire.DateCreated), SortDirection.Descending))
         {

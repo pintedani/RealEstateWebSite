@@ -12,7 +12,7 @@ namespace Imobiliare.Repositories
 
     public class OrasRepository : Repository<Oras>, IOrasRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(OrasRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(OrasRepository));
 
         private IJudetRepository judetRepository;
 

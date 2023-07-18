@@ -10,7 +10,7 @@ namespace Imobiliare.Repositories
 {
   public class ConstructoriRepository : Repository<Constructor>, IConstructoriRepository
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(ConstructoriRepository));
+    private static readonly ILog log = LogManager.GetLogger(typeof(ConstructoriRepository));
 
     public ConstructoriRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(Constructor.Id)))
     {

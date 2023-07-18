@@ -5,7 +5,7 @@ using System.Linq;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
-using log4net;
+
 
 namespace Imobiliare.ServiceLayer.EmailService
 {

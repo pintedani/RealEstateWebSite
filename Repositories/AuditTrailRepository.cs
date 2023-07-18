@@ -4,10 +4,11 @@
 
   using Imobiliare.Entities;
   using Imobiliare.Repositories.Interfaces;
+    using Logging;
 
-  public class AuditTrailRepository : Repository<AuditTrail>, IAuditTrailRepository
+    public class AuditTrailRepository : Repository<AuditTrail>, IAuditTrailRepository
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AuditTrailRepository));
+    private static readonly ILog log = LogManager.GetLogger(typeof(AuditTrailRepository));
 
     public AuditTrailRepository(ApplicationDbContext dbContext)
       : base(dbContext, new SortSpec(nameof(AuditTrail.Id)))

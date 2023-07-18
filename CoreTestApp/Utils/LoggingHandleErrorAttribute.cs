@@ -5,11 +5,12 @@ using System.Web;
 
 namespace Imobiliare.UI.BusinessLayer
 {
-  using System.Web.Mvc;
+    using Logging;
+    using System.Web.Mvc;
 
   public class LoggingHandleErrorAttribute : HandleErrorAttribute
   {
-    private readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(LoggingHandleErrorAttribute));
+    private readonly ILog log = LogManager.GetLogger(typeof(LoggingHandleErrorAttribute));
 
     public override void OnException(ExceptionContext context)
     {

@@ -4,12 +4,13 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using Imobiliare.ServiceLayer.Interfaces;
+using Logging;
 
 namespace Imobiliare.ServiceLayer.EmailService
 {
     public class EmailSender : IEmailSender
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(EmailSender));
+        private static readonly ILog log = LogManager.GetLogger(typeof(EmailSender));
 
         public EmailSendStatus SendUserEmail(string email, string title, string message, string headerFooter, string userId)
         {

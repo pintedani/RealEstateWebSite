@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Net;
 using Imobiliare.ServiceLayer.Interfaces;
+using Logging;
 using Newtonsoft.Json;
 
 namespace Imobiliare.ServiceLayer
 {
     public class RecaptchaValidator : IRecaptchaValidator
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(RecaptchaValidator));
+    private static readonly ILog log = LogManager.GetLogger(typeof(RecaptchaValidator));
 
     private const string CAPTCHA_PRIVATE_KEY = "6LdoSQwTAAAAAGlUmRinm6nXyWI1nNfkLKzVc8Qn";
 

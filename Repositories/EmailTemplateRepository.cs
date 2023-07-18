@@ -9,7 +9,7 @@
 
   public class EmailTemplateRepository : Repository<EmailTemplate>, IEmailTemplateRepository
   {
-    private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(EmailTemplateRepository));
+    private static readonly ILog log = LogManager.GetLogger(typeof(EmailTemplateRepository));
 
     public EmailTemplateRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(EmailTemplate.Id)))
     {

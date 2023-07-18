@@ -15,7 +15,7 @@
 
     public class UsersRepository : Repository<UserProfile>, IUsersRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(UsersRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(UsersRepository));
 
         public UsersRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(UserProfile.Id)))
         {

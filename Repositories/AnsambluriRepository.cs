@@ -14,11 +14,12 @@ namespace Imobiliare.Repositories
     using System.IO;
     using System.Web;
 
-    using Imobiliare.Managers;
+    using Logging;
+    using Microsoft.EntityFrameworkCore;
 
     public class AnsambluriRepository : Repository<Ansamblu>, IAnsambluriRepository
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(AnsambluriRepository));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AnsambluriRepository));
 
         public AnsambluriRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(Ansamblu.Id)))
         {

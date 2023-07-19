@@ -1,0 +1,220 @@
+﻿<script>
+  //unbind -> events before binding them every time on init(because of ajax async loading)
+  //$('.searchBox').keydown(function (e) {
+  //    if (e.keyCode == 13)
+  //        $('.searchButton').click();
+  //});
+  $('.searchBox').click(function () {
+    $(this).select();
+  });
+
+  $(".searchButton").on("click", function () {
+    if ($(".searchBox").val() == "Introduceti Localitate") {
+      alert("Introduceți numele unei localități!");
+    } else {
+      //set cookie with searched value
+      $.cookie('cookieLastSearchedLocalitate', $(".searchBox").val(), { expires: 30, path: '/' });
+
+      var url = '@Url.Action("SearchForValue", "Anunturi", new {searchValue = "__id__", tipOferta1 = "__tip__", tipOfertaGen  = "__tipOfertaGen__"})';
+      var tempPath = url.replace(/__id__/g, $(".searchBox").val());
+      //&amp seems to be a general problema when passing params, therefore replace with simple &
+      var finalPath1 = tempPath.replace(/&amp;tipOferta1=__tip__/g, "&tipOferta1=" + $("#TipProprietateSelect").val());
+      var finalPath2 = finalPath1.replace(/&amp;tipOfertaGen=__tipOfertaGen__/g, "&tipOfertaGen=" + $("#TipOfertaGenSelect").val());
+      window.location.href = finalPath2;
+    }
+  });
+
+  $(document).mousedown(function (e) {
+    var container7 = $(".localitatiSearchResult");
+    if (!container7.is(e.target) // if the target of the click isn't the container...
+        && container7.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+      if (container7.css('display') != 'none') {
+        container7.hide();
+      }
+    }
+  });
+
+  var typingTimer;
+  var doneTypingInterval = 300;
+    
+
+  //user is "finished typing," do something
+  function doneTyping() {
+
+    //On backspace check if value is less than 2 characters, postback only in case
+    if (pressedKey == '8') {
+      if ($(".searchBox").val().length < 2) {
+        $(".localitatiSearchResult").html("");
+        $(".localitatiSearchResult").hide();
+        return;
+      }
+    }
+
+    //alert(String.fromCharCode(e.which) + "code: " + e.which);
+    if ($(".searchBox").val().length > 0) {
+      var searchValue = $(".searchBox").val();
+
+      //In caz de backspace
+      if (pressedKey == '8') {
+        searchValue = $(".searchBox").val();
+      }
+
+      //Show all (tot judetul) results only on searching, not also on adding location
+      var includingTotJudetul = false;
+      if ($(".searchButton").length) {
+        includingTotJudetul = true;
+      }
+      $(".searchBoxLoading").show();
+      $.ajax({
+        url: '@Url.Action("LocationSearchResults", "Home")',
+        dataType: 'json',
+        async: false,
+        data: { searchText: searchValue, includingTotJudet: includingTotJudetul },
+        success: function (orase) {
+          $(".searchBoxLoading").hide();
+          $(".localitatiSearchResult").html("");
+          $(".localitatiSearchResult").show();
+          if (orase.length > 0) {
+            $(".searchBoxNoResults").hide();
+            for (var index = 0; index < orase.length; ++index) {
+              var splitString = orase[index].split('|');
+              var oras = splitString[1];
+
+              //(totJudetul)
+              if (splitString[2]) {
+                oras += " | " + splitString[2];
+              }
+
+              var orasId = splitString[0];
+
+              $(".localitatiSearchResult").append('<li style="cursor:pointer" data-orasid = "' + orasId + '" data-val = "' + oras + '"><span style="padding: 8px 0 9px 0; cursor:pointer" class="glyphicon glyphicon-map-marker"></span>  ' + oras + '</li>');
+            }
+            $(".localitatiSearchResult").show();
+
+            $(".localitatiSearchResult li").on("click", function () {
+              //If on searching
+              if ($(".searchButton").length) {
+                $(".searchBox").val($(this).data("val"));
+
+                $(".localitatiSearchResult").hide();
+                //$(".searchButton").click();
+
+                $.ajax({
+                  url: '@Url.Action("GetNumarAnunturiForFilterHomeSearch", "Home")',
+                  type: 'POST',
+                  data: {
+                    TipProprietate: $("#TipProprietateSelect").val(),
+                    TipOfertaGen: $("#TipOfertaGenSelect").val(),
+                    localitateString: $(".searchBox").val()
+                  },
+                  success: function (data) {
+                    var rezText = " Rezultate";
+                    if (data == 1) {
+                      rezText = " Rezultat";
+                    }
+                    $("#SearchBtnHomeTxt").html(data + rezText);
+                  }
+                });
+              }
+
+              //This method if available is used to do some custom actions after selection
+              localitateSelectataDropdown();
+            });
+          } else {
+            $(".localitatiSearchResult").hide();
+            $(".searchBoxLoading").hide();
+            $(".searchBoxNoResults").show();
+          }
+        }
+      });
+    }
+  }
+
+  function updateCartiere(orasid) {
+    if (orasid != null && orasid != '') {
+      $.getJSON('@Url.Action("Cartiere", "Home")', { orasId: orasid }, function (cartiere) {
+        var cartierSelect = $('#CartierSelect');
+        cartierSelect.empty();
+        if (cartiere.length !== 0) {
+            $.each(cartiere, function (index, cartier) {
+            cartierSelect.append($('<option/>', {
+                value: cartier.Id,
+                text: cartier.Nume
+            }));
+          });
+          $('#cartierSelectDiv').fadeOut('fast');
+          $('#cartierSelectDiv').fadeIn('slow');
+          $('#cartierSelectDiv').fadeIn('slow');
+        } else {
+          $('#cartierSelectDiv').hide();
+        }
+        //$.cookie('SelectedOras', selectedOras, { expires: 7 });
+      });
+    }
+  }
+
+  $(".schimbaLocalitateButton").on("click", function () {
+    $(".searchBox").val("");
+    $("#OrasSelect").val("");
+    $(".searchBox").prop('disabled', false);
+    $(".schimbaLocalitateButton").hide();
+    $('#CartierSelect').empty();
+    $('#cartierSelectDiv').hide();
+  });
+
+  //keydown to work on touchscreen devices
+  $(".searchBox").keydown(function (e) {
+    pressedKey = e.which;
+    var selected = $(".localitatiSearchResult").find("li.selected");
+    //Check for updown arrows
+    if (pressedKey == "38") {
+      e.preventDefault();
+      //alert($(".localitatiSearchResult").find("li").length);
+      if (selected.length) {
+        //alert("is");
+        $(".localitatiSearchResult").find("li").removeClass("selected");
+        selected.prev("li").addClass("selected");
+      } else {
+        $(".localitatiSearchResult").find("li").first().addClass("selected");
+      }
+    } else if (pressedKey == "40") {
+      e.preventDefault();
+      if (selected.length) {
+        //alert("is");
+        $(".localitatiSearchResult").find("li").removeClass("selected");
+        selected.next("li").addClass("selected");
+      } else {
+        $(".localitatiSearchResult").find("li").first().addClass("selected");
+      }
+    } else if (pressedKey == "13") {
+      e.preventDefault();
+      $(".localitatiSearchResult").hide();
+      if (selected.length) {
+        selected.click();
+      }
+    } else {
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(doneTyping, doneTypingInterval);
+    }
+  });
+
+  function inputFocus(i) {
+    if (i.value == i.defaultValue) {
+      i.value = "";
+      i.style.color = "#000";
+    } else {
+      i.style.color = "#000";
+      i.select();
+    }
+  }
+
+  function inputBlur(i) {
+    if (i.value == "") {
+      i.value = i.defaultValue;
+      i.style.color = "#c3c3c3";
+    } else {
+      i.style.color = "#c3c3c3";
+    }
+  }
+</script>

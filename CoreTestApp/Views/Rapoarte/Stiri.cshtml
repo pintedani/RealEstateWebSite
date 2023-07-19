@@ -1,0 +1,34 @@
+﻿@model Imobiliare.UI.Models.RapoarteStiriDetalii
+
+@Html.Partial("_MenuSuperAdmin")
+<br />
+@if (Request.UrlReferrer != null)
+{
+<a class="btn btn-success" onclick="history.go(-1); return false;" href="#" style="margin: 5px 0 10px 0"><span class="glyphicon glyphicon-arrow-left"></span> Înapoi</a>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-success">
+            <div class="panel-heading">Ultimele 7 zile</div>
+            <div class="panel-body">
+                <p><strong>@Model.Stiri.Count</strong> stiri adaugate</p>
+
+                @foreach (var stire in Model.Stiri)
+                {
+                <div>
+                    <p>@stire.Titlu</p>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-success">
+            <div class="panel-heading">Alte activitati</div>
+            <div class="panel-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>

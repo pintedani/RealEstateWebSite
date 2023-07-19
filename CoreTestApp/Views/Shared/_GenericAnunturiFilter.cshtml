@@ -1,0 +1,189 @@
+﻿<script type="text/javascript">
+        const KEY_UP = '38';
+        const KEY_DOWN = '40';
+        const KEY_ENTER = '13';
+        const KEY_BACKSPACE = '8';
+
+        var typingTimer;
+        var doneTypingInterval = 300;
+        var pressedKey;
+
+        $(function () {
+            $("#searchBox").keydown(function (e) {
+                pressedKey = e.which;
+                console.log(String.fromCharCode(pressedKey) + "code: " + pressedKey);
+                var selected = $("#localitatiSearchResult").find("li.selected");
+                if (pressedKey == KEY_UP) {
+                    e.preventDefault();
+                    if (selected.length) {
+                        $("#localitatiSearchResult").find("li").removeClass("selected");
+                        selected.prev("li").addClass("selected");
+                    } else {
+                        $("#localitatiSearchResult").find("li").first().addClass("selected");
+                    }
+                } else if (pressedKey == KEY_DOWN) {
+                    e.preventDefault();
+                    if (selected.length) {
+                        $("#localitatiSearchResult").find("li").removeClass("selected");
+                        selected.next("li").addClass("selected");
+                    } else {
+                        $("#localitatiSearchResult").find("li").first().addClass("selected");
+                    }
+                } else if (pressedKey == KEY_ENTER) {
+                    e.preventDefault();
+                    $("#localitatiSearchResult").hide();
+                    if (selected.length) {
+                        selected.click();
+                    }
+                } else {
+                    clearTimeout(typingTimer);
+                    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+                }
+            });
+
+            $("#searchButton").on("click", SearchForValue);
+
+            $("#TipOfertaSelectControl > .btn-outline-secondary").on("click", function () {
+                var selectedOferta = $(this).data("val");
+                $("#TipOfertaGenSelect").val(selectedOferta);
+                if (enableautorefresh) {
+                    SearchForValue();
+                }
+            });
+
+            $("#TipProprietateSelectControl .dropdown-item").on("click", function () {
+                $("#TipProprietateSelect").val($(this).data("val"));
+                $("#TipProprietateDropdown").html($(this).children("label").html());
+                if (enableautorefresh) {
+                    SearchForValue();
+                }
+            });
+        });
+
+        function SearchForValue() {
+            var constructQueryString = '?searchValue=' + $("#searchBox").val() +
+                '&tipProprietate=' + $("#TipProprietateSelect").val() +
+                '&tipOfertaGen=' + $("#TipOfertaGenSelect").val();
+
+            var camereMin = $("#camereMin").val();
+            console.log('camere min is' + camereMin);
+            if (camereMin > 0) {
+                constructQueryString += '&camereMin=' + camereMin
+            }
+            var camereMax = $("#camereMax").val();
+            if (camereMax > 0) {
+                constructQueryString += '&camereMax=' + camereMax
+            }
+            var pretMin = $("#pretMin").val();
+            if (pretMin > 0) {
+                constructQueryString += '&pretMin=' + pretMin
+            }
+            var pretMax = $("#pretMax").val();
+            if (pretMax > 0) {
+                constructQueryString += '&pretMax=' + pretMax
+            }
+            var mpMin = $("#mpMin").val();
+            if (mpMin > 0) {
+                constructQueryString += '&mpMin=' + mpMin
+            }
+            var mpMax = $("#mpMax").val();
+            if (mpMax > 0) {
+                constructQueryString += '&mpMax=' + mpMax
+            }
+            var page = $("#page").val();
+            if (page > 0) {
+                constructQueryString += '&page=' + page
+            }
+            var mapMode = $("#mapMode").val();
+            if (mapMode !== '' && mapMode) {
+                constructQueryString += '&mapMode=' + mapMode
+            }
+            var cartier = $("#CartierSelect").val();
+            if (cartier !== '0' && cartier) {
+                //alert(cartier);
+                constructQueryString += '&cartier=' + cartier
+            }
+            var tipVanzator = $("#TipVanzatorSelect").val();
+            if (tipVanzator !== 'TotiVanzatorii' && tipVanzator) {
+                constructQueryString += '&vanzator=' + tipVanzator
+            }
+
+            //window.location.href = '/Anunturi/Lista/judet-Cluj/localitate-Cluj-Napoca/tip-Apartament';
+            //https://www.apartamente24.ro/Anunturi/Lista/judet-Cluj/localitate-Cluj-Napoca/vanzator-Persoane-Fizice/tip-Vanzare-Apartamente/pret-5000-25000/mp-10-190/camere-2-4/vechimezile-60
+
+            window.location.href = '/Anunturi/SearchForValue' + constructQueryString;
+        }
+
+        function doneTyping() {
+            if (pressedKey == KEY_BACKSPACE) {
+                if ($("#searchBox").val().length < 2) {
+                    $("#localitatiSearchResult").html("");
+                    $("#localitatiSearchResult").hide();
+                    return;
+                }
+            }
+
+            if ($("#searchBox").val().length > 0) {
+                var searchValue = $("#searchBox").val();
+
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $("#searchDiv").offset().top
+                }, 500);
+
+                $.ajax({
+                    url: '@Url.Action("LocationSearchResults", "Home")',
+                    dataType: 'json',
+                    async: false,
+                    data: { searchText: searchValue, includingTotJudet: true },
+                    success: function (orase) {
+                        $("#localitatiSearchResult").html("");
+                        $("#localitatiSearchResult").show();
+                        if (orase.length > 0) {
+                            for (var index = 0; index < orase.length; ++index) {
+                                var splitString = orase[index].split('|');
+                                var oras = splitString[1];
+
+                                //(totJudetul)
+                                if (splitString[2]) {
+                                    oras += " | " + splitString[2];
+                                }
+
+                                $("#localitatiSearchResult").append('<li data-val = "' + oras + '"><div class="d-flex dropdown-item my-1">' + oras+'</div></li>');
+                            }
+
+                            $("#localitatiSearchResult").show();
+
+                            $("#localitatiSearchResult li").on("click", function () {
+                                $("#searchBox").val($(this).data("val"));
+                                $("#localitatiSearchResult").hide();
+
+                                $.ajax({
+                                    url: '@Url.Action("GetNumarAnunturiForFilterHomeSearch", "Home")',
+                                    type: 'POST',
+                                    data: {
+                                        TipProprietate: $("#TipProprietateSelect").val(),
+                                        TipOfertaGen: $("#TipOfertaGenSelect").val(),
+                                        localitateString: $("#searchBox").val()
+                                    },
+                                    success: function (data) {
+                                        var rezText = " Rezultate";
+                                        if (data == 1) {
+                                            rezText = " Rezultat";
+                                        }
+                                        $("#searchButton").html(data + rezText);
+                                        if (enableautorefresh) {
+                                            SearchForValue();
+                                        }
+                                    }
+                                });
+                            });
+                        } else {
+                            $("#localitatiSearchResult").hide();
+                            $(".searchBoxLoading").hide();
+                            $(".searchBoxNoResults").show();
+                        }
+                    }
+                });
+            }
+        }
+</script>

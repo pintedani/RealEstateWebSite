@@ -1,0 +1,80 @@
+﻿@model Imobiliare.Entities.Mesaj
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Mesaj</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.FromUser.Email)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FromUser.Email)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Imobil.Title)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Imobil.Title)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ToUser.Email)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ToUser.Email)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Continut)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Continut)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CreateDateTime)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CreateDateTime)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.CitireDateTime)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.CitireDateTime)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

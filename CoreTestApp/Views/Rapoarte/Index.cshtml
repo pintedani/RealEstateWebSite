@@ -1,0 +1,55 @@
+﻿@model Imobiliare.UI.Models.RapoarteData
+
+@Html.Partial("_MenuSuperAdmin")
+<br />
+
+<h3 style="color: red">Rapoartele acestea sunt generate acum, prin interogare directa in BD.</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">Administratori</div>
+            <div class="panel-body">
+                @foreach (var admin in Model.Administratori)
+                {
+                <h3>@admin.UserName</h3>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Anunturi")">
+            <div class="panel panel-success">
+                <div class="panel-heading">Ultimele 7 zile</div>
+                <div class="panel-body">
+                    <p>
+                        <strong>@Model.AnunturiNoiAdaugate.Count</strong> anunturi adaugate
+                    </p>
+                    <p>
+                        <strong>@Model.AnunturiReactualizate.Count</strong> anunturi reactualizate
+                    </p>
+                    <p>
+                        <strong>@Model.UseriCreati.Count</strong> useri creati
+                    </p>
+                    @*@foreach (var anunt in Model.Anunturi)
+                    {
+                        <h3>@anunt.Title</h3>
+                    }*@
+                </div>
+            </div>
+        </a>
+
+    </div>
+    <div class="col-md-4">
+        <a href="@Url.Action("Stiri")">
+            <div class="panel panel-success">
+                <div class="panel-heading">Stiri</div>
+                <div class="panel-body">
+                    <p>
+                        <strong>@Model.Stiri.Count</strong> stiri adaugate
+                    </p>
+                </div>
+            </div>
+        </a>
+</div>
+</div>

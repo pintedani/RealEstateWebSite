@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "RestrictionarePrimireEmail";
+}
+
+@if (ViewBag.Id != null)
+{
+    <h2>Restrictionare Primire Email: @ViewBag.Email</h2>
+    <br />
+
+    using (Html.BeginForm("RestrictionarePrimireEmail", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" value="@ViewBag.Id" name="userId">
+        <input type="hidden" value="@ViewBag.Email" name="email">
+        <h2>Pentru dezabonare permanenta de la emailuri din partea apartamente24.ro, confirmati prin apasarea urmatorului buton:</h2>
+        <br />
+        <br />
+        <input type="submit" class="btn btn-success" value="Dezabonare" />
+    }
+}
+

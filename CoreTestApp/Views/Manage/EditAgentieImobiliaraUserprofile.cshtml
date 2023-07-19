@@ -1,0 +1,196 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.UI.Models.EditAgentImobiliarModel
+
+@{
+    ViewBag.Title = "Editeaza Detalii Cont";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    @Html.Partial("_MenuUserProfileB5")
+
+    @using (Html.BeginForm("EditAgentieImobiliaraUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.IsAgentieAdmin)
+        @Html.HiddenFor(model => model.TrustedUser)
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 p-2">
+                    <div style="font-size: 1.2em; margin-top: 5px">
+                        Email: @Model.UserName - membru din @Model.UserCreateDate.Value.ToString("dd/MM/yyyy")
+                    </div>
+                    <hr />
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        <label>Numele tau complet</label>
+                        @Html.TextBoxFor(model => model.NumeComplet, new { title = "Introduceti numele", placeholder = "Numele tau complet", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.NumeComplet)
+                    </div>
+                    <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                        <label>Telefon</label>
+                        @Html.TextBoxFor(model => model.PhoneNumber, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", type = "tel", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PhoneNumber)
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="touchCheckbox" style="padding: 15px; margin-top: 5px; background-color: white; border-bottom: 1px solid #eeeeee">
+                        <span style="font-size: 1.8em" class="bi @(Model.AbonatLaNewsLetter ? "bi-check" : "bi-unchecked")"></span>
+                        <input type="hidden" value="@(Model.AbonatLaNewsLetter ? "true" : "false")" name="AbonatLaNewsLetter">
+                        <label>Abonat la newsletter</label>
+                    </div>
+
+                    <div style="display: inline-block">
+                        <div>
+                            <input id="ProfileImage" type="file" name="ProfileImage" style="opacity: 0" />
+                        </div>
+                        <div style="display: inline-block" id="filesInfo">
+                            @if (Model.Picture != null)
+                            {
+                                <img style="width: 120px; margin-right: 40px" src="../../Images/profileImages/@Model.Picture" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px" />
+                            }
+                        </div>
+                        <div style="display: inline-block" onclick="$('#ProfileImage').click()">
+                            <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poză profil agent</button>
+                        </div>
+
+                        @*<img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px"/>
+                            <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poza profil agent</button>*@
+                    </div>
+                    <hr />
+                    <button type="submit" class="btn btn-primary" style="margin: 0 0 0 10px"><span class="bi bi-check"></span> Salvează</button>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 p-2">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Membru Agentie Imobiliara</div>
+                        <div class="panel-body">
+                            <div class="col-xs-12">
+                                <div style="display: inline-block; vertical-align: top">
+                                    @if (Model.Agentie.PozaAgentie != null)
+                                    {
+                                        <img style="width: 120px" src="~/Images/LogoAgentii/@Model.Agentie.PozaAgentie" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Images/DecorationImages/image_placeholder.png" style="width: 70px" />
+                                    }
+                                </div>
+                                <div style="display: inline-block">
+                                    <label>Nume agentie:</label>
+                                    <p style="display: inline-block; margin-top: 5px; font-weight:bold">@Model.Agentie.Nume</p>
+                                    <br />
+                                    <label>Telefon agentie:</label>
+                                    <p style="display: inline-block; margin-top: 5px; font-weight: bold">@Model.Agentie.TelefonAgentie</p>
+                                    <br />
+                                    <label>Site web:</label>
+                                    <p style="display: inline-block; margin-top: 5px; font-weight: bold">@Model.Agentie.Website</p>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.Agentie.DescriereAgentie))
+                            {
+                                <div>
+                                    <label>Descriere:</label>
+                                    <p style="display: inline-block">@Model.Agentie.DescriereAgentie</p>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+
+                            @if (Model.IsAgentieAdmin)
+                            {
+                                <a class="btn btn-primary" href="@Url.Action("EditAgentieDetails", "Manage")"><span class="bi bi-pencil"></span> Editeaza detalii agentie</a>
+                                <hr />
+                            }
+                        </div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Agenti imobiliari</div>
+                        <div class="panel-body">
+                            <div>
+                                <label>Agenti:</label>
+                                <p style="display: inline-block; margin-top: 5px; font-weight: bold">@Model.Agentie.AgentieImobiliaraUserProfiles.Count / 10 Agenti definiti</p>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            @if (Model.IsAgentieAdmin)
+                            {
+                                <a class="btn btn-primary" href="@Url.Action("EditAgentieManageAgenti", "Manage")"><span class="bi bi-pencil"></span> Editeaza agenti</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.TrustedUser)
+            {
+                <h3>
+                    <span class="bi bi-star"></span>Utilizator de incredere
+                </h3>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            //disable button once clicked
+            $('#submitButton').on("click", function () {
+                $('#submitButton').hide();
+                $('#loadingGif').show();
+            });
+        });
+    </script>
+    <script>
+        //Preview Image
+        window.onload = init;
+
+        function init() {
+            document.getElementById('ProfileImage').addEventListener('change', fileSelect, false);
+        }
+
+        function fileSelect(evt) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var files = evt.target.files;
+
+                var result = '';
+                var file;
+                for (var i = 0; file = files[i]; i++) {
+                    // if the file is not an image, continue
+                    if (!file.type.match('image.*')) {
+                        alert("Va rugam selectati o imagine(.jpg .png)");
+                        continue;
+                    }
+
+                    reader = new FileReader();
+                    reader.onload = (function (tFile) {
+                        return function (evt) {
+
+                            var div = document.createElement('div');
+                            div.innerHTML = '<img style="width: 90px;" src="' + evt.target.result + '" />';
+                            document.getElementById('filesInfo').innerHTML = "";
+                            document.getElementById('filesInfo').appendChild(div);
+                            $("#SelectLogoButton").html('Schimbă poză profil agent');
+                        };
+                    }(file));
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

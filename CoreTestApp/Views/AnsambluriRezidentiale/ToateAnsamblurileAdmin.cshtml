@@ -1,0 +1,87 @@
+﻿    @using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.AnsambluriViewModel
+
+@Html.Partial("_MenuSuperAdmin")
+
+<br />
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+    <a href="@Url.Action("Create")" class="btn btn-light"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Adauga ansamblu nou</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Poze
+        </th>
+        <th>
+            Localitate
+        </th>
+        <th>
+            Titlu
+        </th>
+        <th>
+            Creat
+        </th>
+        <th>
+            Modificat
+        </th>
+        <th>
+            <span class="glyphicon glyphicon-eye-open"></span>
+        </th>
+        <th>
+            Activ
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Ansambluri)
+    {
+        <tr>
+            <td>
+                @if (!(string.IsNullOrEmpty(item.Poze)))
+                {
+                    <a href="@AnsambluriRezidentialeUrls.AnsambluRezidentialUrl(item, null)"><img style="max-height: 50px; max-width: 100px" src="~/Images/AnsambluriRezidentiale/@item.Poze.Split(';').First()" /></a>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Oras.Nume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titlu)
+            </td>
+            <td>
+                @item.DateCreated.ToShortDateString()
+            </td>
+            <td>
+                @item.DateModified.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumarVizualizari)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "AnsambluriRezidentiale", new {id = item.Id})" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="@Url.Action("Delete", "AnsambluriRezidentiale", new {id = item.Id})" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (Model.NumberOfPages > 1)
+{
+    using (Html.BeginForm("ToateAnsamblurileAdmin", "AnsambluriRezidentiale", FormMethod.Get, new { id = "PickForm" }))
+    {
+        <div class="clearfix"></div>
+        <p style="margin: 10px 0 0 0">Pagina @Model.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+}
+
+@section Scripts {
+    @Html.Partial("_GenericPaging")
+}

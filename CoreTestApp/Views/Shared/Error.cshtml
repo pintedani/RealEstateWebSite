@@ -1,0 +1,16 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<hgroup class="title">
+    <h1 class="error">Eroare.</h1>
+    <h2 class="error">Ne pare rau. A aparut o eroare in timpul navigarii.</h2>
+
+    @*Only for debug on server*@
+    @*<h1 style="display: block">Message: @Model.Exception.Message</h1>
+    <h1 style="display: block">Controller: @Model.ControllerName</h1>
+    <h1 style="display: block">Action: @Model.ActionName</h1>
+    <h1 style="display: block">Inner: @Model.Exception.InnerException.Message</h1>*@
+</hgroup>

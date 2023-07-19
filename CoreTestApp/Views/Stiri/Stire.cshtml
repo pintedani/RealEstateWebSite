@@ -1,0 +1,241 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.StireViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+    string formattedTitle = HttpUtility.HtmlDecode(HtmlHelpers.RemoveSpecialCharacters(Model.Stire.Titlu, ' ', false, true));
+
+    if (!string.IsNullOrEmpty(Model.Stire.TitluUrl))
+    {
+        ViewBag.Title = Model.Stire.TitluUrl;
+    }
+    else
+    {
+        ViewBag.Title = formattedTitle;
+    }
+
+    if (!string.IsNullOrEmpty(Model.Stire.MetaDescription))
+    {
+        ViewBag.MetaDescription = Model.Stire.MetaDescription;
+    }
+    else
+    {
+        ViewBag.MetaDescription = formattedTitle;
+    }
+
+    if (Model.Stire.Keywords != null)
+    {
+        ViewBag.Keywords = Model.Stire.Keywords;
+    }
+
+    ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+    ViewBag.ShareTitle = formattedTitle;
+    ViewBag.ShareDescription = ViewBag.MetaDescription;
+    if (!string.IsNullOrEmpty(Model.Stire.Poze))
+    {
+        ViewBag.ShareImage = "http://www.apartamente24.ro/Images/Stiri/" + Model.Stire.Poze.Split(';')[0];
+    }
+    else
+    {
+        ViewBag.ShareImage = "http://www.apartamente24.ro/Images/imobiliare2.jpg";
+    }
+}
+<div class="container">
+
+    <div id="fb-root"></div>
+    <style>
+        .fb-comments iframe {
+            width: 100% !important
+        }
+    </style>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/ro_RO/sdk.js#xfbml=1&version=v2.8&appId=273830189442081";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+    @*Google+*@
+    <!--<script>
+        // Defines the configuration options, these must be set before you load
+        // the platform.js file.
+        window.___gcfg = {
+            lang: 'ro-RO'
+        }
+    </script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>-->
+
+    <div class="row" style="padding-left: 5px; padding-right: 5px">
+        <div class="col-md-10" style="margin-top: 30px; padding-left: 5px; padding-right: 5px">
+            <p><span class="bi bi-calendar"></span> @Model.Stire.DateCreated.Date.ToString("dd/MM/yy")</p>
+
+            <h1 style="margin-bottom: 5px">@Model.Stire.Titlu</h1>
+            <!-- Place this tag where you want the share button to render. -->
+            <div class="g-plus" data-action="share" data-annotation="bubble"></div>
+            <br />
+            <div class="fb-share-button" data-layout="button_count"></div>
+            <hr style="margin-top: 5px" />
+
+            @if (!string.IsNullOrEmpty(Model.Stire.Poze))
+            {
+                <div>
+                    <img style="width: 100%" src="/Images/Stiri/@Model.Stire.Poze.Split(';')[0]" />
+                </div>
+            }
+            <hr />
+
+            @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+            {
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama sus articol --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="4618131363" data-ad-format="auto"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                <br />
+            }
+
+            <div>@Html.Raw(HttpUtility.HtmlDecode(Model.Stire.Continut.Replace("\n", "<br/>")))</div>
+            <br />
+            <strong style="font-size: 1.2em">Dacă te interesează astfel de ştiri, te aşteptăm să te alături paginii noastre de Facebook, cu un Like mai jos:</strong>
+            <div class="clearfix"></div>
+            <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fapartamente24&width=450&layout=standard&action=like&show_faces=true&share=false&height=80&appId" width="350" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+
+            @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+            {
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama jos articol -->
+                <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-1474334984782094" data-ad-slot="6958224088"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            }
+
+            <div class="clearfix"></div>
+
+            <hr />
+            <div class="row">
+                <div class="col-sm-6">
+                    @if (Model.StireAnterioara != null)
+                    {
+                        <a href="@StiriUrls.BuildStirePageUrl(Model.StireAnterioara)">
+                            <div>
+                                @if (!string.IsNullOrEmpty(@Model.StireAnterioara.Poze))
+                                {
+                                    <div class="col-sx-4">
+                                        <img src="../../Images/Stiri/@Model.StireAnterioara.Poze.Split(';')[0]" style="width: 100px; display: inline-block" />
+                                    </div>
+                                }
+                                <p><span class="bi bi-arrow-left"></span> @Model.StireAnterioara.Titlu</p>
+                            </div>
+                        </a>
+                    }
+                </div>
+                @*to not displaytwo times the hr*@
+                @*@if (Model.StireUrmatoare != null && Model.StireAnterioara != null)
+                    {
+                        <hr class="visible-xs" />
+                    }*@
+                <div class="col-sm-6 d-flex align-content-end">
+                    @if (Model.StireUrmatoare != null)
+                    {
+                        <a href="@StiriUrls.BuildStirePageUrl(Model.StireUrmatoare)">
+                            <div>
+                                @if (!string.IsNullOrEmpty(@Model.StireUrmatoare.Poze))
+                                {
+                                    <div class="col-sx-4">
+                                        <img src="../../Images/Stiri/@Model.StireUrmatoare.Poze.Split(';')[0]" style="width: 100px; display: inline-block" />
+                                    </div>
+                                }
+                                <p>@Model.StireUrmatoare.Titlu <span class="bi bi-arrow-right"></span></p>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+
+            <br />
+            @*
+                    Disquss - not used anymore
+                    <div id="disqus_thread"></div>
+                <script>
+
+                    /**
+                     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+                    /*
+                    var disqus_config = function () {
+                        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+                        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                    };
+                    */
+                    (function () { // DON'T EDIT BELOW THIS LINE
+                        var d = document, s = d.createElement('script');
+                        s.src = '//apartamente24-ro.disqus.com/embed.js';
+                        s.setAttribute('data-timestamp', +new Date());
+                        (d.head || d.body).appendChild(s);
+                    })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>*@
+
+            @*moderate comments https://developers.facebook.com/tools/comments/*@
+            <div>
+                <div class="fb-comments" data-width="100%" data-numposts="5"></div>
+            </div>
+        </div>
+
+        <div style="margin-top: 25px" class="col-md-2">
+            <p style="font-size: 1.1em;">
+                <b>Ultimele Anunțuri:</b>
+            </p>
+            @{
+                List<Imobil> lastAddedImobils = Model.LastAddedImobils;
+            }
+            @if (lastAddedImobils.Count > 0)
+            {
+                foreach (var imobil in lastAddedImobils.ToList())
+                {
+                    @*position: relative -> in order to work class="anchor-link-spanner"><span class="link-spanner"></span>*@
+                    <a href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)" style="display: inline-block; padding: 0 10px; background-color: honeydew; position: relative">
+                        @*<a href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)" class="anchor-link-spanner"><span class="link-spanner"></span></a>*@
+                        @*A tag allows to contain divs in HTML 5*@
+                        <div style="width: 150px; display: inline-block; cursor: pointer">
+                            <img class="center-cropped" style="height: 100px; box-shadow: 6px 6px 4px #888888;" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)" />
+                            <p style="font-size: 1.1em; margin-top: 4px; margin-bottom: 0px;">@TipOfertaDisplayFormatter.GetDisplayString(imobil.TipProprietate, imobil.TipOfertaGen)</p>
+                            <div>
+                                <div style="display: inline-block; height: 70px; max-width: 90px">
+                                    <p style="font-size: 1.3em; margin-bottom: 5px; margin-top: 12px">@imobil.Price €</p>
+                                    @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, imobil.TipProprietate, imobil.TipOfertaGen) && imobil.NumarCamere > 0)
+                                    {
+                                        <p style="font-size: 1.1em; margin-top: 5px;">@imobil.NumarCamere Camere</p>
+                                    }
+                                </div>
+
+                                <div style="float: right; padding-top: 30px">
+                                    <p class="btn btn-success">Detalii</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p style="font-size: 1.1em; margin-top: 0;">@imobil.Judet.Nume, @imobil.Oras.Nume</p>
+                            </div>
+
+                        </div>
+                        <hr />
+                    </a>
+                    @*<hr/>*@
+                }
+            }
+        </div>
+    </div>
+
+    <div class="col" style="background-color: #F9F9F9; text-align: center; padding: 10px; margin-top: 5px">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+        }
+        else
+        {
+            <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+        }
+    </div>
+
+</div>

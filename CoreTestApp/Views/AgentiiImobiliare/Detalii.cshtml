@@ -1,0 +1,67 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.Entities.Agentie
+
+@{
+    ViewBag.Title = "Agentia imobiliara " + Model.Nume;
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container m-4">
+
+    @if (!string.IsNullOrEmpty(Model.Nume))
+    {
+        <h3>Agenția imobiliară  @Model.Nume</h3>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.PozaAgentie))
+    {
+        <hr />
+        <img style="max-height: 150px; max-width: 250px" src="~/Images/LogoAgentii/@Model.PozaAgentie" />
+    }
+
+    @if (!string.IsNullOrEmpty(Model.DescriereAgentie))
+    {
+        <hr />
+        <p><Strong>Descriere: </Strong> @Model.DescriereAgentie</p>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Website))
+    {
+        <hr />
+        <Strong>Site web: </Strong> <a href="http://@Model.Website">@Model.Website</a>
+    }
+
+    @if (Model.Oras != null)
+    {
+        <hr />
+        <Strong>Localitate: </Strong> @Model.Oras.Nume
+    }
+
+    <hr />
+    <table class="table table-striped">
+        <tr>
+            <th>
+                Agenți imobiliari
+            </th>
+            <th>@*Anunțuri active*@</th>
+        </tr>
+        @foreach (var agent in Model.AgentieImobiliaraUserProfiles)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(agent.NumeComplet))
+                    {
+                        <p>@agent.NumeComplet </p>
+                    }
+                    else
+                    {
+                        <p>@agent.UserName </p>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink(@agent.Anunturi.Count(x => x.StareAprobare == StareAprobare.Aprobat) + " Anunturi active", "AnunturiUtilizator", "Anunturi", new { userId = agent.Id }, new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

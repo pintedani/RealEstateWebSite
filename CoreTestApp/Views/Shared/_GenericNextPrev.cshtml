@@ -1,0 +1,38 @@
+﻿@functions {
+    private string GetUrlWithoutPage()
+    {
+        var nextUrl = Request.Url.AbsoluteUri;
+        if (nextUrl.Contains("?page="))
+        {
+            var indexTostart = nextUrl.IndexOf("?page=");
+            nextUrl = nextUrl.Remove(indexTostart, nextUrl.Length - indexTostart);
+        }
+        return nextUrl;
+    }
+}
+
+@if (Model.NumberOfPages > 1)
+{
+    if (Model.Page < Model.NumberOfPages)
+    {
+        if (Model.Page > 1)
+        {
+            var prevUrl = GetUrlWithoutPage();
+            var prevPage = Model.Page - 1;
+            prevUrl += "?page=" + prevPage;
+            <link rel="prev" href="@prevUrl" />
+        }
+
+        var nextUrl = GetUrlWithoutPage();
+        var nextPage = Model.Page + 1;
+        nextUrl += "?page=" + nextPage;
+        <link rel="next" href="@nextUrl" />
+    }
+    else if (Model.NumberOfPages > 1)
+    {
+        var prevUrl = GetUrlWithoutPage();
+        var prevPage = Model.Page - 1;
+        prevUrl += "?page=" + prevPage;
+        <link rel="prev" href="@prevUrl" />
+    }
+}

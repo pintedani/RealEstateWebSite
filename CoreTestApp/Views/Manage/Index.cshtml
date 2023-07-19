@@ -1,0 +1,180 @@
+﻿@using Microsoft.Owin.Security
+@model Imobiliare.UI.Models.ManageAccountViewModel
+@{
+    ViewBag.Title = "Administreaza cont";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        <p class="message-success">@ViewBag.StatusMessage</p>
+        <div style="border: 1px solid #a7d582; border-radius: 7px; padding: 8px; padding-bottom: 20px; margin-top: 30px">
+            <p>Sunteti logat ca si: <strong>@User.Identity.Name</strong>.
+            </p>
+            <br/>
+            @Html.ActionLink("Editeaza detalii", "EditUserDetails", "Manage", null, new { @class = "btn btn-success" })
+
+            <div>
+                <br/>
+                @*<br />*@
+                @*<p>Schimbă setări cont</p>*@
+                <hr/>
+                <dl class="dl-horizontal">
+                    @if (Model.HasPassword)
+                    {
+                        @Html.ActionLink("Schimba parola", "ChangePassword", null, new { @class = "btn btn-success" })
+                    }
+                    else
+                    {
+                        <p>Pentru a deveni un user local, trebuie sa adaugi o parola locala.</p>
+                        @Html.ActionLink("Creaza parola locala", "SetPassword", null, new { @class = "btn btn-success" })
+                    }
+                    @*
+                Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+                 See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                    for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+                 Uncomment the following block after you have set up two-factor authentication
+                    *@
+                    @*
+                <dt>Phone Number:</dt>
+                <dd>
+                    @(Model.PhoneNumber ?? "None") [
+                    @if (Model.PhoneNumber != null)
+                    {
+                        @Html.ActionLink("Change", "AddPhoneNumber")
+                        @: &nbsp;|&nbsp;
+                        @Html.ActionLink("Remove", "RemovePhoneNumber")
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Add", "AddPhoneNumber")
+                    }
+                    ]
+                </dd>
+                    *@
+                    @*<dt>Two-Factor Authentication:</dt>
+                    <dd>
+                        <p>
+                            There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                            for details on setting up this ASP.NET application to support two-factor authentication.
+                        </p>*@
+                        @*@if (Model.TwoFactor)
+                    {
+                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Enabled
+                            <input type="submit" value="Disable" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Disabled
+                            <input type="submit" value="Enable" class="btn btn-link" />
+                            </text>
+                        }
+                    }*@
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+            <div style="padding: 8px; border: 1px solid #a7d582; border-radius: 7px; margin-top: 30px">
+                <section id="externalLogins">
+                    @*@Html.Action("RemoveExternalLogins", "Account")*@
+
+                    <p style="padding-bottom: 10px">Asociază login extern cu contul curent pentru a vă putea loga mai ușor.</p>
+                
+                    @*Asta e exact ca cel din ManageLogins*@
+                    @if (Model.Logins.Count > 0)
+                    {
+                        <h4>Login înregistrați</h4>
+                        <table class="table">
+                            <tbody>
+                                @foreach (var account in Model.Logins)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (account.LoginProvider == "Facebook")
+                                            {
+                                            <button id="@account.ProviderKey" style="background: url(../../Images/facebook.png) no-repeat; height: 50px; color: black; border: none" type="submit" name="provider" value="@account.ProviderKey" title="Inregistreaza-te folosind contul de @account.ProviderKey"><span style="padding-left: 50px">Facebook Login activ</span></button>
+                                            }
+                                            else if (account.LoginProvider == "Google")
+                                            {
+                                                <button id="@account.ProviderKey" style="background: url(../../Images/google.png) no-repeat; height: 50px; color: black; border: none" type="submit" name="provider" value="@account.ProviderKey" title="Inregistreaza-te folosind contul de @account.ProviderKey"><span style="padding-left: 50px">Gmail Login activ</span></button>
+                                            }
+                                            else
+                                            {
+                                            <button id="@account.ProviderKey" style="background: url(../../Images/facebook.png) no-repeat;" type="submit" name="provider" value="@account.ProviderKey" title="Inregistreaza-te folosind contul de @account.ProviderKey">@account.ProviderKey</button>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (ViewBag.ShowRemoveButton)
+                                            {
+                                                using (Html.BeginForm("RemoveLogin", "Manage"))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <div>
+                                                        @Html.Hidden("loginProvider", account.LoginProvider)
+                                                        @Html.Hidden("providerKey", account.ProviderKey)
+                                                        <input type="submit" class="btn btn-warning" value="Sterge" title="Sterge @account.LoginProvider login din cont" />
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @: &nbsp;
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @if (Model.OtherLogins.Count > 0)
+                    {
+                        using (Html.BeginForm("LinkLogin", "Manage"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div id="socialLoginList">
+                                <p>
+                                    @foreach (AuthenticationDescription p in Model.OtherLogins)
+                                    {
+                                        if (p.AuthenticationType == "Facebook")
+                                        {
+                                            <button id="@p.AuthenticationType" style="background: url(../../Images/facebook.png) no-repeat; height: 50px; color: black; border: none" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType"><span style="padding-left: 50px">Asociaza contul cu Facebook</span></button>
+                                        }
+                                        else if (p.AuthenticationType == "Google")
+                                        {
+                                            <button id="@p.AuthenticationType" style="background: url(../../Images/google.png) no-repeat; height: 50px; color: black; border: none" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType"><span style="padding-left: 50px">Asociaza contul cu Gmail</span></button>
+                                        }
+                                        else
+                                        {
+                                            <button id="@p.AuthenticationType" style="background: url(../../Images/facebook.png) no-repeat;" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType">@p.AuthenticationType</button>
+                                        }
+                            @*<button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>*@
+                                    }
+                                </p>
+                            </div>
+                        }
+                    }
+                    <hr />
+                    <p><span class="badge alert-success">@Model.Logins.Count</span> Login externi</p>
+                    @Html.ActionLink("Administreaza login extern", "ManageLogins", null, new { @class = "btn btn-success" })
+
+                    @*@Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })*@
+                </section>
+            </div>
+        <div style="padding: 8px; border: 1px solid #a7d582; border-radius: 7px; margin-top: 30px">
+            @Html.ActionLink("Anunturile mele", "Index", "Administrare", null, new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>

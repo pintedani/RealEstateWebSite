@@ -1,0 +1,223 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.UI.Models.EditUserDetailsModel
+
+@{
+    ViewBag.Title = "Editeaza Detalii Cont";
+}
+
+@*<h3>@ViewBag.Title.</h3>*@
+
+@Html.Partial("_MenuUserProfile")
+
+<br/>
+@using (Html.BeginForm("EditUserDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+
+        @Html.HiddenFor(model => model.UserProfile.Id)
+        @Html.HiddenFor(model => model.UserProfile.Role)
+
+        <div class="panel panel-success">
+            <div class="panel-heading">Email</div>
+            <div class="panel-body">
+                <div class="editor-field">
+                    @Html.DisplayTextFor(model => Model.UserProfile.UserName)
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">Nume Complet</div>
+            <div class="panel-body">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Nume complet</label>
+                    @Html.TextBoxFor(model => model.UserProfile.NumeComplet, new { title = "Introduceti numele", placeholder = "Nume complet", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.UserProfile.NumeComplet)
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">Tip</div>
+            <div class="panel-body">
+                <div class="editor-field">
+                    <div id="tipVanzatorSelectBox" class="selectBoxSimulator dropdown" style="margin-bottom: 10px">
+                        <input type="hidden" id="TipVanzatorSelect" name="UserProfile.TipVanzator" value="@Model.UserProfile.TipVanzator"/>
+                        <button class="combobox dropdown-toggle" style="width: 250px" type="button" id="dropdownTipVanzatorSelectButton" data-toggle="dropdown">
+                            @Model.UserProfile.TipVanzator
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach (var tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
+                            {
+                                <li data-listvalue="@tipVanzator">@tipVanzator</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-success" id="agentieImobiliaraDiv" style="max-width: 600px">
+                    <div class="panel-body row">
+                        <div class="col-md-6">
+                            <label>Nume firmă</label>
+                            <div>
+                                @Html.TextBoxFor(m => m.UserProfile.NumeAgentieImobiliara, new { title = "Introduceti numele companiei" })
+                            </div>
+                            <br/>
+                            <div onclick="$('#ProfileImage').click()">
+                                <button id="SelectLogoButton" type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span> @(Model.UserProfile.Picture != null ? "Schimbă" : "Selectează") logo firmă</button>
+                            </div>
+                            <div>
+                                <input id="ProfileImage" type="file" name="ProfileImage" style="opacity: 0"/>
+                            </div>
+                            <div id="filesInfo">
+                                @if (Model.UserProfile.Picture != null)
+                                {
+                                    <img style="width: 90px;" src="../../Images/profileImages/@Model.UserProfile.Picture"/>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @*Put some sample text here*@
+                            <p>Logo-ul firmei va apărea in dreptul anunțului, de exemplu:</p>
+                            <img src="~/Images/DecorationImages/logoCompanieExemplu.JPG"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">Telefon (numărul la care puteți fi contactat)</div>
+            <div class="panel-body">
+
+                @*@Html.EditorFor(model => model.UserProfile.PhoneNumber, new { htmlAttributes = new { style = "max-width: 300px; width: 100%" }})
+                    @Html.ValidationMessageFor(model => model.UserProfile.PhoneNumber)*@
+
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Telefon</label>
+                    @Html.TextBoxFor(model => model.UserProfile.PhoneNumber, new {title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", type = "tel", @class = "form-control"})
+                    @Html.ValidationMessageFor(model => model.UserProfile.PhoneNumber)
+                </div>
+
+            </div>
+        </div>
+
+        <div class="panel panel-success">
+            <div class="panel-heading">Newsletter</div>
+            <div class="panel-body">
+                @*<div class="editor-field">
+                    @Html.EditorFor(model => Model.UserProfile.AbonatLaNewsLetter)
+                </div>*@
+
+                <div class="touchCheckbox">
+                    <span style="font-size: 1.8em" class="glyphicon @(Model.UserProfile.AbonatLaNewsLetter ? "glyphicon-check" : "glyphicon-unchecked")"></span>
+                    <input type="hidden" value="@(Model.UserProfile.AbonatLaNewsLetter ? "true" : "false")" name="UserProfile.AbonatLaNewsLetter">
+                    <label>Abonat la newsletter</label>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.UserProfile.TrustedUser)
+        {
+            <h3><span class="glyphicon glyphicon-star"></span>Utilizator de incredere</h3>
+        }
+
+        <p>
+            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-floppy-disk"></span> Salvează</button>
+        </p>
+        <br />
+        Membru din: @Model.UserProfile.UserCreateDate
+        <br />
+        <br />
+    </fieldset>
+}
+
+@*<div>
+    <a href="@Url.Action("Index")" class="btn btn-success">
+        <span class="glyphicon glyphicon-arrow-left"></span>
+        Inapoi la Administrare
+    </a>
+</div>*@
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            //alert($("#TipVanzatorSelect").val());
+            if ($("#TipVanzatorSelect").val() != "AgentieImobiliara" && $("#TipVanzatorSelect").val() != "Constructor") {
+                $("#agentieImobiliaraDiv").css({ "display": "none" });
+            }
+            $("#tipVanzatorSelectBox li").click(function() {
+                if ($(this).data("listvalue") == "AgentieImobiliara" || $(this).data("listvalue") == "Constructor") {
+                    $("#agentieImobiliaraDiv").fadeIn();
+                } else {
+                    $("#agentieImobiliaraDiv").fadeOut();
+                }
+            });
+
+            //disable button once clicked
+            $('#submitButton').on("click", function() {
+                $('#submitButton').hide();
+                $('#loadingGif').show();
+            });
+
+            //$("#ProfileImage").change(function() {
+            //    readUrl(this);
+            //});
+
+            //function readUrl(input) {
+            //    if (input.files && input.files[0]) {
+            //        var reader = new FileReader();
+            //        reader.onload = function(e) {
+            //            $('#logoImage').attr('src', e.target.result);
+            //        };
+            //        reader.readAsDataURL(input.files[0]);
+            //    }
+            //}
+        });
+    </script>
+    <script>
+        //Preview Image
+        window.onload = init;
+
+        function init() {
+            document.getElementById('ProfileImage').addEventListener('change', fileSelect, false);
+        }
+
+        function fileSelect(evt) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var files = evt.target.files;
+
+                var result = '';
+                var file;
+                for (var i = 0; file = files[i]; i++) {
+                    // if the file is not an image, continue
+                    if (!file.type.match('image.*')) {
+                        alert("Va rugam selectati o imagine(.jpg .png)");
+                        continue;
+                    }
+
+                    reader = new FileReader();
+                    reader.onload = (function(tFile) {
+                        return function(evt) {
+
+                            var div = document.createElement('div');
+                            div.innerHTML = '<img style="width: 90px;" src="' + evt.target.result + '" />';
+                            document.getElementById('filesInfo').innerHTML = "";
+                            document.getElementById('filesInfo').appendChild(div);
+                            $("#SelectLogoButton").html('Schimbă logo firmă');
+                        };
+                    }(file));
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+}

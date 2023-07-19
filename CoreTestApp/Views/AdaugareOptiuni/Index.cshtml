@@ -1,0 +1,226 @@
+﻿@using Imobiliare.UI.Models
+@model Imobiliare.UI.Models.AdaugareOptiuniData
+
+@Html.Partial("_MenuSuperAdmin")
+
+<div class="row">
+    <p>Instructiuni Butoane:</p>
+    <p>(1) Salveaza modificarile pentru localitatea SELECTATA</p>
+    <p>(2) Adauga o localitate NOUA pentru judetul selectat cu numele, coordinate gps si valorile din checkboxuri</p>
+    <p>(3) Sterge localitatea selectata</p>
+    <p>(4) Salveaza modificarile pentru cartierul SELECTAT</p>
+    <p>(5) Adauga un NOU cartier pentru localitatea selectata cu numele prezent in "Nume Cartier"</p>
+    <p>(6) Sterge cartierul selectat</p>
+    <p>(7) Adauga/Salveaza descrierea pentru o localitate selectata, ce va aparea in lista de anunturi ptr aceasta localitate</p>
+    <p>(8) Localitatile mici nu se afiseaza in prima pagina de rezultate pentru judet, se recomanda pentru sate/comune</p>
+    <p>(9) Daca localitatea e resedinta de judet, se pune acest check</p>
+    <hr/>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm("Index", "AdaugareOptiuni", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
+    {
+        <h3 style="display: inline-block">Selectati Judetul</h3>
+        <div style="display: inline-block; width: 200px;">
+            <select onchange="this.form.submit()" style="width: 150px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="JudetSelect">
+                @foreach (var judet in Model.Judets)
+                {
+                    <option @(Model.SeletedJudet != null && Model.SeletedJudet.Id == judet.Id ? "selected=\"selected\"" : "") value="@judet.Id">@judet.Nume</option>
+                }
+            </select>
+        </div>
+
+        <h3 style="display: inline-block">Localitate:</h3>
+        <div style="display: inline-block; width: 200px">
+            <select onchange="this.form.submit()" style="width: 150px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="OrasSelect">
+                @foreach (var oras in Model.SelectableOrasesWithNumber)
+                {
+                    <option @(Model.SeletedOras != null && Model.SeletedOras.Id == oras.Key.Id ? "selected=\"selected\"" : "") @(Model.SeletedOras != null && !oras.Key.LocalitateMica ? "style=font-weight:bold;font-size:1.1em;color:green" : "") value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                }
+            </select>
+        </div>
+
+        <h3 style="display: inline-block">Cartier:</h3>
+        <div style="display: inline-block; width: 200px">
+            <select onchange="this.form.submit()" style="margin-left: 3px; width: 145px" class="ui-corner-all ui-widget-shadow ui-widget" id="CartierSelect" name="CartierSelect">
+                @foreach (var cartier in Model.SelectableCartiersWithNumber)
+                {
+                    <option @(Model.SeletedCartier != null && Model.SeletedCartier.Id == cartier.Key.Id ? "selected=\"selected\"" : "") value="@cartier.Key.Id">@cartier.Key.Nume @cartier.Value</option>
+                }
+            </select>
+        </div>
+    }
+</div>
+
+<div class="row" style="margin-top: 10px">
+    <div class="col-sm-5" style="border: 1px solid rgb(183, 183, 183); border-radius: 7px; background-color: #F9F9F9; padding-bottom: 20px">
+        <h3 style="padding-bottom: 20px">Editare Localitati</h3>
+
+        @using (Html.BeginForm("AdaugaLocalitate", "AdaugareOptiuni", FormMethod.Post))
+        {
+            var localitateNume = "0";
+            var localitateId = 0;
+            if (Model.SeletedOras != null)
+            {
+                localitateNume = Model.SeletedOras.Nume;
+                localitateId = Model.SeletedOras.Id;
+            }
+
+            string selectedJudet = Model.SeletedJudet.Nume;
+            string coordinateJudet = Model.SeletedOras != null ? Model.SeletedOras.CoordinateGps : Model.SeletedJudet.CoordinateGps;
+            <input id="IdLocalitateEdit" type="hidden" name="IdLocalitateEdit" value="@localitateId" />
+            <div class="col-sm-12">
+                <p style="display: inline-block">Nume Localitate</p>
+                <input id="NumeLocalitateEdit" type="text" name="NumeLocalitate" value="@localitateNume" />
+            </div>
+            <div class="col-sm-5">
+                <p style="display: inline-block">Gps</p>
+                <input id="GpsLocalitateEdit" style="width: 120px" type="text" name="CoordinateGps" value="@coordinateJudet" />
+            </div>
+            <div class="col-sm-7">
+                <input id="IdJudet" style="width: 80px; display: inline-block" readonly="readonly" type="hidden" name="IdJudet" value="@(Model.SeletedJudet != null ? Model.SeletedJudet.Id : 0)" />
+                <label style="display: inline-block">Judet: @selectedJudet</label>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-6">
+                <input id="LocalitateMica" style="width: 40px; display: inline-block" type="checkbox" name="LocalitateMica" checked="@Model.SeletedOras.LocalitateMica" />
+                <label style="display: inline-block">Localitate Mica(8)</label>
+            </div>
+            <div class="col-sm-6">
+                <input id="ResedintaJudet" style="width: 40px; display: inline-block" type="checkbox" name="ResedintaJudet" checked="@Model.SeletedOras.ResedintaJudet" />
+                <label style="display: inline-block">Resedinta Judet(9)</label>
+            </div>
+            <div class="clearfix"></div>
+
+            //Valoarea din value e importnata pentru ca se face filter dupa submitvalue la submit
+            <input class="btn btn-info" type="submit" name="SubmitAction" value="Salveaza Modificari" onclick = "return confirm('Numele localitatii, gps si valori din checkboxuri vor fi MODIFICATE. Continuati?')"/><span>(1)</span>
+            <input class="btn btn-success" type="submit" name="SubmitAction" value="Adauga Localitate Noua" onclick = "return confirm('O localitate NOUA va fi adaugata cu datele introduse. Continuati?')"/><span>(2)</span>
+            @Html.ActionLink("Sterge(3)", "DeleteLastLocalitate", "AdaugareOptiuni", new { orasID = localitateId, judetID = Model.SeletedJudet != null ? Model.SeletedJudet.Id : 0 }, new { @class = "btn btn-danger", onclick = "return confirm('Sunteti sigur ca doriti sa stergeti localitatea?')" })
+        }
+    </div>
+
+    <div class="col-sm-5 col-sm-push-1" style="border: 1px solid rgb(183, 183, 183); border-radius: 7px; background-color: #F9F9F9; padding-bottom: 20px">
+        <h3 style="padding-bottom: 20px">Editare Cartiere</h3>
+
+        @using (Html.BeginForm("AdaugaCartier", "AdaugareOptiuni", FormMethod.Post))
+        {
+            string cartierNume = "0";
+            int cartierId = 0;
+            if (Model.SeletedCartier != null)
+            {
+                cartierNume = Model.SeletedCartier.Nume;
+                cartierId = Model.SeletedCartier.Id;
+            }
+            <input id="IdJudet" type="hidden" name="IdJudet" value="@(Model.SeletedJudet != null ? Model.SeletedJudet.Id : 0)" />
+            <input id="IdCartierEdit" type="hidden" name="IdCartierEdit" value="@cartierId" />
+            <div class="col-sm-12">
+                <p style="display: inline-block">Nume Cartier</p>
+                <input id="NumeCartierEdit" style="display: inline-block" type="text" name="NumeCartier" value="@cartierNume" />
+                <label style="display: inline-block">Id: @cartierId</label>
+            </div>
+
+            <div class="col-sm-12">
+                <input id="IdLocalitate" style="width: 80px; display: inline-block" readonly="readonly" type="hidden" name="IdLocalitate" value="@(Model.SeletedOras != null ? Model.SeletedOras.Id : 0)" />
+                <label style="display: inline-block">Localitate: @(Model.SeletedOras != null ? Model.SeletedOras.Nume : string.Empty)</label>
+            </div>
+            <input class="btn btn-info" type="submit" name="SubmitAction" value="Salveaza Modificari" onclick = "return confirm('Numele cartierului va fi MODIFICAT cu numele introdus. Continuati?')"/><span>(4)</span>
+            <input class="btn btn-success" type="submit" name="SubmitAction" value="Adauga Cartier Nou" onclick = "return confirm('Un NOU cartier va fi adaugat cu numele introdus. Continuati?')"/><span>(5)</span>
+            @Html.ActionLink("Sterge(6)", "DeleteLastCartier", "AdaugareOptiuni", new { cartierID = cartierId, judetID = Model.SeletedJudet != null ? Model.SeletedJudet.Id : 0, localitateID = Model.SeletedOras != null ? Model.SeletedOras.Id : 0 }, new { @class = "btn btn-danger", onclick = "return confirm('Sunteti sigur ca doriti sa stergeti ultimul cartier? Ordinea nu va mai putea fii stabilita ulterior.')" })
+        }
+    </div>
+
+</div>
+
+<div class="row">
+    <h3>
+        Selectati o pozitie pe harta pentru o mai buna localizare a anuntului.<br />
+        Un singur click ajunge pentru a defini locatia.
+    </h3>
+    <div style="display: none" id="successActualizareDiv">
+        <h3 id="successActualizareText" style="color: blue">Pozitie setata cu success!</h3>
+    </div>
+    <div id="map_canvas_adaugareoptiuni" style="box-shadow: 4px 4px 3px #888888;">
+    </div>
+    <button style="display: none; margin-top: 7px" id="stergePozitieHartaBtn" class="btn btn-warning" onclick="clearMarker()">Sterge pozitia de pe harta</button>
+</div>
+
+<div class="row" style="margin-top: 10px">
+    @*Form for editing descriere*@
+    <p>Descriere localitate</p>
+    <p>@Model.SeletedOras.Id</p>
+    <p>@Model.SeletedOras.Nume</p>
+
+    @using (Html.BeginForm("UpdateDescriereLocalitate", "AdaugareOptiuni", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
+    {
+        <h3 style="display: inline-block">Descriere:</h3><br />
+        <input id="localitateID" type="hidden" name="localitateID" value="@Model.SeletedOras.Id" />
+        <input id="judetID" type="hidden" name="judetID" value="@(Model.SeletedJudet != null ? Model.SeletedJudet.Id : 0)" />
+        <br />
+        <textarea style="width: 100%; max-width: 1000px; height: 150px" id="localitateDescriere" name="localitateDescriere">@Model.SeletedOras.DescriereLocalitate</textarea>
+        <br />
+        <input type="submit" value="Salveaza (7)" class="btn btn-success" />
+    }
+
+</div>
+
+<div class="row">
+    <p>Output:</p>
+    @Html.Raw(HttpUtility.HtmlDecode(Model.SeletedOras.DescriereLocalitate))
+</div>
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA22m48agcdGMBD80KI9wzyRIGn4X4hD5E" type="text/javascript"></script>
+
+    <script>
+        function initialize() {
+            @if (Model.SeletedOras != null)
+            {
+                <text>
+                    var lat = '@Model.SeletedOras.CoordinateGps.Split(',')[0]';
+                    var longu = '@Model.SeletedOras.CoordinateGps.Split(',')[1]';
+
+                    var mapOptions = { zoom: 12, scrollwheel: false, streetViewControl: false, center: new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace( /\)/g, "")) };
+
+            var map = new google.maps.Map(document.getElementById('map_canvas_adaugareoptiuni'), mapOptions);
+
+            placeMarker(new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, "")), map, true);
+
+                    google.maps.event.addListener(map, 'click', function(e)
+                    {
+                        placeMarker(e.latLng, map, true);
+                    });
+                </text>
+            }
+        }
+
+        var markersArray = [];
+
+        //clear all markers
+        function clearOverlays() {
+            for (var i = 0; i < markersArray.length; i++) {
+                markersArray[i].setMap(null);
+            }
+            markersArray.length = 0;
+        }
+
+        function placeMarker(position, map, updateNeeded) {
+            clearOverlays();
+            //declare new marker
+            var image = '../../Images/markerApartment5.png';
+            var marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                icon: image
+            });
+            map.panTo(position);
+            markersArray.push(marker);
+
+            var stringLocation = position.toString();
+            //var lat = position[0];
+            $("#GpsLocalitateEdit").val(stringLocation.split(',')[0].substr(1, 5) + ',' + stringLocation.split(',')[1].substr(1, 5));
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+}

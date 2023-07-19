@@ -1,0 +1,190 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.Entities.Ansamblu
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+  ViewBag.Title = "Edit";
+}
+
+<h2>Editeaza ansamblu rezidential</h2>
+
+<style>
+  input[type="text"], input[type="password"], textarea {
+    max-width: 100%;
+  }
+</style>
+
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+    <h4>Stire</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Titlu, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Titlu, new { style = "width: 100%; max-width:100%", htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Titlu, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Continut, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.TextAreaFor(model => model.Continut, new { style = "width: 100%; height: 400px; max-width:100%", htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Continut, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <div class="checkbox">
+          @Html.EditorFor(model => model.Active)
+          @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Keywords, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Keywords, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.OrasSelect, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <div style="display: inline-block; position: relative; width: 100%">
+          <div class="form-group col-xs-12 floating-label-form-group controls">
+            @Html.Label("Localitate")
+
+            <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(ViewBag.OrasSelectat != null ? ((Oras)ViewBag.OrasSelectat).Nume : "")" placeholder="Introduceti Localitate" name="searchBox" @(ViewBag.OrasSelectat != null ? "disabled" : "") />
+            <input type="hidden" name="OrasSelect" id="OrasSelect" value="@Model.OrasSelect" />
+            <ul style="max-height: 450px; overflow-y: scroll" class="localitatiSearchResult"></ul>
+          </div>
+
+          <div class="schimbaLocalitateButton" style="@(ViewBag.OrasSelectat == null ? "display:none;":"") position: absolute; right: 5px; top: 20px; z-index: 30">
+            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span> Schimba</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Salveaza" class="btn btn-success" />
+      </div>
+    </div>
+  </div>
+}
+
+  <h3 style="color:red">Adaugarea unei poze va face refresh la pagina. Salvati descrierea daca aveti modificari, inainte de a adauga poze!</h3>
+
+<div class="row" style="border-top: 1px solid #a7d582; background-color: #F9F9F9; border-radius: 4px; margin-bottom: 20px">
+  <div class="col-md-6">
+    <div class="col-md-5">
+      <h3 id="AddPhotoMessage">Selectează Poza <span class="glyphicon glyphicon glyphicon-camera"></span></h3>
+      @*@if(string.IsNullOrEmpty(Model.Poze))
+        {*@
+      <div>
+        @using (Html.BeginForm("AddImageNoAjax", "AnsambluriRezidentiale", FormMethod.Post, new { enctype = "multipart/form-data", id = "NoFlashUploadForm" }))
+        {
+          <input type="hidden" name="ansambluId" value="@Model.Id" />
+                        <input type="file" name="file" id="file" />
+                        <div style="padding: 5px">
+                          <input type="submit" class="btn btn-success" value="Încarcă Poză">
+                        </div>
+        }
+      </div>
+      @*}*@
+    </div>
+
+  </div>
+  <div class="col-md-6">
+
+    @if (!string.IsNullOrEmpty(Model.Poze))
+    {
+      foreach (var poza in Model.Poze.Split(';'))
+      {
+        <div>
+          <div style="display: inline-block; width: 200px">
+            <img style="max-width: 200px; max-height: 120px" src="/Images/AnsambluriRezidentiale/@poza" />
+          </div>
+          <div style="display: inline-block">
+
+            <input type="button" class="btn btn-success insertImgButton" value="Insereaza">
+            @using (Html.BeginForm("StergeImagine", "AnsambluriRezidentiale", FormMethod.Post))
+            {
+                <input type="hidden" name="ansambluId" value="@Model.Id" />
+                <input type="hidden" name="poza" value="@poza" />
+                  <div style="padding-top: 5px">
+                    <input type="submit" class="btn btn-danger" value="Sterge Poză">
+                  </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<div>
+  @Html.ActionLink("Înapoi la ansambluri", "ToateAnsamblurileAdmin", null, new { @class = "btn btn-success" })
+</div>
+
+@section Scripts {
+  @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+  <script>
+        $(document).ready(function() {
+            $(".insertImgButton").on("click", function () {
+                //alert($(this).closest('div').prev().find('img').attr('src'));
+                var imgSrc = $(this).closest('div').prev().find('img').attr('src');
+                var link = "<div class=\"col-xs-12 col-md-12 col-lg-8\" style=\"padding:0\"><img style=\"width:100%; padding:0\" src=\"" + imgSrc + "\"></div><div class=\"clearfix\"></div>";
+                insertAtCaret("Continut", link);
+            });
+        });
+
+        function insertAtCaret(areaId, text) {
+            var txtarea = document.getElementById(areaId);
+            var scrollPos = txtarea.scrollTop;
+            var strPos = 0;
+            var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+                "ff" : (document.selection ? "ie" : false));
+            if (br == "ie") {
+                txtarea.focus();
+                var range = document.selection.createRange();
+                range.moveStart('character', -txtarea.value.length);
+                strPos = range.text.length;
+            }
+            else if (br == "ff") strPos = txtarea.selectionStart;
+
+            var front = (txtarea.value).substring(0, strPos);
+            var back = (txtarea.value).substring(strPos, txtarea.value.length);
+            txtarea.value = front + text + back;
+            strPos = strPos + text.length;
+            if (br == "ie") {
+                txtarea.focus();
+                var range = document.selection.createRange();
+                range.moveStart('character', -txtarea.value.length);
+                range.moveStart('character', strPos);
+                range.moveEnd('character', 0);
+                range.select();
+            }
+            else if (br == "ff") {
+                txtarea.selectionStart = strPos;
+                txtarea.selectionEnd = strPos;
+                txtarea.focus();
+            }
+            txtarea.scrollTop = scrollPos;
+        }
+
+  </script>
+}

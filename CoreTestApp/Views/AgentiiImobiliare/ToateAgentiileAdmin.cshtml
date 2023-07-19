@@ -1,0 +1,70 @@
+﻿@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.AgentiiViewModel
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+    ViewBag.Title = "Edit Agentii";
+}
+<br />
+<table class="table table-striped">
+    <tr>
+        <th>
+            Logo
+        </th>
+        <th>
+            Nume
+        </th>
+        <th>
+            Useri
+        </th>
+        <th>
+            Localitate
+        </th>
+        <th>
+            AfisarePrimaPagina
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Agentii)
+    {
+        <tr>
+            <td>
+                <a href="@AgentiiImobiliareUrls.AgentieImobiliaraUrl(item, null)"><img style="height: 40px" src="~/Images/LogoAgentii/@(!string.IsNullOrEmpty(item.PozaAgentie) ? item.PozaAgentie : "no_picture.png")" /></a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgentieImobiliaraUserProfiles.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Oras.Nume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AfisarePrimaPagina)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "AgentiiImobiliare", new {id = item.Id})" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a href="@Url.Action("Delete", "AgentiiImobiliare", new {id = item.Id})" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (Model.NumberOfPages > 1)
+{
+    using (Html.BeginForm("ToateAgentiileAdmin", "AgentiiImobiliare", FormMethod.Get, new {id = "PickForm"}))
+    {
+        <p style="margin: 10px 0 0 0">Pagina @Model.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+}
+
+@section Scripts {
+    @Html.Partial("_GenericPaging")
+}

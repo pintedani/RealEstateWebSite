@@ -1,0 +1,77 @@
+﻿@using Imobiliare.Entities
+@model IEnumerable<Imobiliare.Entities.Mesaj>
+
+@{
+    ViewBag.Title = "Mesaje";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    @Html.Partial("_MenuUserProfileB5")
+
+    @Html.ActionLink("Mesaje primite", "Index", null, new { @class = "btn btn-light" })
+    <a href="@Url.Action("Trimise")" class="btn btn-primary"><span class="bi bi-send"></span>&nbsp;Mesaje trimise</a>
+    <br />
+    <br />
+    @if (!Model.Any())
+    {
+        <h3>Nu aveti mesaje primite</h3>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FromUser.Email)
+                </th>
+                <th>
+                    Subiect
+                </th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Anunt
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.OrderByDescending(x => x.CreateDateTime))
+            {
+                <tr onclick="window.location='@Url.Action("Details", new {id = item.Id})'" style="cursor: pointer">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FromUser.Email.Split('@')[0])
+                    </td>
+                    <td>
+                        @if (item.CitireDateTime != DateTime.MinValue)
+                        {
+                            <p>@item.Continut</p>
+                        }
+                        else
+                        {
+                            <p style="font-weight: bolder">@item.Continut</p>
+                        }
+                    </td>
+                    <td>
+                        @item.CreateDateTime.ToShortDateString()
+                    </td>
+                    <td>
+                        @*Imobil = null in case if it was deleted*@
+                        @if (item.Categorie == MesajCategorie.Anunt && item.Imobil != null)
+                        {
+                            <img src="~/Images/uploadedPhotos/@item.Imobil.FirstPhoto" style="height: 30px" />
+                        }
+                        else
+                        {
+                            <p>profil</p>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Delete","Mesaje", new{id=item.Id})" class="btn btn-danger"><span class="bi bi-trash"></span></a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+</div>

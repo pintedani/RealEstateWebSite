@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Detalii Mesaj";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+@model Imobiliare.UI.Models.MesajConversationModel
+
+<div class="container">
+    @Html.Partial("_MenuUserProfileB5")
+    <br />
+    @*@Html.ActionLink("Mesaje Trimise", "Trimise", "Mesaje")*@
+    @Html.ActionLink("Mesaje primite", "Index", null, new { @class = "btn btn-primary" })
+    <a href="@Url.Action("Trimise")" class="btn btn-primary"><span class="bi bi-send"></span>&nbsp;Mesaje trimise</a>
+    <br />
+    <br />
+    <div class="row">
+
+        <div style="text-align: center">
+            @if (@Model.MesajSelectat.Imobil != null)
+            {
+                <a href="@Url.Action("ApartamentDetalii", "Anunturi", new {imobilId = Model.MesajSelectat.Imobil.Id})"><img src="~/Images/uploadedPhotos/@Model.MesajSelectat.Imobil.FirstPhoto" style="width: 120px"></a>
+                <p style="display: inline-block">@Model.MesajSelectat.Imobil.Title | @Model.MesajSelectat.Imobil.Price €</p>
+            }
+            @*else if (@Model.MesajSelectat.Profil != null)
+                {
+                  <a href="@Url.Action("Details", "Profiluri", new {id = Model.MesajSelectat.ProfilId})">@Model.MesajSelectat.Profil.Titlu</a>
+                  <p style="display: inline-block">@Model.MesajSelectat.Profil.Titlu</p>
+                }*@
+        </div>
+        @foreach (var mesaj in Model.Mesaje)
+        {
+            if (mesaj.FromUser.Email == User.Identity.Name)
+            {
+                <div style="margin-right: 40px; padding: 5px; background-color: beige; border-radius: 5px">
+                    <p>Eu:</p>
+
+                    <p>@mesaj.Continut</p>
+                    <small>Trimis: @mesaj.CreateDateTime.ToShortDateString()</small>
+                </div>
+            }
+            else
+            {
+                <div style="margin-left: 40px; padding: 5px; background-color: azure; border-radius: 5px">
+                    <p>Raspuns @mesaj.FromUser.Email.Split('@')[0]:</p>
+
+                    <p>@mesaj.Continut</p>
+                    @if (mesaj.CitireDateTime != DateTime.MinValue)
+                    {
+                        <small>Citit: @mesaj.CitireDateTime.ToShortDateString()</small>
+                    }
+                </div>
+            }
+            <hr />
+        }
+
+        @if (Model.MesajSelectat.Imobil != null)
+        {
+            using (Html.BeginForm("RaspundeMesajAnuntRelated", "Mesaje", FormMethod.Post, new { ReturnUrl = Request.Url }))
+            {
+                <input type="hidden" name="MesajId" value="@Model.MesajSelectat.Id" />
+                <input type="hidden" name="MesajLoggedInUserEmail" value="@Model.LoggedInUserEmail" />
+                <input type="hidden" name="MesajToUserEmail" value="@Model.ToUserEmail" />
+                <div class="form-group col-xs-12 floating-label-form-group" style="margin-top: 5px; background-color: rgb(248, 255, 248); border-style: groove;">
+                    <label>Raspunde</label>
+                    <textarea rows="4" id="MesajRaspuns" name="MesajRaspuns" style="width: 100%; height: 100px" placeholder="Scrie mesaj aici..." class="form-control"></textarea>
+                </div>
+                <button class="btn btn-primary my-2"><span class="bi bi-send"></span>&nbsp;Trimite</button>
+            }
+        }
+        @*else if (Model.MesajSelectat.Profil != null)
+            {
+              using (Html.BeginForm("RaspundeMesajProfilRelaled", "Mesaje", FormMethod.Post, new { ReturnUrl = Request.Url }))
+              {
+                <input type="hidden" name="MesajId" value="@Model.MesajSelectat.Id" />
+                <input type="hidden" name="MesajLoggedInUserEmail" value="@Model.LoggedInUserEmail" />
+                <input type="hidden" name="MesajToUserEmail" value="@Model.ToUserEmail" />
+                <div class="form-group col-xs-12 floating-label-form-group" style="margin-top: 5px; background-color: rgb(248, 255, 248)">
+                  <label>Raspunde</label>
+                  <textarea rows="4" id="MesajRaspuns" name="MesajRaspuns" style="max-width: 600px; width: 100%; height: 100px" placeholder="Raspunde" class="form-control"></textarea>
+                </div>
+                <button class="btn btn-primary"><span class="bi bi-send"></span>&nbsp;Trimite</button>
+              }
+            }*@
+
+    </div>
+    <br />
+    <br />
+    <a href="@Url.Action("Index")" class="btn btn-light"><span class="bi bi-arrow-left"></span> Inapoi la mesaje</a>
+</div>

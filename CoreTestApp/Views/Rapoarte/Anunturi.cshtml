@@ -1,0 +1,74 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.UI.BusinessLayer
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.RapoarteAnunturiDetalii
+
+@Html.Partial("_MenuSuperAdmin")
+<br/>
+@if (Request.UrlReferrer != null)
+{
+<a class="btn btn-success" onclick="history.go(-1); return false;" href="#" style="margin: 5px 0 10px 0"><span class="glyphicon glyphicon-arrow-left"></span> Înapoi</a>
+}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-success">
+            <div class="panel-heading">Ultimele 7 zile</div>
+            <div class="panel-body">
+                <p><strong>@Model.AnunturiNoiAdaugate.Count</strong> anunturi adaugate</p>
+                <p><strong>@Model.AnunturiReactualizate.Count</strong> anunturi reactualizate</p>
+                <p><strong>@Model.UseriCreati.Count</strong> useri creati
+                </p>
+
+                @foreach (var imobil in Model.AnunturiNoiAdaugate)
+                {
+                <div>
+                    <div style="display: inline-block; position: relative; height: 150px; padding-top: 5px">
+                        @if (imobil.Poze != null)
+                        {
+                            <a class="anchor-link-spanner" href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)">
+                                <img style="max-height: 90%; cursor: pointer; max-width: 95%; box-shadow: 6px 6px 4px #888888" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)"
+                                     src="~/Images/uploadedPhotos/@imobil.FirstPhoto"/>
+                            </a>
+                            <div style="position: absolute; top: 7px; left: 8px; opacity: 0.8; width: 40px; background-color: #fff; font-weight: bold; font-size: 11px;">
+                                <span style="padding-left: 7px" class="glyphicon glyphicon-camera"></span>
+                                <b style="padding-left: 2px; font-size: 1.2em">@imobil.Poze.Split(';').Count()</b>
+                            </div>
+                        }
+                        else
+                        {
+                            <a style="padding: 0" href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)">
+                                <img style="max-height: 90%; cursor: pointer; max-width: 90%; box-shadow: 6px 6px 4px #888888;" alt="poza apartament" src="~/Images/uploadedPhotos/@imobil.FirstPhoto"/>
+                            </a>
+                        }
+
+                        @if (imobil.UserProfile.Agentie != null && !string.IsNullOrEmpty(imobil.UserProfile.Agentie.PozaAgentie) && imobil.UserProfile.Role != Role.Administrator && imobil.TipVanzator == TipVanzator.AgentieImobiliara)
+                        {
+                            <div style="position: absolute; cursor: pointer; top: 97px; left: 125px; height: 50px; text-align: center;"
+                                 onclick="var url = '@Url.Action("AnunturiUtilizator", "Anunturi", new { userId = @imobil.UserId })';window.location = url;">
+                                <img class="img-thumbnail" style="max-height: 40px; max-width: 50px; vertical-align: middle;" src="~/Images/LogoAgentii/@imobil.UserProfile.Agentie.PozaAgentie" alt="agentie imobiliara logo"/>
+                            </div>
+                        }
+                    </div>
+                    <div style="display: inline-block">
+                        <p>@imobil.Title</p>
+                        <p>@imobil.StareAprobare</p>
+                        <p>@imobil.Price</p>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-success">
+            <div class="panel-heading">Useri noi creati</div>
+            <div class="panel-body">
+                @foreach (var user in Model.UseriCreati)
+                {
+                    <p>@user.UserName</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

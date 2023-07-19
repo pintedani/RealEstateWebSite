@@ -1,0 +1,184 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.UI.Utils
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.AgentiiViewModel
+@{
+    ViewBag.Title = "Agenții Imobiliare.";
+    ViewBag.MetaDescription = "Agenții imobiliare. Caută agenție imobiliară pentru a găsi oferta potrivită.";
+}
+
+<style>
+    .detaliiFeature {
+        font-size: 1.2em;
+        padding: 10px;
+    }
+
+        .detaliiFeature > li {
+            padding: 5px;
+        }
+</style>
+
+<div id="searchDivMainPage" style="text-align: center" class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-md-push-2 container" id="MainPageSearchDiv" style="background: none repeat scroll 0 0 rgba(255, 255, 255, 0.75); border-radius: 5px">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Agenții Imobiliare</h1>
+                @*<img class="visible-xs" style="padding-bottom: 5px; width: 270px" src="~/Images/DecorationImages/logoApartamente24Transp.png"/>*@
+            </div>
+        </div>
+        <div id="searchDivMainPageContent" style="padding: 20px; border-radius: 5px">
+            <div class="input-group" style="margin: 0 auto">
+                <div style="display: inline-block; position: relative; padding-right: 5px">
+                    <h3>Orașul tău</h3>
+                </div>
+                <div style="display: inline-block">
+                    @using (Html.BeginForm("Index", "AgentiiImobiliare"))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div style="display: inline-block; position: relative">
+                            <input type="text" autocomplete="off" style="padding: 6px; margin-right: 5px; color: #c3c3c3; font-size: 1.4em; vertical-align: middle" class="ui-corner-all searchBox highlightTextBox" value="Introduceti Localitate" onfocus="inputFocus(this)" onblur="inputBlur(this)" name="searchBox" />
+                            <input type="hidden" name="OrasSelect" id="OrasSelect" value="0" />
+                            <span class="searchBoxLoading glyphicon glyphicon-refresh" style="position: absolute; right: 5px; top: 2px; display: none"></span>
+                            <span class="searchBoxNoResults" style="position: absolute; right: 5px; top: 2px; display: none">Nume localitate invalid</span>
+                            <ul class="localitatiSearchResult"></ul>
+                        </div>
+                        <input type="submit" value="Caută" class="btn btn-success" style="display: inline-block; margin: 0" />
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row" style="background-color: white">
+    <div class="col-md-8">
+        @*In caz ca s-a filtrat pe o localitate*@
+        @if (Model.Oras != null)
+        {
+            <h3>Localitate: @Model.Oras.Nume</h3>
+        }
+        @if (Model.Agentii.Count != 0)
+        {
+            foreach (var item in Model.Agentii)
+            {
+                <div class="col-md-6" style="margin-top: 20px; height: 160px">
+                    <a href="@AgentiiImobiliareUrls.AgentieImobiliaraUrl(item, null)">
+                        <div style="padding: 20px 10px 10px 20px">
+                            @if (!string.IsNullOrEmpty(item.PozaAgentie))
+                            {
+                                <img style="height: 50px" src="~/Images/LogoAgentii/@item.PozaAgentie" />
+                            }
+                            else
+                            {
+                                <img style="height: 50px" src="~/Images/DecorationImages/imagePlaceholder.png" />
+                            }
+                            @*<img style="height: 40px" src="~/Images/LogoAgentii/@(!string.IsNullOrEmpty(item.PozaAgentie) ? item.PozaAgentie : "no_picture.png")"/>*@
+                            <h3>@item.Nume</h3>
+                            <p>Agenti: @item.AgentieImobiliaraUserProfiles.Count</p>
+                            @if (item.Oras != null)
+                            {
+                                <p><span class="glyphicon glyphicon-map-marker"></span>&nbsp;@item.Oras.Nume</p>
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+
+            if (Model.NumberOfPages > 1)
+            {
+                using (Html.BeginForm("Index", "AgentiiImobiliare", FormMethod.Get, new { id = "PickForm" }))
+                {
+                    <div class="clearfix"></div>
+                    <p style="margin: 10px 0 0 0">Pagina @Model.Page din @Model.NumberOfPages</p>
+                    <nav>
+                        <ul class="pagination pagination-lg"></ul>
+                    </nav>
+                }
+            }
+        }
+        else
+        {
+            <h3>Nu s-au găsit agenții imobiliare pentru criteriile selectate.</h3>
+        }
+    </div>
+    <div class="col-md-4" style="border: 1px solid #ddd; padding: 15px">
+        @*<h3>
+              Ai o agentie imobiliara si vrei sa apari pe aceasta pagina? Creeaza un cont nou gratuit si apari in lista de agentii imobiliare.
+            </h3>*@
+
+        <h3 style="padding: 10px">Creează GRATUIT un cont pentru agentia ta imobiliară. Iată ce avantaje ai:</h3>
+        <ul class="detaliiFeature">
+            <li>- poți adăuga oricâte anunțuri în mod gratuit;</li>
+            <li>- ești contactat de oameni interesați de ofertele agenției tale;</li>
+            <li>- crești valoarea brandului tău;</li>
+            <li>- poți crea conturi pentru fiecare agent angajat în agenție. De exemplu, poți arăta ca de zona X se ocupă agentul Y, iar de zona T se ocupă agentul V;</li>
+            <li>- poți folosi soluția noastră și pentru organizarea muncii in agenție.</li>
+        </ul>
+
+        <br />
+        <a href="@Url.Action("Register","Account")" class="btn btn-light"><span class="glyphicon glyphicon-plus-sign red"></span>&nbsp;Creează Cont Gratuit</a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12 col-md-8">
+        <img style="width: 100%; max-width:452px" src="~/Images/DecorationImages/banner_ansambluri.png" />
+    </div>
+</div>
+
+@section nextprev {
+    @Html.Partial("_GenericNextPrev")
+}
+
+@section Scripts {
+    @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+    @Html.Partial("_GenericPaging")
+    <script type="text/javascript">
+        $(document).mousedown(function (e) {
+            var container4 = $("#custom-dropdown-tipoferta");
+            if (!container4.is(e.target) // if the target of the click isn't the container...
+                && container4.has(e.target).length === 0) // ... nor a descendant of the container
+            {
+                if (container4.css('display') != 'none') {
+                    container4.hide();
+                }
+            }
+        });
+
+
+        $(function () {
+            $('#body').css('opacity', '0.1');
+
+            //Assuming Backgrounds between homeBackGround1->homeBackGround4(extend if new ones are added)
+            $('#body').css('background-image', 'url(' + '../../Images/DecorationImages/AgentiiImobiliare_logo2.jpg' + ')');
+            $('#body').css('background-repeat', 'no-repeat');
+            $('#body').animate({ opacity: 1 }, 2000, function () {
+                $(".TipOfertaSelect").effect("highlight", {}, 1500);
+                $(".highlightTextBox").effect("highlight", {}, 3000);
+            });
+
+            $("#overlay").css({
+                opacity: 0.5,
+                top: 41,
+                width: 830,
+                height: 550
+            });
+
+            $("#img-load").css({
+                top: (200),
+                left: (390)
+            });
+
+            @*$("#TipOfertaSelectButton").html("@TipOfertaDisplayFormatter.GetDisplayString((TipOferta) Enum.Parse(typeof (TipOferta), ViewBag.TipOferta.ToString()))" + "<span class=\"caret\"></span>");*@
+            $(".TipOfertaSelect").val("@ViewBag.TipOferta");
+
+            $("#custom-dropdown-tipoferta li").click(function () {
+                $(this).parents('#tipOfertaSelectControl').find('button').html($(this).find("p").text());
+                $(this).parents('#tipOfertaSelectControl').find('button').effect("highlight", { times: 5 }, 3000);
+                var selectedOferta = $(this).data("tipoferta");
+                $(".TipOfertaSelect").val(selectedOferta);
+                $("#custom-dropdown-tipoferta").hide();
+            });
+        });
+    </script>
+}

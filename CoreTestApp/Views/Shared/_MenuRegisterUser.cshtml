@@ -1,0 +1,22 @@
+﻿@*<style>
+    .active > a {
+        background-color: #F9F9F9 !important;
+    }
+</style>*@
+
+@*<br />
+<ul class="nav nav-tabs nav-justified">
+    <li @(Request.Url.ToString().Contains("Login") ? "class = active nav-item" : "nav-item")> @Html.ActionLink("Intră In Cont. Adaugă Anunțuri Gratuite", "Login", "Account")</li>
+    <li @(Request.Url.ToString().Contains("Register") ? "class = active nav-item" : "nav-item")> @Html.ActionLink("Înregistrează-te. Creează cont rapid și simplu", "Register", "Account")</li>
+</ul>
+<hr/>*@
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link @(Request.Url.ToString().Contains("Login") ? "active" : "")" href="/Account/Login">Intră In Cont. Adaugă Anunțuri Gratuite</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Request.Url.ToString().Contains("Register") ? "active" : "")" href="/Account/Register">Înregistrează-te. Creează cont rapid și simplu</a>
+    </li>
+</ul>
+@*<hr />*@

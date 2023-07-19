@@ -1,0 +1,98 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.Entities.Agentie
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+  ViewBag.Title = "Editeaza Agentie";
+}
+<br />
+
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Agentie @Model.Id</h4>
+    @if (!string.IsNullOrEmpty(Model.PozaAgentie))
+    {
+        <img src="~/Images/LogoAgentii/@Model.PozaAgentie"/>
+    }
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nume, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Nume, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Nume, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.DescriereAgentie, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.TextAreaFor(model => model.DescriereAgentie, new { style = "width: 100%; height: 400px; max-width:100%", htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.DescriereAgentie, "", new { @class = "text-danger" })
+    </div>
+  </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+  <div class="form-group">
+    @Html.LabelFor(model => model.TelefonAgentie, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.EditorFor(model => model.TelefonAgentie, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.TelefonAgentie, "", new { @class = "text-danger" })
+    </div>
+  </div>
+  
+  <div class="form-group">
+    @Html.LabelFor(model => model.AfisarePrimaPagina, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      @Html.EditorFor(model => model.AfisarePrimaPagina, new { htmlAttributes = new { @class = "form-control" } })
+      @Html.ValidationMessageFor(model => model.AfisarePrimaPagina, "", new { @class = "text-danger" })
+    </div>
+  </div>
+  
+  <div class="form-group">
+    @Html.LabelFor(model => model.OrasSelect, htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+      <div style="display: inline-block; position: relative; width: 100%">
+        <div class="form-group col-xs-12 floating-label-form-group controls">
+          @Html.Label("Localitate")
+
+          <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(ViewBag.OrasSelectat != null ? ((Oras)ViewBag.OrasSelectat).Nume : "")" placeholder="Introduceti Localitate" name="searchBox" @(ViewBag.OrasSelectat != null ? "disabled" : "") />
+          <input type="hidden" name="OrasSelect" id="OrasSelect" value="@Model.OrasSelect" />
+          <ul style="max-height: 450px; overflow-y: scroll" class="localitatiSearchResult"></ul>
+        </div>
+
+        <div class="schimbaLocalitateButton" style="@(ViewBag.OrasSelectat == null ? "display:none;":"") position: absolute; right: 5px; top: 20px; z-index: 30">
+          <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span> Schimba</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Salveaza" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+  <a href="@Url.Action("ToateAgentiileAdmin")" class="btn btn-link">< Toate Agentiile</a>
+</div>
+
+@section Scripts {
+  @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+}

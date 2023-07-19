@@ -1,0 +1,184 @@
+﻿@model Imobiliare.UI.Models.RaportActivitateData
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .sesiuniDistincteTab {
+        color: white;
+        background-color: darkgoldenrod;
+    }
+
+    .anunturiUserTab {
+        color: white;
+        background-color: darkcyan;
+    }
+
+    .anunturiAdminTab {
+        color: white;
+        background-color: darkred;
+    }
+</style>
+
+@Html.Partial("_MenuSuperAdmin")
+<br />
+@using (Html.BeginForm("Index", "RaportActivitate", FormMethod.Get, new { id = "PickForm" }))
+{
+    <text>De la:</text>
+    <input class="datepickerDate" name="startDateTime" value="@Model.StartDate.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+    <text>Pana la:</text>
+    <input class="datepickerDate" name="endDateTime" value="@Model.EndDate.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+}
+<br />
+<h3 style="display: inline-block; color: darkgoldenrod">Sesiuni distincte</h3> |
+<h3 style="display: inline-block; color: darkcyan">Anunturi useri</h3> |
+<h3 style="display: inline-block; color: darkred">Anunturi admin</h3>
+<br />
+<div class="row">
+    @foreach (var raportGraphic in Model.RaportActivitateGraphics)
+    {
+        <div>
+            <h3><span class="glyphicon glyphicon-time"></span> @raportGraphic.DateTime.ToString("dd-MM-yy")</h3>
+
+            @{
+                var sesiuniWidth = raportGraphic.SesiuniDistinctePercentage;
+                if (sesiuniWidth < 2)
+                {
+                    sesiuniWidth = 2;
+                }
+                var anunturiUserWidth = raportGraphic.AnunturiByUserPercentage;
+                if (anunturiUserWidth < 2)
+                {
+                    anunturiUserWidth = 2;
+                }
+                var anunturiAdminWidth = raportGraphic.AnunturiByAdminPercentage;
+                if (anunturiAdminWidth < 2)
+                {
+                    anunturiAdminWidth = 2;
+                }
+            }
+
+            <div class="sesiuniDistincteTab" style="display: inline-block; width: @sesiuniWidth%">
+                <div style="float: left; padding-left: 2px">@raportGraphic.SesiuniDistinctePercentage%</div>
+                @if (raportGraphic.SessionStartedDistinctCount > 0)
+                {
+                    <div style="float: right; padding-right: 2px">@raportGraphic.SessionStartedDistinctCount</div>
+                }
+            </div><br />
+            <div class="anunturiUserTab" style="display: inline-block; width: @anunturiUserWidth%">
+                <div style="float: left; padding-left: 2px">@raportGraphic.AnunturiByUserPercentage%</div>
+                @if (raportGraphic.AnunturiByUsersCount > 0)
+                {
+                    <div style="float: right; padding-right: 2px">@raportGraphic.AnunturiByUsersCount</div>
+                }
+            </div><br />
+            <div class="anunturiAdminTab" style="display: inline-block; width: @anunturiAdminWidth%">
+                <div style="float: left; padding-left: 2px">@raportGraphic.AnunturiByAdminPercentage%</div>
+                @if (raportGraphic.AnunturiByAdminCount > 0)
+                {
+                    <div style="float: right; padding-right: 2px">@raportGraphic.AnunturiByAdminCount</div>
+                }
+            </div>
+        </div>
+
+    }
+</div>
+
+<h3 style="color: red">Rapoartele acestea sunt generate periodic la 48h, si sunt salvate in Baza de date. Coincide cu informatiile ce sunt trimise pe mail la admin.</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            StiriAdaugate
+        </th>
+        <th>
+            AnsambluriAdaugate
+        </th>
+        <th>
+            UseriCreati
+        </th>
+        <th>
+            AnunturiByUsers
+        </th>
+        <th>
+            AnunturiByAdmin
+        </th>
+        <th>
+            SessionStarted
+        </th>
+        <th>
+            Sesiuni Distincte
+        </th>
+        <th>
+            AuditTrails
+        </th>
+        <th>
+            LastConsideredHours
+        </th>
+        <th>
+            CreateDateTime
+        </th>
+        <th>
+            GenerareRaportTime
+        </th>
+        <th>
+            IsFakeEmailManager
+        </th>
+    </tr>
+
+    @foreach (var item in Model.RaportActivitates)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StiriAdaugateCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnsambluriAdaugateCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UseriCreatiCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnunturiByUsersCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnunturiByAdminCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionStartedCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionStartedDistinctCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AuditTrailsCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastConsideredHoursCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GenerareRaportTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFakeEmailManager)
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".datepickerDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                onSelect: function () {
+                    document.getElementById('PickForm').submit();
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,81 @@
+﻿@model Imobiliare.UI.Models.ImobilViewModel
+
+<style>
+    .PhotoButton {
+        padding: 8px 13px;
+        background-color: #5eab1f;
+    }
+
+    .imageEditDiv {
+        color: white;
+    }
+</style>
+
+<br />
+<br />
+<div class="col-md-7">
+    @if (Model.Poze != null)
+    {
+        var poze = Model.Poze.Split(';');
+        foreach (var poza in poze)
+        {
+            if (poza != string.Empty)
+            {
+                <div class="imageEditDiv" style="width: 280px; display: inline-block; padding: 5px; box-shadow: 0 2px 8px 0 #888888; margin-bottom: 10px">
+                    <div style="display: inline-block; vertical-align: top">
+
+                        <div style="display: inline-block; vertical-align: top">
+                            <button type="submit" class="deletePozaButton" name="pozaDeSters" value="@poza"
+                                    style="padding: 8px 13px; background-color: rgb(237, 134, 134); vertical-align: top"
+                                    onclick="return confirm('Sunteti sigur ca doriti sa stergeti poza?') ">
+                                <span style="pointer-events: none" class="bi bi-trash"></span>
+                            </button>
+                            <br />
+                            <br />
+                            <button type="submit" style="padding: 8px 13px; background-color: #5eab1f; vertical-align: bottom" name="rotatePoza" value="@poza">
+                                <span style="pointer-events: none" class="bi bi-arrow-clockwise"></span>
+                            </button>
+                        </div>
+                        <div style="display: inline-block; vertical-align: top">
+                            @if (poze.First() == poza)
+                            {
+                                <div style="display: inline-block; width: 156px; height: 120px; border: 5px solid #a7d582; margin-bottom: 4px">
+                                    <img style="max-height: 100%; max-width: 100%; height: auto; width: auto" class="pozaImobil" src="~/Images/uploadedPhotos/@poza" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="display: inline-block; width: 146px; height: 120px;">
+                                    <img style="max-height: 100%; max-width: 100%; height: auto; width: auto" class="pozaImobil" src="~/Images/uploadedPhotos/@poza" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div style="display: inline-block; vertical-align: top">
+                        @if (poze.First() != poza)
+                        {
+                            <button type="submit" style="background-color: #5eab1f; padding: 8px 13px" name="movePozaUp" value="@poza">
+                                <span style="pointer-events: none" class="bi bi-arrow-up"></span>
+                            </button>
+                            <br />
+                            <br />
+                        }
+
+                        @if (poze.Last() != poza)
+                        {
+                            <button type="submit" style="background-color: #5eab1f; padding: 8px 13px;" name="movePozaDown" value="@poza">
+                                <span style="pointer-events: none" class="bi bi-arrow-down"></span>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    }
+    else
+    {
+
+    }
+    <br />
+
+</div>

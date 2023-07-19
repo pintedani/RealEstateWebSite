@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Șterge cont";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+
+    @Html.Partial("_MenuUserProfileB5")
+
+    <h2>@ViewBag.Title.</h2>
+
+    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 p-2">
+        @using (Html.BeginForm("DeleteAccountConfirmed", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <h4>Sunteți siguri că doriți să ștergeți contul de pe apartamente24.ro? Toate anunțurile adăugate vor fi șterse automat.</h4>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-danger" value="Șterge contul" onclick="return confirm('Sunteți siguri că doriți să ștergeți contul de pe apartamente24.ro? Toate anunțurile adăugate vor fi șterse automat.')" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

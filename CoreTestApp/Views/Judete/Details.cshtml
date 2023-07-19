@@ -1,0 +1,50 @@
+﻿@model Imobiliare.Entities.Judet
+
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.Partial("_MenuSuperAdmin")
+
+<div>
+    <h4>Judet</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nume)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nume)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrescurtareAuto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrescurtareAuto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CoordinateGps)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CoordinateGps)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descriere)
+        </dt>
+
+        <dd>
+            @Html.Raw(HttpUtility.HtmlDecode(Model.Descriere))
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

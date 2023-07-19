@@ -1,0 +1,94 @@
+﻿@using System.Text.RegularExpressions
+@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model Imobiliare.UI.Models.StiriViewModel
+
+@{
+    ViewBag.Title = "Stiri imobiliare";
+
+    ViewBag.MetaDescription = "Noutati din sectorul imobiliar, stiri despre evolutia pietei imobiliare din Romania.";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<title>Știri</title>
+
+<div class="container">
+    <h2>Știri</h2>
+    <hr />
+
+    @foreach (var stire in Model.Stiri)
+    {
+
+        <a class="linkDiv" href="@StiriUrls.BuildStirePageUrl(stire)">
+            <div style="border: 1px solid #a7d582; border-radius: 4px; box-shadow: 3px 3px 2px #888888; margin-bottom: 7px; padding: 5px">
+                <h2>@Html.DisplayFor(modelItem => stire.Titlu)</h2>
+                <hr />
+
+                @if (!string.IsNullOrEmpty(stire.Poze))
+                {
+                    @*Remove this for example with this line: <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>*@
+                    stire.Continut = Regex.Replace(stire.Continut, "<script.*?>(.|\n)*?</script>", string.Empty);
+                    var continut = Regex.Replace(stire.Continut, "<.*?>", String.Empty);
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-4">
+                            <img style="width: 100%" src="/Images/Stiri/@stire.Poze.Split(';')[0]" alt="@stire.Titlu"/>
+                        </div>
+                        <div class="col-md-8" style="font-size: 1.2em">
+                            @if (continut.Length < 200)
+                            {
+                                @continut
+                            }
+                            else
+                            {
+                                @Html.Raw(continut.Substring(0, 200))
+                                @:...
+                            }
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                }
+                else
+                {
+                    @*Remove this for example with this line: <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>*@
+                    stire.Continut = Regex.Replace(stire.Continut, "<script.*?>(.|\n)*?</script>", string.Empty);
+                    var continut = Regex.Replace(stire.Continut, "<.*?>", String.Empty);
+                    <div class="row">
+                        @if (continut.Length < 200)
+                        {
+                            @continut
+                        }
+                        else
+                        {
+                            @Html.Raw(continut.Substring(0, 200))
+                            @:...
+                        }
+                    </div>
+                }
+                <p><span class="bi bi-calendar"></span> @stire.DateCreated.Date.ToString("dd/MM/yy")</p>
+                <p>
+                    @Html.DisplayFor(modelItem => stire.CategorieStire)
+                </p>
+            </div>
+        </a>
+    }
+
+    @if (Model.NumberOfPages > 1)
+    {
+        <p style="margin: 10px 0 0 0">Pagina @Model.StiriFilter.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+
+    @using (Html.BeginForm("Index", "Stiri", FormMethod.Get, new { date = new DateTime(), id = "PickForm" }))
+    {
+        //For paging to insert page element
+    }
+</div>
+
+@section nextprev {
+    @Html.Partial("_GenericNextPrev")
+}
+
+@section Scripts {
+    @Html.Partial("_GenericPagingB5")
+}

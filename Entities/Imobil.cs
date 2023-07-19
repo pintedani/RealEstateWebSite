@@ -94,7 +94,7 @@ namespace Imobiliare.Entities
 
         public double GoogleMarkerCoordinateLong { get; set; }
 
-        //public TipVanzator TipVanzator { get; set; }
+        public TipVanzator TipVanzator { get; set; }
 
         public bool Garaj { get; set; }
 

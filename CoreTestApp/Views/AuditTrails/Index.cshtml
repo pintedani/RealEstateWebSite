@@ -1,0 +1,90 @@
+﻿@model Imobiliare.UI.Models.AuditTrailData
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+    ViewBag.Title = "Audit Trails";
+}
+
+<br />
+@using (Html.BeginForm("Index", "AuditTrails", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
+{
+    <text>Data:</text>
+    <input id="datepickerDate" name="auditTrailDate" value="@Model.SelectedDate.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+    <text>Cauta text:</text>
+    <input id="searchText" name="searchText" value="@Model.SearchText" type="text" size="10" style="width: 200px" />
+    <input class="btn btn-success" type="submit" value="Caută" />
+}
+<br />
+@if (Model.AuditTrails.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+                Category
+            </th>
+            <th>
+                Message
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                NotifyAdmin
+            </th>
+            <th>
+                UserName
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.AuditTrails)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Message)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NotifyAdmin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    if (Model.NumberOfPages > 1)
+    {
+        <p style="margin: 10px 0 0 0">Pagina @Model.LogsFilter.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+}
+else
+{
+    <h3>Nu sunt audit trails ptr @Model.SelectedDate</h3>
+}
+
+@section Scripts {
+    @Html.Partial("_GenericPaging")
+    <script type="text/javascript">
+        $(function () {
+            $("#datepickerDate").datepicker({
+                dateFormat: 'dd/mm/yy',
+                onSelect: function () {
+                    document.getElementById('PickForm').submit();
+                }
+            });
+            $("#viewButton").button();
+        });
+    </script>
+}

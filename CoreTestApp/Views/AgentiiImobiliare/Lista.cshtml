@@ -1,0 +1,48 @@
+﻿@using Imobiliare.UI.Utils.UrlSeoFormatters
+@model IEnumerable<Imobiliare.Entities.Agentie>
+
+@{
+    ViewBag.Title = "Agentii imobiliare";
+    ViewBag.MetaDescription = "Agentii imobiliare din " + Model.First().Oras.Nume;
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+<br />
+
+@if (!Model.Any())
+{
+    <h3>Nu sunt înregistrate agenții pentru criteriile selectate</h3>
+    return;
+}
+
+<div class="container">
+    <h3>Agenții imobiliare din @Model.First().Oras.Nume</h3>
+    <hr />
+
+
+    <table class="table table-striped">
+        <!--<tr>
+            <th>-->
+        @*@Html.DisplayNameFor(model => model.PozaAgentie)*@
+        <!--</th>
+        <th>-->
+        @*Detalii*@
+        <!--</th>
+            <th></th>
+        </tr>-->
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@AgentiiImobiliareUrls.AgentieImobiliaraUrl(item, item.Oras)">
+                        <img style="max-height: 50px; max-width:150px" src="~/Images/LogoAgentii/@(!string.IsNullOrEmpty(item.PozaAgentie) ? item.PozaAgentie : "no_picture.png")" />
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nume)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

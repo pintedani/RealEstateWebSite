@@ -1,0 +1,25 @@
+﻿<style>
+/*    .usermenu > .nav-item > .active {
+        background-color: #007171;
+        border-color: #7dad31;
+    }*/
+</style>
+
+<div class="my-4">
+    <nav class="nav nav-tabs usermenu flex-column flex-sm-row">
+            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Administrare") ? "active" : "")" aria-current="page" href="@Url.Action("Index", "Administrare")"><span class="bi bi-align-justify"></span> Anunțurile mele</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Mesaje") ? "active" : "")" href="@Url.Action("Index", "Mesaje")"><span class="bi bi-envelope"></span> Mesaje</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Edit") ? "active" : "")" href="@Url.Action("EditUserDetails", "Manage")"><span class="bi bi-pencil"></span> Detalii cont</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("ChangePassword") ? "active" : "")" href="@Url.Action("ChangePassword", "Manage")">Schimbă parola</a>
+        <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("ManageLogins") ? "active" : "")" href="@Url.Action("ManageLogins", "Manage")">Login extern</a>
+        <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("DeleteAccount") ? "active" : "")" href="@Url.Action("DeleteAccount", "Manage")">Șterge Cont</a>
+    </nav>
+</div>
+
+@*https://getbootstrap.com/docs/5.0/components/navs-tabs/*@
+@*<nav class="nav nav-pills flex-column flex-sm-row">
+    <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="#">Active</a>
+    <a class="flex-sm-fill text-sm-center nav-link" href="#">Longer nav link</a>
+    <a class="flex-sm-fill text-sm-center nav-link" href="#">Link</a>
+    <a class="flex-sm-fill text-sm-center nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+</nav>*@

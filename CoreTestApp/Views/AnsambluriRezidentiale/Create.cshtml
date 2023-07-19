@@ -1,0 +1,105 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.Entities.Ansamblu
+
+@Html.Partial("_MenuSuperAdmin")
+
+@{
+  ViewBag.Title = "Create";
+}
+
+<h2>Adauga Ansamblu Rezidential</h2>
+
+<style>
+  input[type="text"], input[type="password"], textarea {
+    max-width: 100%;
+  }
+</style>
+
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+
+  <div class="form-horizontal">
+    <h4>Stire</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Titlu, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Titlu, new { style = "width: 100%; max-width:100%", htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Titlu, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Continut, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.TextAreaFor(model => model.Continut, new { style = "width: 100%; height: 400px; max-width:100%", htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Continut, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <div class="checkbox">
+          @Html.EditorFor(model => model.Active)
+          @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.Keywords, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        @Html.EditorFor(model => model.Keywords, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Keywords, "", new { @class = "text-danger" })
+      </div>
+    </div>
+
+    <div class="form-group">
+      @Html.LabelFor(model => model.OrasSelect, htmlAttributes: new { @class = "control-label col-md-2" })
+      <div class="col-md-10">
+        <div style="display: inline-block; position: relative; width: 100%">
+          <div class="form-group col-xs-12 floating-label-form-group controls">
+            @Html.Label("Localitate")
+
+            <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceti Localitate" name="searchBox" />
+            <input type="hidden" name="OrasSelect" id="OrasSelect" value="0" />
+            <ul style="max-height: 450px; overflow-y: scroll" class="localitatiSearchResult"></ul>
+          </div>
+
+          <div class="schimbaLocalitateButton" style="display:none; position: absolute; right: 5px; top: 20px; z-index: 30">
+            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-remove"></span> Schimba</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-10">
+        <input type="submit" value="Adauga ansamblu" class="btn btn-success" />
+      </div>
+    </div>
+  </div>
+}
+
+<div>
+  @Html.ActionLink("Inapoi la ansambluri", "ToateAnsamblurileAdmin", null, new { @class = "btn btn-link" })
+</div>
+
+@section Scripts {
+  @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+  <script>
+    $(function () {
+      $(".localitatiSearchResult").on("click", function () {
+        //Hack because everything in Layout.html
+        $(".searchBox").prop('disabled', false);
+      });
+      //$("#OrasSelect").onchange(function() {
+      //    alert("bau");
+      //});
+    });
+  </script>
+}

@@ -5,9 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
-using Imobiliare.UI.App_Start;
-
-using Microsoft.Practices.Unity;
+using Logging;
 
 namespace Imobiliare.UI.Utils.HttpModules
 {

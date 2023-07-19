@@ -13,7 +13,7 @@ using Imobiliare.Entities;
 using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.Utilities;
-
+using Logging;
 
 namespace Imobiliare.Repositories
 {

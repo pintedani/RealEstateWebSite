@@ -1,0 +1,130 @@
+﻿@model Imobiliare.Entities.RaportActivitate
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RaportActivitate</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceiversCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceiversCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StiriAdaugateCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StiriAdaugateCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnsambluriAdaugateCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnsambluriAdaugateCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UseriCreatiCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UseriCreatiCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnunturiByUsersCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnunturiByUsersCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnunturiByAdminCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnunturiByAdminCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SessionStartedCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SessionStartedCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SessionStartedDistinctCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SessionStartedDistinctCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AuditTrailsCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuditTrailsCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastConsideredHoursCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastConsideredHoursCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinalEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinalEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GenerareRaportTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GenerareRaportTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsFakeEmailManager)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsFakeEmailManager)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

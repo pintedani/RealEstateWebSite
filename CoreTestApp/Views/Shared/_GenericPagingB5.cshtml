@@ -1,0 +1,81 @@
+﻿@*Model needs to contain the following properties: Model.NumberOfPages && Model.Page*@
+@if (Model.NumberOfPages > 1)
+{
+    <script>
+        function initializePaging(numberOfPages, page) {
+            var innerHtml = '';
+            if (page > 1) {
+                innerHtml = '<li class="page-item"><span class="page-link" style="cursor:pointer"><<</span></li>';
+            }
+            if (numberOfPages < 10) {
+                for (var i = 1; i <= numberOfPages; i++) {
+                    if (i == page) {
+                        innerHtml += '<li class="active page-item"><span class="page-link" style="background-color: #007171">' +
+                            i +
+                            '</span></li>';
+                    } else {
+                        innerHtml += '<li class="page-item"><span class="page-link" style="cursor:pointer">' + i + '</span></li>';
+                    }
+                }
+            } else {
+                var negativeValues = 0;
+                for (var page2 = parseInt(page) - 4; page2 < page; page2++) {
+                    if (page2 > 0) {
+                        innerHtml += '<li class="page-item"><span class="page-link" style="cursor:pointer">' + page2 + '</span></li>';
+                    } else {
+                        negativeValues++;
+                    }
+                }
+                innerHtml += '<li class="active page-item"><span class="page-link" style="background-color: #007171">' +
+                    page +
+                    '</span></li>';
+                for (var page3 = parseInt(page) + 1;
+                    page3 <= parseInt(page) + 4 + negativeValues;
+                    page3++) {
+                    if (page3 <= numberOfPages) {
+                        innerHtml += '<li class="page-item"><span class="page-link" style="cursor:pointer">' + page3 + '</span></li>';
+                    }
+                }
+            }
+
+            if (numberOfPages != page) {
+                innerHtml += '<li class="page-item"><span class="page-link" style="cursor:pointer">>></span></li>';
+            }
+            $(".pagination").html(innerHtml);
+        }
+
+        $(function() {
+            initializePaging('@Model.NumberOfPages', '@Model.Page');
+
+            $(".pagination").on("click",
+                function(event) {
+                    var page = $(event.target).text();
+                    if (page == '<<') {
+                        page = 1;
+                    } else if (page == ">>") {
+                        page = '@Model.NumberOfPages';
+                    }
+                    //In Layout.cshtml
+                    initializePaging('@Model.NumberOfPages', page);
+
+                    var element = document.createElement('input');
+                    element.setAttribute('type', 'hidden');
+                    element.setAttribute('value', page);
+                    element.setAttribute('name', 'page');
+                    element.setAttribute('id', 'page');
+
+                    var pickForm = document.getElementById('PickForm');
+                    if (pickForm) {
+                        pickForm.appendChild(element);
+                        document.getElementById('PickForm').submit();
+                    }
+
+                    var searchForm = document.getElementById('SearchAnunturiForm');
+                    if (searchForm) {
+                        searchForm.appendChild(element);
+                        SearchForValue();
+                    }
+                });
+        });
+    </script>
+}

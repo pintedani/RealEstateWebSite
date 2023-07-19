@@ -1,0 +1,78 @@
+﻿@model Imobiliare.UI.Models.MesajeData
+
+@Html.Partial("_MenuSuperAdmin")
+
+<table class="table">
+    <tr>
+        <th>
+            Email exp
+        </th>
+        <th>
+            Titlu
+        </th>
+        <th>
+            Email dest
+        </th>
+        <th>
+            Continut
+        </th>
+        <th>
+            Trimis
+        </th>
+        <th>
+            Citit
+        </th>
+        <th>
+            Id anunt
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Mesaje)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FromUser.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imobil.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ToUser.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Continut)
+            </td>
+            <td>
+                @item.CreateDateTime.ToString("dd-MM-yy HH:mm")
+            </td>
+            <td>
+                @(item.CitireDateTime != DateTime.MinValue ? item.CitireDateTime.ToString("dd-MM-YY HH:mm") : "Necitit")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imobil.Id)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
+
+@if (Model.NumberOfPages > 1)
+{
+    using (Html.BeginForm("ToateMesajele", "Mesaje", FormMethod.Get, new { id = "PickForm" }))
+    {
+        <div class="clearfix"></div>
+        <p style="margin: 10px 0 0 0">Pagina @Model.Page din @Model.NumberOfPages</p>
+        <nav>
+            <ul class="pagination pagination-lg"></ul>
+        </nav>
+    }
+}
+
+@section Scripts {
+    @Html.Partial("_GenericPaging")
+}

@@ -1,0 +1,159 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.UI.Models.EditConstructorImobiliarModel
+
+@{
+    ViewBag.Title = "Editeaza Detalii Cont";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    @Html.Partial("_MenuUserProfileB5")
+
+    <div class="row" style="background-color: #f9f9f9; padding: 10px 0">
+        @using (Html.BeginForm("EditConstructorUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.TrustedUser)
+            @Html.HiddenFor(model => model.ConstructorId)
+
+            <div class="col-md-6">
+                <div style="font-size: 1.2em; margin-top: 5px">
+                    Email: @Model.UserName - membru din @Model.UserCreateDate.Value.ToString("dd/MM/yyyy")
+                </div>
+                <hr />
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Numele tau complet</label>
+                    @Html.TextBoxFor(model => model.NumeComplet, new { title = "Introduceti numele", placeholder = "Numele tau complet", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.NumeComplet)
+                </div>
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Telefon</label>
+                    @Html.TextBoxFor(model => model.PhoneNumber, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", type = "tel", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PhoneNumber)
+                </div>
+                <div class="clearfix"></div>
+                <div class="touchCheckbox" style="padding: 15px; margin-top: 5px; background-color: white; border-bottom: 1px solid #eeeeee">
+                    <span style="font-size: 1.8em" class="bi @(Model.AbonatLaNewsLetter ? "bi-check" : "bi-unchecked")"></span>
+                    <input type="hidden" value="@(Model.AbonatLaNewsLetter ? "true" : "false")" name="AbonatLaNewsLetter">
+                    <label>Abonat la newsletter</label>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Telefon</label>
+                    @Html.TextBoxFor(model => model.ConstructorNume, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ConstructorNume)
+                </div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Telefon Constructor</label>
+                    @Html.TextBoxFor(model => model.ConstructorTelefon, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon Constructor", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ConstructorTelefon)
+                </div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Website</label>
+                    @Html.TextBoxFor(model => model.ConstructorWebsite, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Website", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ConstructorWebsite)
+                </div>
+
+                <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
+                    <label>Descriere</label>
+                    @Html.TextBoxFor(model => model.ConstructorDescriere, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Descriere", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ConstructorDescriere)
+                </div>
+
+                <div style="display: inline-block">
+                    <div>
+                        <input id="ProfileImage" type="file" name="ProfileImage" style="opacity: 0" />
+                    </div>
+                    <div style="display: inline-block" id="filesInfo">
+                        @if (Model.ConstructorPoza != null)
+                        {
+                            <img style="width: 120px; margin-right: 40px" src="../../Images/LogoConstructori/@Model.ConstructorPoza" />
+                        }
+                        else
+                        {
+                            <img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px" />
+                        }
+                    </div>
+                    <div style="display: inline-block" onclick="$('#ProfileImage').click()">
+                        <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.ConstructorPoza != null ? "Schimbă" : "Selectează") logo constructor</button>
+                    </div>
+
+                    @*<img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px"/>
+                        <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poza profil agent</button>*@
+                </div>
+                <hr />
+                <button type="submit" class="btn btn-primary" style="margin: 0 0 0 10px"><span class="bi bi-check"></span> Salvează</button>
+            </div>
+            <hr class="visible-xs visible-sm" />
+
+            if (Model.TrustedUser)
+            {
+                <h3>
+                    <span class="bi bi-star"></span>Utilizator de incredere
+                </h3>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            //disable button once clicked
+            $('#submitButton').on("click", function () {
+                $('#submitButton').hide();
+                $('#loadingGif').show();
+            });
+        });
+    </script>
+    <script>
+        //Preview Image
+        window.onload = init;
+
+        function init() {
+            document.getElementById('ProfileImage').addEventListener('change', fileSelect, false);
+        }
+
+        function fileSelect(evt) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var files = evt.target.files;
+
+                var result = '';
+                var file;
+                for (var i = 0; file = files[i]; i++) {
+                    // if the file is not an image, continue
+                    if (!file.type.match('image.*')) {
+                        alert("Va rugam selectati o imagine(.jpg .png)");
+                        continue;
+                    }
+
+                    reader = new FileReader();
+                    reader.onload = (function (tFile) {
+                        return function (evt) {
+
+                            var div = document.createElement('div');
+                            div.innerHTML = '<img style="width: 90px;" src="' + evt.target.result + '" />';
+                            document.getElementById('filesInfo').innerHTML = "";
+                            document.getElementById('filesInfo').appendChild(div);
+                            $("#SelectLogoButton").html('Schimbă poză profil agent');
+                        };
+                    }(file));
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

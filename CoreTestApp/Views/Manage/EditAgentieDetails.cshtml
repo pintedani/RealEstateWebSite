@@ -1,0 +1,158 @@
+﻿@using Imobiliare.Entities
+@model Imobiliare.UI.Models.EditAgentieImobiliaraModel
+
+@{
+    ViewBag.Title = "Edit Agentie Details";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    @Html.Partial("_MenuUserProfileB5")
+
+    @if (Request.UrlReferrer != null)
+    {
+        <a class="btn btn-primary" href="@Url.Action("EditUserDetails")" style="margin: 5px 0 10px 0"><span class="bi bi-arrow-left"></span> Înapoi la detalii cont</a>
+    }
+
+    <h3>Editeaza Detalii Agentie Imobiliara</h3>
+
+    @using (Html.BeginForm("EditAgentieDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        @Html.HiddenFor(model => model.Agentie.Id)
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 p-2">
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Nume agentie</label>
+                        @Html.TextBoxFor(model => model.Agentie.Nume, new { title = "Introduceti numele agentiei imobiliare", placeholder = "Nume agentie", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Agentie.Nume)
+                    </div>
+
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Telefon agentie</label>
+                        @Html.TextBoxFor(model => model.Agentie.TelefonAgentie, new { title = "Introduceti telefonul agentie", placeholder = "Telefon agentie", @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        <label>Site web</label>
+                        @Html.TextBoxFor(model => model.Agentie.Website, new { title = "Introduceti siteul web", placeholder = "Site web (ex: www.agentie@agentie.ro)", @class = "form-control" })
+                    </div>
+
+                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                        @Html.Label("Descriere:")
+                        @Html.TextAreaFor(model => Model.Agentie.DescriereAgentie, new { style = "max-width: 600px; width: 100%; max-height: 100px", title = "Completati descrierea agentiei", placeholder = "Descriere", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => Model.Agentie.DescriereAgentie)
+                    </div>
+
+                    <div style="display: inline-block; position: relative; width: 100%">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            @Html.Label("Localitate")
+                            @*<input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceti Localitate" name="searchBox" />*@
+                            <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(Model.Agentie.Oras != null ?  Model.Agentie.Oras.Nume : "Introduceti Localitate")" name="searchBox" @(Model.Agentie.Oras != null ? "disabled" : "") />
+                            <input type="hidden" name="OrasSelect" id="OrasSelect" value="@(Model.Agentie.Oras != null ? Model.Agentie.Oras.Id : 0)" />
+                            <ul style="max-height:450px; overflow-y:scroll" class="localitatiSearchResult"></ul>
+                        </div>
+                        <div class="schimbaLocalitateButton" style="position:absolute; right: 5px; top:20px; z-index:30">
+                            <button type="button" class="btn btn-warning"><span class="bi bi-remove"></span> Schimba</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 p-2">
+                    <div>
+                        <input id="ProfileImage" type="file" name="ProfileImage" style="opacity: 0" />
+                    </div>
+                    <div style="display: inline-block" id="filesInfo">
+                        @if (Model.Agentie.PozaAgentie != null)
+                        {
+                            <img style="width: 120px; margin-right: 40px" src="../../Images/LogoAgentii/@Model.Agentie.PozaAgentie" />
+                        }
+                    </div>
+                    <div style="display: inline-block" onclick="$('#ProfileImage').click()">
+                        <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Agentie.PozaAgentie != null ? "Schimbă" : "Selectează") logo firmă</button>
+                    </div>
+                    <hr />
+                    <p>Este important sa incarcati o imagine pentru agentia imobiliara pentru o mai buna promovare a anunturilor. Logo-ul firmei va apărea in dreptul anunțului, de exemplu:</p>
+                    <img src="~/Images/DecorationImages/logoCompanieExemplu.JPG" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary my-2"><span class="bi bi-check"></span> Salvează</button>
+    }
+</div>
+
+@section Scripts {
+    @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
+    <script>
+        $(document).ready(function () {
+
+            //disable button once clicked
+            $('#submitButton').on("click", function () {
+                $('#submitButton').hide();
+                $('#loadingGif').show();
+            });
+
+            //$("#ProfileImage").change(function() {
+            //    readUrl(this);
+            //});
+
+            //function readUrl(input) {
+            //    if (input.files && input.files[0]) {
+            //        var reader = new FileReader();
+            //        reader.onload = function(e) {
+            //            $('#logoImage').attr('src', e.target.result);
+            //        };
+            //        reader.readAsDataURL(input.files[0]);
+            //    }
+            //}
+        });
+    </script>
+    <script>
+        //Preview Image
+        window.onload = init;
+
+        function init() {
+            document.getElementById('ProfileImage').addEventListener('change', fileSelect, false);
+        }
+
+        function fileSelect(evt) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var files = evt.target.files;
+
+                var result = '';
+                var file;
+                for (var i = 0; file = files[i]; i++) {
+                    // if the file is not an image, continue
+                    if (!file.type.match('image.*')) {
+                        alert("Va rugam selectati o imagine(.jpg .png)");
+                        continue;
+                    }
+
+                    reader = new FileReader();
+                    reader.onload = (function (tFile) {
+                        return function (evt) {
+
+                            var div = document.createElement('div');
+                            div.innerHTML = '<img style="width: 120px; margin-right: 40px" src="' + evt.target.result + '" />';
+                            document.getElementById('filesInfo').innerHTML = "";
+                            document.getElementById('filesInfo').appendChild(div);
+                            $("#SelectLogoButton").html('Schimbă logo firmă');
+                        };
+                    }(file));
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}

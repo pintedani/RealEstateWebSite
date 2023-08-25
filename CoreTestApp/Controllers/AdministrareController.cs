@@ -1,4 +1,5 @@
 ﻿using Imobiliare.Entities;
+using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.UI.Models;
@@ -74,7 +75,7 @@ namespace Imobiliare.UI.Controllers
             {
                 userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(userId, false);
             }
-            else if (Request.Form["userIdSelect"] != null)
+            else if ((string)Request.Form["userIdSelect"] != null)
             {
                 userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(Request.Form["userIdSelect"], false);
             }
@@ -213,7 +214,7 @@ namespace Imobiliare.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AnuntEditare([Bind(Include = "Id,Title,Descriere,Price,Suprafata,ContactTelefon,ContactEmail,OrasId,CartierId,TipOfertaGen,TipProprietate,TipVanzator,GoogleMarkerCoordinates,NrBalcoane,NumarCamere,NrBai,NrBalcoane,Strada,VechimeImobil,Negociabil,Decomandat,AerConditionat,CT,Garaj,LocParcare,Finisat,LocInPivnita,Valabilitate,Etaj,NumarTotalEtaje,PromotedLevel")]
+        public ActionResult AnuntEditare([Bind("Id,Title,Descriere,Price,Suprafata,ContactTelefon,ContactEmail,OrasId,CartierId,TipOfertaGen,TipProprietate,TipVanzator,GoogleMarkerCoordinates,NrBalcoane,NumarCamere,NrBai,NrBalcoane,Strada,VechimeImobil,Negociabil,Decomandat,AerConditionat,CT,Garaj,LocParcare,Finisat,LocInPivnita,Valabilitate,Etaj,NumarTotalEtaje,PromotedLevel")]
             ImobilViewModel imobilViewModel)
         {
             var user = this.unitOfWork.UsersRepository.Single(x => x.Email == User.Identity.Name);
@@ -225,7 +226,8 @@ namespace Imobiliare.UI.Controllers
                     var imobilDto = InitializeToBeEditedAnunt(imobilViewModel);
 
                     var addedImobil = this.unitOfWork.AnunturiRepository.AddImobil(imobilDto, HttpContext.User.Identity.Name);
-                    this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Added anunt by user {User.Identity.Name}, de pe dispozitiv mobil {Request.Browser.IsMobileDevice}, adresa ip: {Request.UserHostAddress}, browser: {Request.UserAgent}", userName: User.Identity.Name);
+                    //TODO reenable after fix with browser
+                    //this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Added anunt by user {User.Identity.Name}, de pe dispozitiv mobil {Request.Browser.IsMobileDevice}, adresa ip: {Request.UserHostAddress}, browser: {Request.UserAgent}", userName: User.Identity.Name);
                     this.unitOfWork.Complete();
                     if (user.Role == Role.Administrator || user.TrustedUser)
                     {
@@ -320,14 +322,15 @@ namespace Imobiliare.UI.Controllers
             return Json("Marker sters cu success");
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        //[AcceptVerbs(HttpVerbs.Post)]
         public ActionResult DeleteImage()
         {
-            var imobilId = Request.Form["imobilId"].ParseToInt();
-            var photoToDelete = Request.Form["pozaDeSters"];
-            var movePozaUp = Request.Form["movePozaUp"];
-            var movePozaDown = Request.Form["movePozaDown"];
-            var rotatePoza = Request.Form["rotatePoza"];
+            string imobilIdString = Request.Form["imobilId"];
+            int imobilId = imobilIdString.ParseToInt();
+            string photoToDelete = Request.Form["pozaDeSters"];
+            string movePozaUp = Request.Form["movePozaUp"];
+            string movePozaDown = Request.Form["movePozaDown"];
+            string rotatePoza = Request.Form["rotatePoza"];
             if (photoToDelete != null)
             {
                 log.DebugFormat("Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
@@ -365,41 +368,42 @@ namespace Imobiliare.UI.Controllers
         [AllowAnonymous]
         public ActionResult AddImage(string currentValue)
         {
-            HttpPostedFileBase file = Request.Files["Filedata"];
+            //HttpPostedFileBase file = Request.Files["Filedata"];
 
-            int imobilId = currentValue.ParseToInt();
-            var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
-            this.unitOfWork.Complete();
-            log.DebugFormat("Added images for imobil async with id {0} by user {1}, imageName: {2}", imobilId, User.Identity.Name, imageName);
-            var imobil = this.unitOfWork.AnunturiRepository.Single(x => x.Id == imobilId);
-            return PartialView("_pozeEditAnuntPartial", new ImobilCreateData { ImobilToEdit = imobil });
+            //int imobilId = currentValue.ParseToInt();
+            //var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
+            //this.unitOfWork.Complete();
+            //log.DebugFormat("Added images for imobil async with id {0} by user {1}, imageName: {2}", imobilId, User.Identity.Name, imageName);
+            //var imobil = this.unitOfWork.AnunturiRepository.Single(x => x.Id == imobilId);
+            //return PartialView("_pozeEditAnuntPartial", new ImobilCreateData { ImobilToEdit = imobil });
+            return null;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult AddImageNoAjax(HttpPostedFileBase file)
-        {
-            int imobilId = int.Parse(Request.Form["imobilId"]);
-            if (file != null)
-            {
-                var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
-                if (!string.IsNullOrEmpty(imageName))
-                {
-                    this.unitOfWork.Complete();
-                    log.DebugFormat("Added images for imobil NOT async with id {0} by user {1}, imageName: {2}",
-                        imobilId, User.Identity.Name, imageName);
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Eroare la incarcarea fisierului. Verificati sa fie de tipul imagine!";
-                }
-            }
-            else
-            {
-                log.DebugFormat("No image selected for imobil NOT async  by user {0}", User.Identity.Name);
-            }
-            return RedirectToAction(nameof(AnuntEditare), new RouteValueDictionary(new Dictionary<string, object>() { { "id", imobilId } }));
-        }
+        //[HttpPost]
+        //[AllowAnonymous]
+        //public ActionResult AddImageNoAjax(HttpPostedFileBase file)
+        //{
+        //    int imobilId = int.Parse(Request.Form["imobilId"]);
+        //    if (file != null)
+        //    {
+        //        var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
+        //        if (!string.IsNullOrEmpty(imageName))
+        //        {
+        //            this.unitOfWork.Complete();
+        //            log.DebugFormat("Added images for imobil NOT async with id {0} by user {1}, imageName: {2}",
+        //                imobilId, User.Identity.Name, imageName);
+        //        }
+        //        else
+        //        {
+        //            TempData["ErrorMessage"] = "Eroare la incarcarea fisierului. Verificati sa fie de tipul imagine!";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        log.DebugFormat("No image selected for imobil NOT async  by user {0}", User.Identity.Name);
+        //    }
+        //    return RedirectToAction(nameof(AnuntEditare), new RouteValueDictionary(new Dictionary<string, object>() { { "id", imobilId } }));
+        //}
 
         public ActionResult Deactivare(int imobilid, string returnUrl)
         {

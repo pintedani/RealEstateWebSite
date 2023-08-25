@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
+using Logging;
 
 namespace Imobiliare.Repositories
 {

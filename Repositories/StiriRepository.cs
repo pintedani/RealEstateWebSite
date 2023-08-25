@@ -9,6 +9,7 @@ using System.Web;
 using Caching;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
+using Logging;
 
 namespace Imobiliare.Repositories
 {
@@ -53,47 +54,47 @@ namespace Imobiliare.Repositories
         {
             Stire stire = this.DbContext.Stires.Find(id);
             this.DbContext.Stires.Remove(stire);
-            DeleteAllStiriPhotos(stire.Poze);
+            //DeleteAllStiriPhotos(stire.Poze);
         }
 
-        public string AddImage(int stireId, HttpPostedFileBase[] httpPostedFileBases)
-        {
-            var itemToExtend = this.DbContext.Stires.First(x => x.Id == stireId);
-            var lastAddedImage = AddPhotos(itemToExtend, httpPostedFileBases);
-            return lastAddedImage;
-        }
+        //public string AddImage(int stireId, HttpPostedFileBase[] httpPostedFileBases)
+        //{
+        //    var itemToExtend = this.DbContext.Stires.First(x => x.Id == stireId);
+        //    var lastAddedImage = AddPhotos(itemToExtend, httpPostedFileBases);
+        //    return lastAddedImage;
+        //}
 
         public void DeleteImage(int stireId, string pozadeSters)
         {
-            var itemToremove = this.DbContext.Stires.First(x => x.Id == stireId);
+            //var itemToremove = this.DbContext.Stires.First(x => x.Id == stireId);
 
-            var allPhotos = itemToremove.Poze.Split(';');
+            //var allPhotos = itemToremove.Poze.Split(';');
 
-            string newPictureList = string.Empty;
-            foreach (var pictureName in allPhotos.Where(pictureName => pictureName != string.Empty && pictureName != pozadeSters))
-            {
-                if (newPictureList == string.Empty)
-                {
-                    newPictureList = pictureName;
-                }
-                else
-                {
-                    newPictureList += ";" + pictureName;
-                }
-            }
+            //string newPictureList = string.Empty;
+            //foreach (var pictureName in allPhotos.Where(pictureName => pictureName != string.Empty && pictureName != pozadeSters))
+            //{
+            //    if (newPictureList == string.Empty)
+            //    {
+            //        newPictureList = pictureName;
+            //    }
+            //    else
+            //    {
+            //        newPictureList += ";" + pictureName;
+            //    }
+            //}
 
-            itemToremove.Poze = newPictureList != string.Empty ? newPictureList : null;
+            //itemToremove.Poze = newPictureList != string.Empty ? newPictureList : null;
 
-            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pozadeSters);
-            var fileDel = new FileInfo(path);
-            if (fileDel.Exists)
-            {
-                fileDel.Delete();
-            }
-            else
-            {
-                log.ErrorFormat("Attempt to remove inexisting stire photo {0}", pozadeSters);
-            }
+            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pozadeSters);
+            //var fileDel = new FileInfo(path);
+            //if (fileDel.Exists)
+            //{
+            //    fileDel.Delete();
+            //}
+            //else
+            //{
+            //    log.ErrorFormat("Attempt to remove inexisting stire photo {0}", pozadeSters);
+            //}
         }
 
         public Tuple<Stire, Stire> FindBeforeAndAfterNavigationStiri(int id, StiriFilter stiriFilter)
@@ -133,63 +134,63 @@ namespace Imobiliare.Repositories
         //}
 
         //Refactor this to not duplicate from Imobils
-        private static string AddPhotos(Stire stire, HttpPostedFileBase[] files)
-        {
-            string pictureName = string.Empty;
-            if (files != null)
-            {
-                foreach (var httpPostedFileBase in files)
-                {
-                    if (httpPostedFileBase != null)
-                    {
-                        pictureName = Guid.NewGuid() + ".jpg";
-                        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pictureName);
+        //private static string AddPhotos(Stire stire, HttpPostedFileBase[] files)
+        //{
+        //    string pictureName = string.Empty;
+        //    if (files != null)
+        //    {
+        //        foreach (var httpPostedFileBase in files)
+        //        {
+        //            if (httpPostedFileBase != null)
+        //            {
+        //                pictureName = Guid.NewGuid() + ".jpg";
+        //                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pictureName);
 
-                        Image image = Image.FromStream(httpPostedFileBase.InputStream);
-                        //var finalImage = FixedSize(image, 640, 480);
+        //                Image image = Image.FromStream(httpPostedFileBase.InputStream);
+        //                //var finalImage = FixedSize(image, 640, 480);
 
-                        image.Save(path, ImageFormat.Jpeg);
-                        image.Dispose();
-                        image.Dispose();
+        //                image.Save(path, ImageFormat.Jpeg);
+        //                image.Dispose();
+        //                image.Dispose();
 
-                        //pictureName = InsertWaterMark(pictureName);
+        //                //pictureName = InsertWaterMark(pictureName);
 
-                        if (stire.Poze == null)
-                        {
-                            stire.Poze = pictureName;
-                        }
-                        else
-                        {
-                            stire.Poze += ";" + pictureName;
-                        }
-                    }
-                }
-            }
-            return pictureName;
-        }
+        //                if (stire.Poze == null)
+        //                {
+        //                    stire.Poze = pictureName;
+        //                }
+        //                else
+        //                {
+        //                    stire.Poze += ";" + pictureName;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return pictureName;
+        //}
 
-        private void DeleteAllStiriPhotos(string poze)
-        {
-            if (poze != null)
-            {
-                foreach (var poza in poze.Split(';'))
-                {
-                    if (poza != string.Empty)
-                    {
-                        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), poza);
-                        var fileDel = new FileInfo(path);
-                        if (fileDel.Exists)
-                        {
-                            fileDel.Delete();
-                            log.DebugFormat("Deleted stire photo {0}", poza);
-                        }
-                        else
-                        {
-                            log.ErrorFormat("Attempt to remove inexisting stire photo {0}", poza);
-                        }
-                    }
-                }
-            }
-        }
+        //private void DeleteAllStiriPhotos(string poze)
+        //{
+        //    if (poze != null)
+        //    {
+        //        foreach (var poza in poze.Split(';'))
+        //        {
+        //            if (poza != string.Empty)
+        //            {
+        //                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), poza);
+        //                var fileDel = new FileInfo(path);
+        //                if (fileDel.Exists)
+        //                {
+        //                    fileDel.Delete();
+        //                    log.DebugFormat("Deleted stire photo {0}", poza);
+        //                }
+        //                else
+        //                {
+        //                    log.ErrorFormat("Attempt to remove inexisting stire photo {0}", poza);
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

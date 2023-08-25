@@ -2,11 +2,14 @@
 {
   using System;
   using System.Collections.Generic;
-  using System.Linq;
+    using System.Data.Entity;
+    using System.Linq;
 
   using Imobiliare.Entities;
   using Imobiliare.Repositories.Interfaces;
-  public class CartierRepository : Repository<Cartier>, ICartierRepository
+    using Logging;
+
+    public class CartierRepository : Repository<Cartier>, ICartierRepository
   {
     private static readonly ILog log = LogManager.GetLogger(typeof(CartierRepository));
 
@@ -75,7 +78,7 @@
       }
       catch (Exception exception)
       {
-        log.ErrorFormat("Error while adding cartier {0} for oras with id {1}, exception {2}", nume, orasId, exception);
+        //log.ErrorFormat("Error while adding cartier {0} for oras with id {1}, exception {2}", nume, orasId, exception);
         return false;
       }
     }

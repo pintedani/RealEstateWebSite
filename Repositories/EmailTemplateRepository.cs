@@ -6,8 +6,9 @@
 
   using Imobiliare.Entities;
   using Imobiliare.Repositories.Interfaces;
+    using Logging;
 
-  public class EmailTemplateRepository : Repository<EmailTemplate>, IEmailTemplateRepository
+    public class EmailTemplateRepository : Repository<EmailTemplate>, IEmailTemplateRepository
   {
     private static readonly ILog log = LogManager.GetLogger(typeof(EmailTemplateRepository));
 

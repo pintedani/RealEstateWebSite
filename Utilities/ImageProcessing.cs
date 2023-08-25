@@ -15,105 +15,105 @@ namespace Imobiliare.Utilities
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ImageProcessing));
 
-        public static string AddPhotos(Imobil imobil, HttpPostedFileBase[] files)
-        {
-            string pictureName = string.Empty;
-            if (files != null)
-            {
-                foreach (var httpPostedFileBase in files)
-                {
-                    if (httpPostedFileBase != null)
-                    {
-                        try
-                        {
-                            //This name is temporary, watermark creates real name
-                            pictureName = GetFormattedImageName(imobil);
-                            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"),
-                                pictureName);
+        //public static string AddPhotos(Imobil imobil, HttpPostedFileBase[] files)
+        //{
+        //    string pictureName = string.Empty;
+        //    if (files != null)
+        //    {
+        //        foreach (var httpPostedFileBase in files)
+        //        {
+        //            if (httpPostedFileBase != null)
+        //            {
+        //                try
+        //                {
+        //                    //This name is temporary, watermark creates real name
+        //                    pictureName = GetFormattedImageName(imobil);
+        //                    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"),
+        //                        pictureName);
 
-                            Image image = Image.FromStream(httpPostedFileBase.InputStream);
+        //                    Image image = Image.FromStream(httpPostedFileBase.InputStream);
 
-                            var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
+        //                    var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
 
-                            var finalImage = FixedSize(image, scaledImage.Item1, scaledImage.Item2);
-                            //var finalImage = FixedSize(image, 640, 480);
+        //                    var finalImage = FixedSize(image, scaledImage.Item1, scaledImage.Item2);
+        //                    //var finalImage = FixedSize(image, 640, 480);
 
-                            finalImage.Save(path, ImageFormat.Jpeg);
-                            finalImage.Dispose();
-                            image.Dispose();
+        //                    finalImage.Save(path, ImageFormat.Jpeg);
+        //                    finalImage.Dispose();
+        //                    image.Dispose();
 
-                            //pictureName = InsertWaterMark(pictureName, imobil);
+        //                    //pictureName = InsertWaterMark(pictureName, imobil);
 
-                            if (imobil.Poze == null)
-                            {
-                                imobil.Poze = pictureName;
-                            }
-                            else
-                            {
-                                imobil.Poze += ";" + pictureName;
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            pictureName = null;
-                            log.ErrorFormat($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
-                        }
-                    }
-                }
-            }
-            return pictureName;
-        }
+        //                    if (imobil.Poze == null)
+        //                    {
+        //                        imobil.Poze = pictureName;
+        //                    }
+        //                    else
+        //                    {
+        //                        imobil.Poze += ";" + pictureName;
+        //                    }
+        //                }
+        //                catch (Exception e)
+        //                {
+        //                    pictureName = null;
+        //                    log.ErrorFormat($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return pictureName;
+        //}
 
         public void RotateImage(Imobil imobil, string pictureName)
         {
-            //https://www.c-sharpcorner.com/forums/rotate-and-save-image-in-c-sharp
-            var allPhotos = imobil.Poze.Split(';');
+            ////https://www.c-sharpcorner.com/forums/rotate-and-save-image-in-c-sharp
+            //var allPhotos = imobil.Poze.Split(';');
 
-            var index = 0;
-            for (var i = 0; i < allPhotos.Count(); i++)
-            {
-                if (allPhotos[i] == pictureName)
-                {
-                    index = i;
-                    break;
-                }
-            }
+            //var index = 0;
+            //for (var i = 0; i < allPhotos.Count(); i++)
+            //{
+            //    if (allPhotos[i] == pictureName)
+            //    {
+            //        index = i;
+            //        break;
+            //    }
+            //}
 
-            string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
+            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
 
-            try
-            {
-                var img = Image.FromFile(path);
-                img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            //try
+            //{
+            //    var img = Image.FromFile(path);
+            //    img.RotateFlip(RotateFlipType.Rotate90FlipNone);
 
-                var newName = GetFormattedImageName(imobil);
-                string newPath = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), newName);
-                img.Save(newPath);
+            //    var newName = GetFormattedImageName(imobil);
+            //    string newPath = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), newName);
+            //    img.Save(newPath);
 
-                img.Dispose();
+            //    img.Dispose();
 
-                File.Delete(path);
+            //    File.Delete(path);
 
-                allPhotos[index] = newName;
-            }
-            catch (Exception exception)
-            {
-                log.ErrorFormat("RotateImage image {0} error {1}", pictureName, exception.Message);
-            }
+            //    allPhotos[index] = newName;
+            //}
+            //catch (Exception exception)
+            //{
+            //    log.ErrorFormat("RotateImage image {0} error {1}", pictureName, exception.Message);
+            //}
 
-            string newPictureList = string.Empty;
-            foreach (var picture in allPhotos.Where(x => x != string.Empty))
-            {
-                if (newPictureList == string.Empty)
-                {
-                    newPictureList = picture;
-                }
-                else
-                {
-                    newPictureList += ";" + picture;
-                }
-            }
-            imobil.Poze = newPictureList;
+            //string newPictureList = string.Empty;
+            //foreach (var picture in allPhotos.Where(x => x != string.Empty))
+            //{
+            //    if (newPictureList == string.Empty)
+            //    {
+            //        newPictureList = picture;
+            //    }
+            //    else
+            //    {
+            //        newPictureList += ";" + picture;
+            //    }
+            //}
+            //imobil.Poze = newPictureList;
         }
 
         public static Tuple<int, int> GetResizedImageRatio(int imgWidth, int imgHeight, int maxWidth, int maxHeight)
@@ -128,55 +128,55 @@ namespace Imobiliare.Utilities
             return result;
         }
 
-        private static Image FixedSize(Image imgPhoto, int Width, int Height)
-        {
-            int sourceWidth = imgPhoto.Width;
-            int sourceHeight = imgPhoto.Height;
-            int sourceX = 0;
-            int sourceY = 0;
-            int destX = 0;
-            int destY = 0;
+        //private static Image FixedSize(Image imgPhoto, int Width, int Height)
+        //{
+        //    int sourceWidth = imgPhoto.Width;
+        //    int sourceHeight = imgPhoto.Height;
+        //    int sourceX = 0;
+        //    int sourceY = 0;
+        //    int destX = 0;
+        //    int destY = 0;
 
-            float nPercent = 0;
-            float nPercentW = 0;
-            float nPercentH = 0;
+        //    float nPercent = 0;
+        //    float nPercentW = 0;
+        //    float nPercentH = 0;
 
-            nPercentW = ((float)Width / (float)sourceWidth);
-            nPercentH = ((float)Height / (float)sourceHeight);
-            if (nPercentH < nPercentW)
-            {
-                nPercent = nPercentH;
-                destX = Convert.ToInt16((Width -
-                                         (sourceWidth * nPercent)) / 2);
-            }
-            else
-            {
-                nPercent = nPercentW;
-                destY = Convert.ToInt16((Height -
-                                         (sourceHeight * nPercent)) / 2);
-            }
+        //    nPercentW = ((float)Width / (float)sourceWidth);
+        //    nPercentH = ((float)Height / (float)sourceHeight);
+        //    if (nPercentH < nPercentW)
+        //    {
+        //        nPercent = nPercentH;
+        //        destX = Convert.ToInt16((Width -
+        //                                 (sourceWidth * nPercent)) / 2);
+        //    }
+        //    else
+        //    {
+        //        nPercent = nPercentW;
+        //        destY = Convert.ToInt16((Height -
+        //                                 (sourceHeight * nPercent)) / 2);
+        //    }
 
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
+        //    int destWidth = (int)(sourceWidth * nPercent);
+        //    int destHeight = (int)(sourceHeight * nPercent);
 
-            Bitmap bmPhoto = new Bitmap(Width, Height,
-                PixelFormat.Format24bppRgb);
-            bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
-                imgPhoto.VerticalResolution);
+        //    Bitmap bmPhoto = new Bitmap(Width, Height,
+        //        PixelFormat.Format24bppRgb);
+        //    bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
+        //        imgPhoto.VerticalResolution);
 
-            Graphics grPhoto = Graphics.FromImage(bmPhoto);
-            grPhoto.Clear(Color.FromArgb(249, 249, 249));
-            grPhoto.InterpolationMode =
-                InterpolationMode.HighQualityBicubic;
+        //    Graphics grPhoto = Graphics.FromImage(bmPhoto);
+        //    grPhoto.Clear(Color.FromArgb(249, 249, 249));
+        //    grPhoto.InterpolationMode =
+        //        InterpolationMode.HighQualityBicubic;
 
-            grPhoto.DrawImage(imgPhoto,
-                new Rectangle(destX, destY, destWidth, destHeight),
-                new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
-                GraphicsUnit.Pixel);
+        //    grPhoto.DrawImage(imgPhoto,
+        //        new Rectangle(destX, destY, destWidth, destHeight),
+        //        new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
+        //        GraphicsUnit.Pixel);
 
-            grPhoto.Dispose();
-            return bmPhoto;
-        }
+        //    grPhoto.Dispose();
+        //    return bmPhoto;
+        //}
 
         //Not used currently
         //private static string InsertWaterMark(string pictureName, Imobil imobil)
@@ -311,17 +311,17 @@ namespace Imobiliare.Utilities
                 {
                     if (poza != string.Empty)
                     {
-                        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), poza);
-                        var fileDel = new FileInfo(path);
-                        if (fileDel.Exists)
-                        {
-                            log.DebugFormat("Remove photo {0}", poza);
-                            fileDel.Delete();
-                        }
-                        else
-                        {
-                            log.ErrorFormat("Attempt to remove inexisting anunt photo {0}", poza);
-                        }
+                        //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), poza);
+                        //var fileDel = new FileInfo(path);
+                        //if (fileDel.Exists)
+                        //{
+                        //    log.DebugFormat("Remove photo {0}", poza);
+                        //    fileDel.Delete();
+                        //}
+                        //else
+                        //{
+                        //    log.ErrorFormat("Attempt to remove inexisting anunt photo {0}", poza);
+                        //}
                     }
                 }
             }

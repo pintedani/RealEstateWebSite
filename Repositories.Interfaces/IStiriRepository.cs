@@ -18,7 +18,7 @@ namespace Imobiliare.Repositories.Interfaces
 
         void Add(Stire stire);
 
-        string AddImage(int stireId, HttpPostedFileBase[] httpPostedFileBases);
+        //string AddImage(int stireId, HttpPostedFileBase[] httpPostedFileBases);
 
         void DeleteImage(int stireId, string poza);
 

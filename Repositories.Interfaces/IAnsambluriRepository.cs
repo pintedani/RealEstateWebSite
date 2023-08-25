@@ -17,7 +17,7 @@ namespace Imobiliare.Repositories.Interfaces
 
         void Edit(Ansamblu ansamblu);
 
-        string AddImage(int ansambluId, HttpPostedFileBase[] httpPostedFileBases);
+        //string AddImage(int ansambluId, HttpPostedFileBase[] httpPostedFileBases);
 
         void DeleteImage(int ansambluId, string poza);
 

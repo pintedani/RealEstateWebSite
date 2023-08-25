@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
+using Logging;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
@@ -86,20 +87,20 @@ namespace Imobiliare.Repositories
 
         private void DeleteAllAgentiePhotos(string poza)
         {
-            if (poza != null)
-            {
-                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoAgentii"), poza);
-                var fileDel = new FileInfo(path);
-                if (fileDel.Exists)
-                {
-                    fileDel.Delete();
-                    log.DebugFormat("Deleted agentie photo {0}", poza);
-                }
-                else
-                {
-                    log.ErrorFormat("Attempt to remove inexisting agentie photo {0}", poza);
-                }
-            }
+            //if (poza != null)
+            //{
+            //    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoAgentii"), poza);
+            //    var fileDel = new FileInfo(path);
+            //    if (fileDel.Exists)
+            //    {
+            //        fileDel.Delete();
+            //        log.DebugFormat("Deleted agentie photo {0}", poza);
+            //    }
+            //    else
+            //    {
+            //        log.ErrorFormat("Attempt to remove inexisting agentie photo {0}", poza);
+            //    }
+            //}
         }
     }
 }

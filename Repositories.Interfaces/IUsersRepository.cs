@@ -16,11 +16,11 @@
 
     void UpdateConfirmationToken(string userId, string confirmationToken);
 
-    string AddImageForUserProfile(HttpPostedFileBase file, string userId);
+    //string AddImageForUserProfile(HttpPostedFileBase file, string userId);
 
-    string AddImageForAgentie(HttpPostedFileBase file, int agentieId);
+    //string AddImageForAgentie(HttpPostedFileBase file, int agentieId);
 
-    void AddImageForConstructor(HttpPostedFileBase profileImage, int constructorId);
+    //void AddImageForConstructor(HttpPostedFileBase profileImage, int constructorId);
 
     void UpdateUserProfile(UserProfile userProfile);
 

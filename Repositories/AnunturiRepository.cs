@@ -518,13 +518,13 @@ namespace Imobiliare.Repositories
             list[indexB] = tmp;
         }
 
-        public string AddImages(int imobilId, HttpPostedFileBase[] files)
-        {
-            string lastAddedImage = string.Empty;
-            var itemToExtend = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).Include(nameof(Imobil.Cartier)).First(x => x.Id == imobilId);
-            lastAddedImage = ImageProcessing.AddPhotos(itemToExtend, files);
-            return lastAddedImage;
-        }
+        //public string AddImages(int imobilId, HttpPostedFileBase[] files)
+        //{
+        //    string lastAddedImage = string.Empty;
+        //    var itemToExtend = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).Include(nameof(Imobil.Cartier)).First(x => x.Id == imobilId);
+        //    lastAddedImage = ImageProcessing.AddPhotos(itemToExtend, files);
+        //    return lastAddedImage;
+        //}
 
         public void RemoveGoogleMarkerCoordinates(int imobilId)
         {
@@ -592,27 +592,27 @@ namespace Imobiliare.Repositories
 
         public void ClearPhotosExceptFirst(int anuntId)
         {
-            var itemToEdit = this.DbContext.Imobile.First(x => x.Id == anuntId);
+            //var itemToEdit = this.DbContext.Imobile.First(x => x.Id == anuntId);
 
-            //Delete all except first photo
-            foreach (var poza in itemToEdit.Poze.Split(';').Skip(1))
-            {
-                if (poza != string.Empty)
-                {
-                    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), poza);
-                    var fileDel = new FileInfo(path);
-                    if (fileDel.Exists)
-                    {
-                        fileDel.Delete();
-                    }
-                    else
-                    {
-                        log.ErrorFormat("Attempt to remove inexisting anunt photo {0} for anunt with id {1}", poza, anuntId);
-                    }
-                }
-            }
+            ////Delete all except first photo
+            //foreach (var poza in itemToEdit.Poze.Split(';').Skip(1))
+            //{
+            //    if (poza != string.Empty)
+            //    {
+            //        string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), poza);
+            //        var fileDel = new FileInfo(path);
+            //        if (fileDel.Exists)
+            //        {
+            //            fileDel.Delete();
+            //        }
+            //        else
+            //        {
+            //            log.ErrorFormat("Attempt to remove inexisting anunt photo {0} for anunt with id {1}", poza, anuntId);
+            //        }
+            //    }
+            //}
 
-            itemToEdit.Poze = itemToEdit.Poze.Split(';')[0];
+            //itemToEdit.Poze = itemToEdit.Poze.Split(';')[0];
         }
 
         public Imobil GetImobilRelatedToExternalLink(string externalLink)
@@ -734,7 +734,7 @@ namespace Imobiliare.Repositories
 
             var anunturiWithMultiplePhotos = lastAddedImobils.Where(x => x.NumarPoze > 1).ToList();
             log.DebugFormat("Starting photo cleanup: {0} with 1 photo already, {1} with more than one photo",
-                anunturiWithMultiplePhotos.Count(), lastAddedImobils.Count() - anunturiWithMultiplePhotos.Count());
+                anunturiWithMultiplePhotos.Count(), (lastAddedImobils.Count() - anunturiWithMultiplePhotos.Count()).ToString());
 
             var photoCount = 0;
             foreach (var anunt in anunturiWithMultiplePhotos)
@@ -743,7 +743,7 @@ namespace Imobiliare.Repositories
                 photoCount += anunt.NumarPoze - 1;
 
                 log.DebugFormat("Attempt to remove {0} secondary photos for not active anunt with id {1}, titlu {2}",
-                    anunt.NumarPoze - 1, anunt.Id, anunt.Title);
+                    (anunt.NumarPoze - 1).ToString(), anunt.Id, anunt.Title);
                 ClearPhotosExceptFirst(anunt.Id);
             }
 
@@ -778,30 +778,31 @@ namespace Imobiliare.Repositories
         {
             //https://stackoverflow.com/questions/176379/determine-sql-server-database-size
             //https://stackoverflow.com/questions/12031393/how-to-know-the-physical-size-of-the-database-in-entity-framework
-            var sqlConn = this.DbContext.Database.Connection as SqlConnection;
+            //var sqlConn = this.DbContext.Database.Connection as SqlConnection;
 
-            var cmd = new SqlCommand("sp_helpdb")
-            {
-                CommandType = CommandType.StoredProcedure,
-                Connection = sqlConn
-            };
+            //var cmd = new SqlCommand("sp_helpdb")
+            //{
+            //    CommandType = CommandType.StoredProcedure,
+            //    Connection = sqlConn
+            //};
 
-            cmd.Parameters.Add(new SqlParameter()
-            {
-                ParameterName = "dbname",
-                Value = "ImobiliareDb"
-            });
+            //cmd.Parameters.Add(new SqlParameter()
+            //{
+            //    ParameterName = "dbname",
+            //    Value = "ImobiliareDb"
+            //});
 
-            var adp = new SqlDataAdapter(cmd);
-            var dataset = new DataSet();
-            sqlConn.Open();
-            adp.Fill(dataset);
-            sqlConn.Close();
+            //var adp = new SqlDataAdapter(cmd);
+            //var dataset = new DataSet();
+            //sqlConn.Open();
+            //adp.Fill(dataset);
+            //sqlConn.Close();
 
-            var l = dataset.Tables[1].Rows[0][4].ToString();
-            var mb = int.Parse(l.Split(' ')[0]) / 1024;
+            //var l = dataset.Tables[1].Rows[0][4].ToString();
+            //var mb = int.Parse(l.Split(' ')[0]) / 1024;
 
-            return mb;
+            //return mb;
+            return 1;
         }
 
         public int DeleteAnunturiVechiBulk(DateTime dateTime)

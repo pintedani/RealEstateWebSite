@@ -4,11 +4,13 @@ namespace Imobiliare.Repositories
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     using Entities;
     using Interfaces;
+    using Logging;
 
     public class OrasRepository : Repository<Oras>, IOrasRepository
     {

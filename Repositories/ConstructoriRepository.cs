@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
+using Logging;
 
 namespace Imobiliare.Repositories
 {

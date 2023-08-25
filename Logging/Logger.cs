@@ -71,6 +71,11 @@ namespace Logging
             
         }
 
+        public void InfoFormat(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public void WarnFormat(string v, string userid)
         {
             
@@ -82,6 +87,16 @@ namespace Logging
         }
 
         public void WarnFormat(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WarnFormat(string v, int id, string titlu, string newTitle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WarnFormat(string v, string searchValue, string tipProprietate)
         {
             throw new NotImplementedException();
         }

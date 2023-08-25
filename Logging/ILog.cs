@@ -21,6 +21,8 @@ namespace Logging
         void ErrorFormat(string v, string poza);
         void ErrorFormat(string v, int anuntId, string secretNumber);
         void ErrorFormat(string v, int anuntId, StareAprobare stareAprobare, StareAprobare stare);
+        void ErrorFormat(string v, string path, string message);
+        void ErrorFormat(string v, string nume, int judetId, Exception exception);
         void InfoFormat(string v);
         void WarnFormat(string v, string userid, int count);
         void WarnFormat(string v);

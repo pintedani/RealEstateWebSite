@@ -5,6 +5,7 @@
   using Imobiliare.Entities;
   using Imobiliare.Repositories.Interfaces;
     using Logging;
+    using Microsoft.EntityFrameworkCore;
 
     public class AuditTrailRepository : Repository<AuditTrail>, IAuditTrailRepository
   {
@@ -32,8 +33,9 @@
     public int DeleteAuditTrailsOltherThanDate(DateTime parse)
     {
       string sqlFormattedDate = parse.ToString("yyyy-MM-dd HH:mm:ss");
-      //Be sure to check Db Name: "Log" or "Logs"
-      return this.DbContext.Database.ExecuteSqlCommand("DELETE FROM dbo.AuditTrail WHERE Date < '" + sqlFormattedDate + "'");
+            //Be sure to check Db Name: "Log" or "Logs"
+
+      return this.DbContext.Database.ExecuteSql($"DELETE FROM dbo.AuditTrail WHERE Date < '{sqlFormattedDate}'");
     }
   }
 }

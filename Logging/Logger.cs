@@ -51,6 +51,16 @@ namespace Logging
             throw new NotImplementedException();
         }
 
+        public void DebugFormat(string v, string title, int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DebugFormat(string v, string emailUser, string titlu, string mesaj)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ErrorFormat(string error)
         {
 
@@ -71,7 +81,27 @@ namespace Logging
             
         }
 
+        public void ErrorFormat(string v, string path, string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ErrorFormat(string v, string nume, int judetId, Exception exception)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ErrorFormat(string v, int id, string? name, string message)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InfoFormat(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Warn(string message)
         {
             throw new NotImplementedException();
         }

@@ -49,7 +49,7 @@
         {
             var user = this.DbContext.Users.Single(x => x.UserName == username);
             user.LastLoginTime = DateTime.Now;
-            this.DbContext.Entry(user).State = EntityState.Modified;
+            this.DbContext.Entry(user).State = (Microsoft.EntityFrameworkCore.EntityState)EntityState.Modified;
         }
 
         public UserProfile GetUserProfileById(string userProfileId, bool includeRelatedEntities)

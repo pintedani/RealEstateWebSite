@@ -11,6 +11,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Imobiliare.Managers.ExtensionMethods;
 using Logging;
+using System.Drawing.Printing;
 
 namespace Imobiliare.UI.Controllers
 {
@@ -162,9 +163,9 @@ namespace Imobiliare.UI.Controllers
         public ActionResult Users(string selectSingleUserEmail)
         {
             var page = 1;
-            if (Request.Form["page"] != null)
+            if (Request.Form["page"].ToString != null)
             {
-                page = Request.Form["page"].ParseToInt();
+                page = Request.Form["page"].ToString().ParseToInt();
             }
 
             string tipVanzator = Request.Form["TipVanzatorSelect"];
@@ -181,7 +182,7 @@ namespace Imobiliare.UI.Controllers
                 role = selectedRole.EnumParse<Role>();
             }
 
-            var userName = Request.Form["UserName"];
+            var userName = Request.Form["UserName"].ToString();
             if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(selectSingleUserEmail))
             {
                 userName = selectSingleUserEmail;
@@ -224,11 +225,12 @@ namespace Imobiliare.UI.Controllers
 
         public ActionResult UserEditare(string userid)
         {
-            UserProfile user;
-            using (var db = new ApplicationDbContext())
-            {
-                user = db.Users.Single(u => u.Id == userid);
-            }
+            UserProfile user = this.unitOfWork.UsersRepository.GetUserProfileById(userid, true);
+
+            //using (var db = new ApplicationDbContext())
+            //{
+            //    user = db.Users.Single(u => u.Id == userid);
+            //}
             return View(user);
         }
 
@@ -307,10 +309,11 @@ namespace Imobiliare.UI.Controllers
             return RedirectToAction("ConfirmEmail", "Account", new { userId = user.Id, code = user.ConfirmationToken });
         }
 
-        [ValidateInput(false)]
+        //[ValidateInput(false)]
         public ActionResult SendEmailReactualizare()
         {
-            var id = Request.Form["emailConfirmareAnuntId"].ParseToInt();
+            string idString = Request.Form["emailConfirmareAnuntId"];
+            var id = idString.ParseToInt();
             var titlu = Request.Form["emailConfirmareAnuntTitlu"];
             var email = Request.Form["emailConfirmareAnuntEmail"];
             var userId = Request.Form["emailConfirmareUserId"];
@@ -450,7 +453,7 @@ namespace Imobiliare.UI.Controllers
         //    {
         //        externalSourceAnunt = new ExternalSourceAnunt() { EroareParsare = "Linkul este atribuit unui anunt anterior! A fost adaugat un anunt deja cu linkul specificat." };
         //    }
-        //    return this.Json(externalSourceAnunt, JsonRequestBehavior.AllowGet);
+        //    return this.Json(externalSourceAnunt, new Newtonsoft.Json.JsonSerializerSettings());
         //}
 
         public ActionResult ClearPhotosExceptFirst(int anuntId, string returnUrl)
@@ -492,10 +495,10 @@ namespace Imobiliare.UI.Controllers
             return this.View(massEmailData);
         }
 
-        [ValidateInput(false)]
+        //[ValidateInput(false)]
         public ActionResult SendMassEmailMessage()
         {
-            var listaEmails = Request.Form["listaEmails"];
+            string listaEmails = Request.Form["listaEmails"];
             var emailTemplateHumanReadableId = Request.Form["EmailTemplateHumanReadableId"];
 
             if (string.IsNullOrEmpty(listaEmails))
@@ -571,32 +574,33 @@ namespace Imobiliare.UI.Controllers
         {
             var urlList = this.externalSiteContentParser.GetPicturesUrlList(url);
 
-            return this.Json(urlList, JsonRequestBehavior.AllowGet);
+            //https://stackoverflow.com/questions/38578463/asp-net-core-the-name-jsonrequestbehavior-does-not-exist-in-the-current-cont
+            return this.Json(urlList, new Newtonsoft.Json.JsonSerializerSettings());
         }
 
         public ActionResult UploadExternalSiteImages(string link, int idanunt)
         {
             var urlList = this.externalSiteContentParser.GetPicturesUrlList(link);
-            foreach (var imageUrl in urlList)
-            {
-                //http://stackoverflow.com/questions/1110246/how-do-i-programatically-save-an-image-from-a-url
-                var imageRequest = (HttpWebRequest)WebRequest.Create(imageUrl);
+            //foreach (var imageUrl in urlList)
+            //{
+            //    //http://stackoverflow.com/questions/1110246/how-do-i-programatically-save-an-image-from-a-url
+            //    var imageRequest = (HttpWebRequest)WebRequest.Create(imageUrl);
 
-                //put useragent because olx is detecting bot
-                imageRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12";
-                WebResponse imageResponse = imageRequest.GetResponse();
+            //    //put useragent because olx is detecting bot
+            //    imageRequest.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12";
+            //    WebResponse imageResponse = imageRequest.GetResponse();
 
-                Stream responseStream = imageResponse.GetResponseStream();
+            //    Stream responseStream = imageResponse.GetResponseStream();
 
-                HttpPostedFileBase[] httpPostedFileBases = new HttpPostedFileBase[1];
-                httpPostedFileBases[0] = new MemoryFile(responseStream, "contentType", "name");
+            //    HttpPostedFileBase[] httpPostedFileBases = new HttpPostedFileBase[1];
+            //    httpPostedFileBases[0] = new MemoryFile(responseStream, "contentType", "name");
 
-                this.unitOfWork.AnunturiRepository.AddImages(idanunt, httpPostedFileBases);
-                this.unitOfWork.Complete();
+            //    this.unitOfWork.AnunturiRepository.AddImages(idanunt, httpPostedFileBases);
+            //    this.unitOfWork.Complete();
 
-                responseStream.Close();
-                imageResponse.Close();
-            }
+            //    responseStream.Close();
+            //    imageResponse.Close();
+            //}
             return RedirectToAction("AnuntEditare", "Administrare", new RouteValueDictionary(new Dictionary<string, object>() { { "id", idanunt } }));
         }
 
@@ -620,43 +624,43 @@ namespace Imobiliare.UI.Controllers
         }
     }
 
-    public class MemoryFile : HttpPostedFileBase
-    {
-        Stream stream;
-        string contentType;
-        string fileName;
+    //public class MemoryFile : HttpPostedFileBase
+    //{
+    //    Stream stream;
+    //    string contentType;
+    //    string fileName;
 
-        public MemoryFile(Stream stream, string contentType, string fileName)
-        {
-            this.stream = stream;
-            this.contentType = contentType;
-            this.fileName = fileName;
-        }
+    //    public MemoryFile(Stream stream, string contentType, string fileName)
+    //    {
+    //        this.stream = stream;
+    //        this.contentType = contentType;
+    //        this.fileName = fileName;
+    //    }
 
-        public override int ContentLength
-        {
-            get { return (int)stream.Length; }
-        }
+    //    public override int ContentLength
+    //    {
+    //        get { return (int)stream.Length; }
+    //    }
 
-        public override string ContentType
-        {
-            get { return contentType; }
-        }
+    //    public override string ContentType
+    //    {
+    //        get { return contentType; }
+    //    }
 
-        public override string FileName
-        {
-            get { return fileName; }
-        }
+    //    public override string FileName
+    //    {
+    //        get { return fileName; }
+    //    }
 
-        public override Stream InputStream
-        {
-            get { return stream; }
-        }
+    //    public override Stream InputStream
+    //    {
+    //        get { return stream; }
+    //    }
 
-        public override void SaveAs(string filename)
-        {
-            using (var file = File.Open(filename, FileMode.CreateNew))
-                stream.CopyTo(file);
-        }
-    }
+    //    public override void SaveAs(string filename)
+    //    {
+    //        using (var file = File.Open(filename, FileMode.CreateNew))
+    //            stream.CopyTo(file);
+    //    }
+    //}
 }

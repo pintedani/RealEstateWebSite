@@ -20,7 +20,7 @@ namespace Imobiliare.UI.Models
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }
-        public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+        //public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
         public string ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
     }
@@ -95,7 +95,7 @@ namespace Imobiliare.UI.Models
         [StringLength(40, ErrorMessage = "Numele agenției nu trebuie sa depăseasca 40 de caractere")]
         public string NumeAgentieImobiliara { get; set; }
 
-        public HttpPostedFileBase ProfileImage { get; set; }
+        public IFormFile ProfileImage { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

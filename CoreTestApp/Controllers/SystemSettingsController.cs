@@ -33,11 +33,8 @@ namespace Imobiliare.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
         public ActionResult Editeaza(
-          [Bind(
-          Include =
-            "Id,DefaultPageSizeAdminPageAnunturi,DefaultPageSizeAdminPageUsers,DefaultPageSizeMainPages,AutoApproveAnunturi,CapchaEnabled,UseFakeEmailManager,NotifyAdminByEmailWhenUserContactsAnotherUser,NotifyAdminByEmailWhenUserChangedAnuntByEmail,AutoSendAnuntExpiratEmails,LogsRetrieveNumber"
+          [Bind("Id,DefaultPageSizeAdminPageAnunturi,DefaultPageSizeAdminPageUsers,DefaultPageSizeMainPages,AutoApproveAnunturi,CapchaEnabled,UseFakeEmailManager,NotifyAdminByEmailWhenUserContactsAnotherUser,NotifyAdminByEmailWhenUserChangedAnuntByEmail,AutoSendAnuntExpiratEmails,LogsRetrieveNumber"
           )] SystemSettings systemSettings)
         {
             if (ModelState.IsValid)

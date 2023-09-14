@@ -1,4 +1,6 @@
-﻿namespace Imobiliare.UI.Models
+﻿using Imobiliare.Repositories;
+
+namespace Imobiliare.UI.Models
 {
     public static class DBInitializer
     {
@@ -8,7 +10,7 @@
                 applicationBuilder.ApplicationServices.CreateScope().
                 ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            if(!applicationDbContext.Imobils.Any()) 
+            if(!applicationDbContext.Imobile.Any()) 
             {
                 //applicationDbContext.Imobils.Add(new Imobil()
                 //{

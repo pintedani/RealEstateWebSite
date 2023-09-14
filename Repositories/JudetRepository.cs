@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using Caching;
+﻿using Caching;
 
 namespace Imobiliare.Repositories
 {
@@ -8,6 +7,7 @@ namespace Imobiliare.Repositories
 
     using Entities;
     using Interfaces;
+    using Microsoft.EntityFrameworkCore;
 
     public class JudetRepository : Repository<Judet>, IJudetRepository
     {

@@ -91,7 +91,7 @@
     [StringLength(40, ErrorMessage = "Numele agenției nu trebuie să depașească 40 de caractere")]
     public string NumeAgentieImobiliara { get; set; }
 
-    public HttpPostedFileBase ProfileImage { get; set; }
+    public IFormFile ProfileImage { get; set; }
   }
 
   public class ExternalLogin

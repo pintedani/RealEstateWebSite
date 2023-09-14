@@ -11,6 +11,7 @@ using Imobiliare.UI.Utils.UrlSeoFormatters;
 using Imobiliare.UI.BusinessLayer;
 using Imobiliare.UI.Utils;
 using Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Imobiliare.UI.Controllers
 {
@@ -18,10 +19,12 @@ namespace Imobiliare.UI.Controllers
     {
         private readonly IUnitOfWork unitOfWork;
         private static readonly ILog log = LogManager.GetLogger(typeof(AnunturiController));
+        private HttpContext httpContext;
 
-        public AnunturiController(IUnitOfWork unitOfWork)
+        public AnunturiController(IUnitOfWork unitOfWork, HttpContext httpContext)
         {
             this.unitOfWork = unitOfWork;
+            this.httpContext = httpContext;
         }
         public ActionResult ApartamentdetaliiIT()
         {
@@ -36,7 +39,7 @@ namespace Imobiliare.UI.Controllers
             //In normal case should not happen
             if (tipProprietate == null || tipOfertaGen == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest);
                 //DAPI: logs were too many, so no need to log
                 //log.WarnFormat("SearchForValue received null value for tipoferta, searchvalue: {0}", searchValue);
             }
@@ -209,7 +212,7 @@ namespace Imobiliare.UI.Controllers
             {
                 //Special case when Localitate name has changed and google crawler accesses old links
                 log.ErrorFormat("Attempt to access invalid url: {0}", ex.Message + ex.StackTrace);
-                return HttpNotFound();
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
 
             var imobilsData = GetImobilsData(
@@ -269,7 +272,7 @@ namespace Imobiliare.UI.Controllers
         {
             if (imobilId == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             int parsedImobilId;
@@ -281,12 +284,12 @@ namespace Imobiliare.UI.Controllers
                 imobil = this.unitOfWork.AnunturiRepository.SingleOrDefault(x => x.Id == parsedImobilId);
                 if (imobil == null)
                 {
-                    return HttpNotFound();
+                    return StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             //Check if title changed in the meantime, do 301 redirect in case
@@ -323,9 +326,9 @@ namespace Imobiliare.UI.Controllers
                 }
             }
 
-            if (!Request.Iscrawler() && IpHistoryCaching.ShouldLogFrequentAccesor(Request.UserHostAddress))
+            if (!Request.Iscrawler() && IpHistoryCaching.ShouldLogFrequentAccesor(httpContext.Connection.RemoteIpAddress.ToString()))
             {
-                log.DebugFormat("User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId, Request.UserHostAddress);
+                log.DebugFormat("User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId.ParseToInt(), httpContext.Connection.RemoteIpAddress.ToString());
                 //if(!apartamentDetaliiData.IsCurrentUserAdmin)
                 this.unitOfWork.AnunturiRepository.IncrementNumarAccesari(parsedImobilId);
                 this.unitOfWork.Complete();
@@ -338,14 +341,14 @@ namespace Imobiliare.UI.Controllers
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
             var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(userId, false);
 
             if (userProfile == null)
             {
-                return HttpNotFound();
+                return StatusCode((int)HttpStatusCode.NotFound);
             }
 
             int totalNumberOfImobils;

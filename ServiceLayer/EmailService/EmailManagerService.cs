@@ -5,7 +5,7 @@ using System.Linq;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
-
+using Logging;
 
 namespace Imobiliare.ServiceLayer.EmailService
 {
@@ -219,9 +219,9 @@ namespace Imobiliare.ServiceLayer.EmailService
                         return EmailSendStatus.RestrictionatPrimireEmail;
                     }
                 }
-                else if (emailUser == ConfigurationManager.AppSettings["EmailAdminFromAddress"].Trim())
+                else if (emailUser == "admin@apartamente24.ro")
                 {
-                    return emailManager.SendUserEmail(emailUser, titlu, mesaj, EmailFooter(), ConfigurationManager.AppSettings["EmailAdminFromAddress"]);
+                    return emailManager.SendUserEmail(emailUser, titlu, mesaj, EmailFooter(), "admin@apartamente24.ro");
                 }
                 else
                 {

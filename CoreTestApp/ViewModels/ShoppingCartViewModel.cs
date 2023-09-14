@@ -1,4 +1,4 @@
-﻿using CoreTestApp.Models;
+﻿using Imobiliare.UI.Models;
 
 namespace Imobiliare.UI.ViewModels
 {

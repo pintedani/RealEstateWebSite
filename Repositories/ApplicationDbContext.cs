@@ -1,7 +1,6 @@
 ﻿using Imobiliare.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace Imobiliare.Repositories
 {
@@ -62,6 +61,12 @@ namespace Imobiliare.Repositories
             {
                 foreinKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
+        }
+
+        public async Task<Imobil> AddAsync(ApplicationDbContext applicationDbContext, Imobil imobil)
+        {
+            await applicationDbContext.Imobile.AddAsync(imobil);
+            return imobil;
         }
     }
 }

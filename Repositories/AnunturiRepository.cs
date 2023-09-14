@@ -391,7 +391,7 @@ namespace Imobiliare.Repositories
 
         public Imobil AddImobil(Imobil imobil, string userName)
         {
-            Imobil addedImobil;
+            Task<Imobil> addedImobil;
             imobil.DataAdaugare = DateTime.Now;
             imobil.DataAdaugareInitiala = DateTime.Now;
             imobil.UserProfile = this.DbContext.Users.First(x => x.UserName == userName);
@@ -418,9 +418,9 @@ namespace Imobiliare.Repositories
             imobil.ContactTelefon = imobil.ContactTelefon.Trim();
 
             imobil.TipVanzator = imobil.TipVanzator;
-            addedImobil = this.DbContext.Imobile.Add(imobil);
+            addedImobil = this.DbContext.AddAsync(this.DbContext, imobil);
 
-            return addedImobil;
+            return addedImobil.Result;
         }
 
         public void DeleteImage(int imobilId, string imageName)
@@ -628,7 +628,7 @@ namespace Imobiliare.Repositories
             {
                 situationTipOfertaDictionary.Add(tipOferta, 0);
             }
-            var query = this.DbContext.Imobile;
+            Microsoft.EntityFrameworkCore.DbSet<Imobil> query = this.DbContext.Imobile;
 
             var allFilteredImobils = ConstructFilterQuery(imobilFilter, query);
             foreach (var imobil in allFilteredImobils)
@@ -666,7 +666,7 @@ namespace Imobiliare.Repositories
             return situationTipOfertaDictionary;
         }
 
-        private static IQueryable<Imobil> ConstructFilterQuery(ImobilFilter imobilFilter, DbSet<Imobil> query)
+        private static IQueryable<Imobil> ConstructFilterQuery(ImobilFilter imobilFilter, Microsoft.EntityFrameworkCore.DbSet<Imobil> query)
         {
             return query.Where(
               x =>

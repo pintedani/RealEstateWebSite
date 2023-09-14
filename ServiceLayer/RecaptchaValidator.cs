@@ -32,7 +32,7 @@ namespace Imobiliare.ServiceLayer
       }
 
       var captchaResponse = JsonConvert.DeserializeObject<CaptchaResponse>(reply);
-      log.DebugFormat("Captcha reply is {0}", captchaResponse.Success);
+      log.DebugFormat("Captcha reply is {0}", captchaResponse.Success.ToString());
       if (captchaResponse.ErrorCodes != null)
       {
         foreach (var errorCode in captchaResponse.ErrorCodes)

@@ -17,13 +17,17 @@ namespace Logging
         void DebugFormat(string v, string? name);
         void DebugFormat(string v, string secretNumber, int anuntId, StareAprobare stare);
         void DebugFormat(string v);
+        void DebugFormat(string v, string title, int id);
+        void DebugFormat(string v, string emailUser, string titlu, string mesaj);
         void ErrorFormat(string error);
         void ErrorFormat(string v, string poza);
         void ErrorFormat(string v, int anuntId, string secretNumber);
         void ErrorFormat(string v, int anuntId, StareAprobare stareAprobare, StareAprobare stare);
         void ErrorFormat(string v, string path, string message);
         void ErrorFormat(string v, string nume, int judetId, Exception exception);
+        void ErrorFormat(string v, int id, string? name, string message);
         void InfoFormat(string v);
+        void Warn(string message);
         void WarnFormat(string v, string userid, int count);
         void WarnFormat(string v);
         void WarnFormat(string v, string userid);

@@ -1,10 +1,10 @@
-﻿//using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 //using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Security.Claims;
-using Microsoft.AspNet.Identity.EntityFramework;
+//using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Imobiliare.Entities
 {

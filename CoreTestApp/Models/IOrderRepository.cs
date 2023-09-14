@@ -1,4 +1,6 @@
-﻿namespace Imobiliare.UI.Models
+﻿using Imobiliare.Entities;
+
+namespace Imobiliare.UI.Models
 {
     public interface IOrderRepository
     {

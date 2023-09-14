@@ -121,18 +121,18 @@ namespace Imobiliare.UI.Controllers
         {
             if (judetId != 0)
             {
-                return Json(this.unitOfWork.OrasRepository.GetSelectableOrases(judetId), JsonRequestBehavior.AllowGet);
+                return Json(this.unitOfWork.OrasRepository.GetSelectableOrases(judetId), new Newtonsoft.Json.JsonSerializerSettings());
             }
-            return this.Json(new List<Oras>(), JsonRequestBehavior.AllowGet);
+            return this.Json(new List<Oras>(), new Newtonsoft.Json.JsonSerializerSettings());
         }
 
         public ActionResult Cartiere(int orasId)
         {
             if (orasId != 0)
             {
-                return Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId), JsonRequestBehavior.AllowGet);
+                return Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId), new Newtonsoft.Json.JsonSerializerSettings());
             }
-            return this.Json(new List<Cartier>(), JsonRequestBehavior.AllowGet);
+            return this.Json(new List<Cartier>(), new Newtonsoft.Json.JsonSerializerSettings());
         }
 
         public ActionResult LocationSearchResults(string searchText, bool includingTotJudet)
@@ -147,9 +147,9 @@ namespace Imobiliare.UI.Controllers
                     jsonList.Add(location.Key + "|" + location.Value);
                 }
 
-                return Json(jsonList, JsonRequestBehavior.AllowGet);
+                return Json(jsonList, new Newtonsoft.Json.JsonSerializerSettings());
             }
-            return this.Json(new List<string>(), JsonRequestBehavior.AllowGet);
+            return this.Json(new List<string>(), new Newtonsoft.Json.JsonSerializerSettings());
         }
 
         public ActionResult RetrieveTelefon(string anuntId)
@@ -157,9 +157,9 @@ namespace Imobiliare.UI.Controllers
             if (anuntId != string.Empty && anuntId.Length > 0)
             {
                 string telefon = this.unitOfWork.AnunturiRepository.GetTelefonForAnunt(anuntId);
-                return Json(telefon, JsonRequestBehavior.AllowGet);
+                return Json(telefon, new Newtonsoft.Json.JsonSerializerSettings());
             }
-            return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+            return this.Json(string.Empty, new Newtonsoft.Json.JsonSerializerSettings());
         }
 
         public JsonResult GetSavedAnunturiFromCookie(List<string> savedIds)
@@ -319,7 +319,8 @@ namespace Imobiliare.UI.Controllers
         {
             if (this.unitOfWork.SystemSettingsRepository.SystemSettings.CapchaEnabled)
             {
-                var response = Request["g-recaptcha-response"];
+                string response = Request.Form["g-recaptcha-response"];
+                //string response = Request["g-recaptcha-response"];
 
                 CaptchaResponse captchaResponse = this.recaptchaValidator.GetCaptchaResponse(response);
                 if (!captchaResponse.Success)
@@ -356,7 +357,8 @@ namespace Imobiliare.UI.Controllers
         {
             if (this.unitOfWork.SystemSettingsRepository.SystemSettings.CapchaEnabled)
             {
-                var response = Request["g-recaptcha-response"];
+                string response = Request.Form["g-recaptcha-response"];
+                //var response = Request["g-recaptcha-response"];
 
                 CaptchaResponse captchaResponse = this.recaptchaValidator.GetCaptchaResponse(response);
                 if (!captchaResponse.Success)
@@ -381,7 +383,7 @@ namespace Imobiliare.UI.Controllers
                 return Content("Eroare: Va rugam introduceti un mesaj");
             }
 
-            this.emailManagerService.NotifyAdminRaportAbuzAnunt(idAnunt.ParseToInt(), mesajAbuz, selectAbuzTip, emailContact, titluAnunt);
+            this.emailManagerService.NotifyAdminRaportAbuzAnunt(idAnunt.ToString().ParseToInt(), mesajAbuz, selectAbuzTip, emailContact, titluAnunt);
 
             var mesaj = "Mesajul a fost receptionat si va fi analizat. Va multumim.";
             return Content(mesaj);

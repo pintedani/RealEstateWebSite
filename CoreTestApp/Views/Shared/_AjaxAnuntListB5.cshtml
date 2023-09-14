@@ -14,6 +14,12 @@
     }*/
 </style>
 
+@*https://stackoverflow.com/questions/32331157/replacement-for-helper-in-asp-net-core*@
+@*@{
+    Func<String, IHtmlContent> foo = @<div>Say @item</div>;
+}*@
+
+
 @helper DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
 {
     <a href="@anuntUrl" class="anuntBox row linkDiv my-4" style="@(anunt.PromotedLevel > PromovatLevel.Nepromovat ? "background-color:#EEFFE0" : "")">

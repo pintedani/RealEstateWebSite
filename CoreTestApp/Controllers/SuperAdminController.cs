@@ -592,10 +592,10 @@ namespace Imobiliare.UI.Controllers
 
             //    Stream responseStream = imageResponse.GetResponseStream();
 
-            //    HttpPostedFileBase[] httpPostedFileBases = new HttpPostedFileBase[1];
-            //    httpPostedFileBases[0] = new MemoryFile(responseStream, "contentType", "name");
+            //    IFormFile[] IFormFiles = new IFormFile[1];
+            //    IFormFiles[0] = new MemoryFile(responseStream, "contentType", "name");
 
-            //    this.unitOfWork.AnunturiRepository.AddImages(idanunt, httpPostedFileBases);
+            //    this.unitOfWork.AnunturiRepository.AddImages(idanunt, IFormFiles);
             //    this.unitOfWork.Complete();
 
             //    responseStream.Close();
@@ -624,7 +624,7 @@ namespace Imobiliare.UI.Controllers
         }
     }
 
-    //public class MemoryFile : HttpPostedFileBase
+    //public class MemoryFile : IFormFile
     //{
     //    Stream stream;
     //    string contentType;

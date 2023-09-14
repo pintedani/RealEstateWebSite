@@ -368,7 +368,7 @@ namespace Imobiliare.UI.Controllers
         [AllowAnonymous]
         public ActionResult AddImage(string currentValue)
         {
-            //HttpPostedFileBase file = Request.Files["Filedata"];
+            //IFormFile file = Request.Files["Filedata"];
 
             //int imobilId = currentValue.ParseToInt();
             //var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
@@ -381,7 +381,7 @@ namespace Imobiliare.UI.Controllers
 
         //[HttpPost]
         //[AllowAnonymous]
-        //public ActionResult AddImageNoAjax(HttpPostedFileBase file)
+        //public ActionResult AddImageNoAjax(IFormFile file)
         //{
         //    int imobilId = int.Parse(Request.Form["imobilId"]);
         //    if (file != null)

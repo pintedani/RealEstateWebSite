@@ -11,6 +11,6 @@ namespace Imobiliare.UI.Models
     {
         public UserProfile UserProfile { get; set; }
 
-        public HttpPostedFileBase ProfileImage { get; set; }
+        public IFormFile ProfileImage { get; set; }
     }
 }

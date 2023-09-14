@@ -36,7 +36,7 @@ namespace Imobiliare.UI.Models
 
     public string NumeAgentieImobiliara { get; set; }
 
-    public HttpPostedFileBase ProfileImage { get; set; }
+    public IFormFile ProfileImage { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

@@ -51,7 +51,7 @@
         void RotatePhoto(int imobilId, string rotatePoza);
 
         //Returns last added image
-        //string AddImages(int imobilId, HttpPostedFileBase[] files);
+        //string AddImages(int imobilId, IFormFile[] files);
 
         void RemoveGoogleMarkerCoordinates(int imobilId);
 

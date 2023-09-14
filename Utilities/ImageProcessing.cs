@@ -15,14 +15,14 @@ namespace Imobiliare.Utilities
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ImageProcessing));
 
-        //public static string AddPhotos(Imobil imobil, HttpPostedFileBase[] files)
+        //public static string AddPhotos(Imobil imobil, IFormFile[] files)
         //{
         //    string pictureName = string.Empty;
         //    if (files != null)
         //    {
-        //        foreach (var httpPostedFileBase in files)
+        //        foreach (var IFormFile in files)
         //        {
-        //            if (httpPostedFileBase != null)
+        //            if (IFormFile != null)
         //            {
         //                try
         //                {
@@ -31,7 +31,7 @@ namespace Imobiliare.Utilities
         //                    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"),
         //                        pictureName);
 
-        //                    Image image = Image.FromStream(httpPostedFileBase.InputStream);
+        //                    Image image = Image.FromStream(IFormFile.InputStream);
 
         //                    var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
 

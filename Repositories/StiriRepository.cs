@@ -57,10 +57,10 @@ namespace Imobiliare.Repositories
             //DeleteAllStiriPhotos(stire.Poze);
         }
 
-        //public string AddImage(int stireId, HttpPostedFileBase[] httpPostedFileBases)
+        //public string AddImage(int stireId, IFormFile[] IFormFiles)
         //{
         //    var itemToExtend = this.DbContext.Stires.First(x => x.Id == stireId);
-        //    var lastAddedImage = AddPhotos(itemToExtend, httpPostedFileBases);
+        //    var lastAddedImage = AddPhotos(itemToExtend, IFormFiles);
         //    return lastAddedImage;
         //}
 
@@ -134,19 +134,19 @@ namespace Imobiliare.Repositories
         //}
 
         //Refactor this to not duplicate from Imobils
-        //private static string AddPhotos(Stire stire, HttpPostedFileBase[] files)
+        //private static string AddPhotos(Stire stire, IFormFile[] files)
         //{
         //    string pictureName = string.Empty;
         //    if (files != null)
         //    {
-        //        foreach (var httpPostedFileBase in files)
+        //        foreach (var IFormFile in files)
         //        {
-        //            if (httpPostedFileBase != null)
+        //            if (IFormFile != null)
         //            {
         //                pictureName = Guid.NewGuid() + ".jpg";
         //                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pictureName);
 
-        //                Image image = Image.FromStream(httpPostedFileBase.InputStream);
+        //                Image image = Image.FromStream(IFormFile.InputStream);
         //                //var finalImage = FixedSize(image, 640, 480);
 
         //                image.Save(path, ImageFormat.Jpeg);

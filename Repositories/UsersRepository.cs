@@ -134,7 +134,7 @@
             itemToApprove.Flags += " | " + note;
         }
 
-        //public string AddImageForUserProfile(HttpPostedFileBase file, string userId)
+        //public string AddImageForUserProfile(IFormFile file, string userId)
         //{
         //    try
         //    {
@@ -177,7 +177,7 @@
         //    }
         //}
 
-        //public string AddImageForAgentie(HttpPostedFileBase file, int agentieId)
+        //public string AddImageForAgentie(IFormFile file, int agentieId)
         //{
         //    try
         //    {
@@ -220,7 +220,7 @@
         //    }
         //}
 
-        //public void AddImageForConstructor(HttpPostedFileBase file, int constructorId)
+        //public void AddImageForConstructor(IFormFile file, int constructorId)
         //{
         //    try
         //    {

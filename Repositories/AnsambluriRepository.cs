@@ -89,10 +89,10 @@ namespace Imobiliare.Repositories
         //    }
         //}
 
-        //public string AddImage(int ansambluId, HttpPostedFileBase[] httpPostedFileBases)
+        //public string AddImage(int ansambluId, IFormFile[] IFormFiles)
         //{
         //    var itemToExtend = this.DbContext.Ansambluri.Include(nameof(Ansamblu.Oras)).First(x => x.Id == ansambluId);
-        //    var lastAddedImage = AddPhotos(itemToExtend, httpPostedFileBases);
+        //    var lastAddedImage = AddPhotos(itemToExtend, IFormFiles);
         //    return lastAddedImage;
         //}
 
@@ -130,14 +130,14 @@ namespace Imobiliare.Repositories
         }
 
         //Refactor this to not duplicate from Imobils
-        //private static string AddPhotos(Ansamblu ansamblu, HttpPostedFileBase[] files)
+        //private static string AddPhotos(Ansamblu ansamblu, IFormFile[] files)
         //{
         //    string pictureName = string.Empty;
         //    if (files != null)
         //    {
-        //        foreach (var httpPostedFileBase in files)
+        //        foreach (var IFormFile in files)
         //        {
-        //            if (httpPostedFileBase != null)
+        //            if (IFormFile != null)
         //            {
         //                var formattedNume = ansamblu.Titlu.RemoveSpecialCharacters('_', true);
         //                if (ansamblu.Oras != null)
@@ -147,7 +147,7 @@ namespace Imobiliare.Repositories
         //                pictureName = formattedNume + "_" + Guid.NewGuid() + ".jpg";
         //                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/AnsambluriRezidentiale"), pictureName);
 
-        //                Image image = Image.FromStream(httpPostedFileBase.InputStream);
+        //                Image image = Image.FromStream(IFormFile.InputStream);
         //                //var finalImage = FixedSize(image, 640, 480);
 
         //                image.Save(path, ImageFormat.Jpeg);

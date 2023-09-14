@@ -44,6 +44,6 @@ namespace Imobiliare.UI.Models
     [DisplayFormat(DataFormatString = "{0:dd/MM/yy HH:mm}")]
     public DateTime? UserCreateDate { get; set; }
 
-    public HttpPostedFileBase ProfileImage { get; set; }
+    public IFormFile ProfileImage { get; set; }
   }
 }

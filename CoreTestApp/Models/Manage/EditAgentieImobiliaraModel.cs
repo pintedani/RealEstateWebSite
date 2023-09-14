@@ -14,7 +14,7 @@ namespace Imobiliare.UI.Models
   {
     public Agentie Agentie { get; set; }
 
-    public HttpPostedFileBase ProfileImage { get; set; }
+    public IFormFile ProfileImage { get; set; }
 
     public int OrasSelect { get; set; }
 

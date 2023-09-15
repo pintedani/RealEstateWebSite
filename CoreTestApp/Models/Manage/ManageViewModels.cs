@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
+//using Microsoft.Owin.Security;
 
 namespace Imobiliare.UI.Models
 {
@@ -13,13 +13,13 @@ namespace Imobiliare.UI.Models
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
       //Added by me
-        public IList<AuthenticationDescription> OtherLogins { get; set; }
+        //public IList<AuthenticationDescription> OtherLogins { get; set; }
     }
 
     public class ManageLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
-        public IList<AuthenticationDescription> OtherLogins { get; set; }
+        //public IList<AuthenticationDescription> OtherLogins { get; set; }
     }
 
     public class FactorViewModel

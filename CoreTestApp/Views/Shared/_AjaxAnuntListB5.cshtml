@@ -20,7 +20,9 @@
 }*@
 
 
-@helper DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
+@*
+    TODO: Reenable with solution for helpers in asp.net core
+    @helper DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
 {
     <a href="@anuntUrl" class="anuntBox row linkDiv my-4" style="@(anunt.PromotedLevel > PromovatLevel.Nepromovat ? "background-color:#EEFFE0" : "")">
         <div class="col-sm-5 g-0">
@@ -64,7 +66,6 @@
                             <span class="badge bg-primary"><span class="bi bi-star"></span>promovat</span>
                         }
 
-                        @*<h3 style="margin-top: 8px; display: inline-block" title="@anunt.Title">@anunt.Title</h3>*@
                     </div>
                 </div>
             </div>
@@ -204,8 +205,7 @@ else
         <br />
         <br />
         foreach (var oras in Model.TotalSelectableOrasesWithNumber.OrderByDescending(x => x.Value).Where(x => x.Value > 0))
-        {
-            @*<h3>@Html.ActionLink(@oras.Key.Nume + " (" + @oras.Value + " Anunturi)", "SearchForValue", "Home", new { searchValue = @oras.Key.Nume + " | " + @judet.PrescurtareAuto, tipOferta1 = "Toate", tipOfertaGen = "Toate" }, new { @class = "needToAddInOrderParameterToWork" })</h3>*@
+        {           
             <p><a href="@UrlBuilder.BuildLocalitateUrl(oras.Key.Nume, oras.Key.Judet.Nume)">@oras.Key.Nume <span class="badge bg-secondary">@oras.Value</span> <small>Anunturi</small></a></p>
         }
     }
@@ -219,4 +219,4 @@ else
         </div>
     }
     }
-}
+}*@

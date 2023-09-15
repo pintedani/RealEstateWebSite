@@ -100,7 +100,7 @@
                         </select>
                     }
 
-                    @Html.Label("Promovat:", null, new { style = "display: inline-block" })
+                    @Html.Label("", "Promovat:", new { style = "display: inline-block" })
                     @{
                         var itemsPromotedLevel = new List<SelectListItem>();
                         itemsPromotedLevel.Add(new SelectListItem() { Text = "Nepromovat", Value = "0" });
@@ -120,7 +120,7 @@
         <div class="row" style="border-top: 1px solid #a7d582; background-color: #F9F9F9; border-radius: 4px; padding: 10px">
             <div class="no-pad-xs col-lg-7" style="display: inline-block; white-space: nowrap; overflow: hidden">
 
-                @Html.Label("Tip Proprietate *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                @Html.Label("", "Tip Proprietate *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                 @*<div class="selectBoxSimulator dropdown" id="dropdownTipOfertaSelectButtonDiv">
                         <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
                         <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipProprietateSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -181,8 +181,7 @@
                     </div>
                 </div>
 
-                @Html.Label("Tip Ofertă *", new { @class = "mt-4 mb-2", style = "width: 100px" })
-
+                @Html.Label("", "Tip Ofertă *", new { @class = "mt-4 mb-2", style = "width: 100px" })
 
                 <div class="pb-1 me-2">
                     <input type="hidden" id="TipOferta2" value="2" />
@@ -209,7 +208,7 @@
                     }
                 }
 
-                @Html.Label("Tip Vânzator *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                @Html.Label("", "Tip Vânzator *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                 @*<div class="selectBoxSimulator dropdown">
                         <input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@Model.TipVanzator" />
                         <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipVanzatorSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -241,7 +240,7 @@
                                 oras = Model.Oras.Nume + "|" + @Model.Judet.PrescurtareAuto;
                             }
                         }
-                        @Html.Label("Locație *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                        @Html.Label("", "Locație *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                         <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceți Localitate *" name="searchBox" @{if (oras != null) { <text> value="@oras" disabled</text>  } } />
                         <input type="hidden" name="OrasId" id="OrasSelect" @{if (oras != null) { <text> value="@Model.OrasId" </text>  } } />
                         @Html.ValidationMessageFor(model => Model.OrasId)
@@ -260,7 +259,7 @@
                 </div>
 
                 <div id="cartierSelectDiv" class="my-2" style="@(Model.Cartiere == null || !Model.Cartiere.Any() ? "display: none" : "")">
-                    @Html.Label("Cartier", new { style = "display:inline-block; width: 90px", @id = "CartierSelectLabel" })
+                    @Html.Label("", "Cartier", new { style = "display:inline-block; width: 90px", @id = "CartierSelectLabel" })
                     <select class="combobox valid form-select" data-val="true" data-val-number="The field CartierId must be a number." data-val-required="The CartierId field is required." id="CartierSelect" name="CartierId" style="width: 200px; display: inline-block" aria-required="true" aria-invalid="false" aria-describedby="CartierSelect-error">
                         @if (Model.Cartiere != null)
                         {
@@ -281,20 +280,20 @@
                 </div>
 
                 <div class="form-group col-xs-12 floating-label-form-group controls">
-                    @Html.Label("Titlu *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                    @Html.Label("", "Titlu *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                     @Html.TextBoxFor(model => Model.Title, new { style = "max-width: 600px; width: 100%", title = "Titlul anuntului cum va aparea pe site", placeholder = "Titlu *", @class = "form-control", data_toggle = "tooltip", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => Model.Title)
                 </div>
 
                 <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                    @Html.Label("Descriere *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                    @Html.Label("", "Descriere *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                     @Html.TextAreaFor(model => Model.Descriere, new { style = "max-width: 600px; width: 100%; height: 150px", title = "Completati descrierea anuntului", placeholder = "Descriere *", @class = "form-control" })
                     @Html.ValidationMessageFor(model => Model.Descriere)
                 </div>
 
                 <div>
                     <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("Preț Euro *", new { @class = "mt-4 mb-2", style = "width: 100px" })
+                        @Html.Label("", "Preț Euro *", new { @class = "mt-4 mb-2", style = "width: 100px" })
                         @{
                             //Necesar daca vine de la controller cu erori de validare din oarecare motiv
                             string pretEuro = "";
@@ -323,7 +322,7 @@
                     </div>
                 </div>
                 <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 10px">
-                    @Html.Label("Suprafață mp *", new { @class = "mt-4 mb-2" })
+                    @Html.Label("", "Suprafață mp *", new { @class = "mt-4 mb-2" })
                     @{
                         string suprafata = "";
                         if (Model.Suprafata != 0)
@@ -348,13 +347,13 @@
                 }
 
                 <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
-                    @Html.Label("Contact Telefon *", new { @class = "mt-4 mb-2" })
+                    @Html.Label("", "Contact Telefon *", new { @class = "mt-4 mb-2" })
                     @Html.TextBoxFor(model => Model.ContactTelefon, new { style = "max-width: 600px; width: 100%", title = "Completati numarul de telefon de contact", placeholder = "Contact Telefon *", @class = "form-control", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => Model.ContactTelefon)
                 </div>
 
                 <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
-                    @Html.Label("Contact Email", new { @class = "mt-4 mb-2" })
+                    @Html.Label("", "Contact Email", new { @class = "mt-4 mb-2" })
                     @Html.TextBoxFor(model => Model.ContactEmail, new { style = "max-width: 600px; width: 100%", title = "Completati emailul de contact(de exemplu: exemplu@exemplu.com)", placeholder = "Contact Email", @class = "form-control", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => Model.ContactEmail)
                 </div>
@@ -365,7 +364,7 @@
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, Model.TipProprietate, Model.TipOfertaGen))
                 {
                     <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("Număr Camere", new { @class = "mt-4 mb-2" })
+                        @Html.Label("", "Număr Camere", new { @class = "mt-4 mb-2" })
                         @Html.TextBoxFor(model => Model.NumarCamere, new { style = "max-width: 600px; width: 100%", placeholder = "Număr Camere", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.NumarCamere)
                     </div>
@@ -374,7 +373,7 @@
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBai, Model.TipProprietate, Model.TipOfertaGen))
                 {
                     <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("Număr băi", new { @class = "mt-4 mb-2" })
+                        @Html.Label("", "Număr băi", new { @class = "mt-4 mb-2" })
                         @Html.TextBoxFor(model => Model.NrBai, new { style = "max-width: 600px; width: 100%", placeholder = "Număr băi", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.NrBai)
                     </div>
@@ -383,14 +382,14 @@
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarBalcoane, Model.TipProprietate, Model.TipOfertaGen))
                 {
                     <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("Număr balcoane", new { @class = "mt-lg-4 mb-2" })
+                        @Html.Label("", "Număr balcoane", new { @class = "mt-lg-4 mb-2" })
                         @Html.TextBoxFor(model => Model.NrBalcoane, new { style = "max-width: 600px; width: 100%", placeholder = "Număr balcoane", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.NrBalcoane)
                     </div>
                 }
 
                 <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                    @Html.Label("Adresa", new { @class = "mt-4 mb-2" })
+                    @Html.Label("", "Adresa", new { @class = "mt-4 mb-2" })
                     @Html.TextBoxFor(model => Model.Strada, new { style = "max-width: 600px; width: 100%", placeholder = "Adresa", @class = "form-control", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => Model.Strada)
                 </div>
@@ -398,7 +397,7 @@
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AnulConstructiei, Model.TipProprietate, Model.TipOfertaGen))
                 {
                     <div class="form-group col-xs-12 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("Anul construcției", new { @class = "mt-4 mb-2" })
+                        @Html.Label("", "Anul construcției", new { @class = "mt-4 mb-2" })
                         @Html.TextBoxFor(model => Model.VechimeImobil, new { style = "max-width: 600px; width: 100%", placeholder = "Anul construcției", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.VechimeImobil)
                     </div>
@@ -406,7 +405,7 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Etaj, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @Html.Label("Etaj", new { @class = "mt-4 mb-2" })
+                    @Html.Label("", "Etaj", new { @class = "mt-4 mb-2" })
                     <div>
                         <div class="selectBoxSimulator dropdown">
                             @if (Model.Etaj == 0)
@@ -455,7 +454,7 @@
                             </select>
                         </div>
 
-                        @Html.Label("","Numar total Etaje", new { @class = "mt-4 mb-2" })
+                        @Html.Label("", "Numar total Etaje", new { @class = "mt-4 mb-2" })
                         <div class="selectBoxSimulator dropdown">
                             @{
                                 var dictionaryTotal = new Dictionary<int, string>();
@@ -597,7 +596,7 @@
                     </div>
                 }
                 <br />
-                @Html.Label("Valabilitate:", new { style = "width: 90px" })
+                @Html.Label("", "Valabilitate:", new { style = "width: 90px" })
                 <div class="selectBoxSimulator dropdown">
                     @*<input type="hidden" id="ValabilitateSelect" name="Valabilitate" value="@(Model.Valabilitate == 0 ? 60 : Model.Valabilitate)" />*@
                     @{

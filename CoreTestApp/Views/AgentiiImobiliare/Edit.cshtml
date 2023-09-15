@@ -67,7 +67,7 @@
     <div class="col-md-10">
       <div style="display: inline-block; position: relative; width: 100%">
         <div class="form-group col-xs-12 floating-label-form-group controls">
-          @Html.Label("Localitate")
+          @Html.Label("", "Localitate")
 
           <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(ViewBag.OrasSelectat != null ? ((Oras)ViewBag.OrasSelectat).Nume : "")" placeholder="Introduceti Localitate" name="searchBox" @(ViewBag.OrasSelectat != null ? "disabled" : "") />
           <input type="hidden" name="OrasSelect" id="OrasSelect" value="@Model.OrasSelect" />

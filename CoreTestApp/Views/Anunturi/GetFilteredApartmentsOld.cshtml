@@ -72,6 +72,7 @@
 @using Imobiliare.Entities
 @using Imobiliare.UI.Utils
 @using Imobiliare.UI.Utils.UrlSeoFormatters
+@using System.Web;
 @model Imobiliare.UI.Models.ImobilsData
 
 @{
@@ -189,7 +190,7 @@
     @if (Model.ImobilFilter.PretMax != 0)
     {
         <p class="combobox" style="display: inline-block; margin: 0 0 2px 2px; padding: 3px">
-            <span>Pret < @Model.ImobilFilter.PretMax</span>
+            <span>Pret &lt; @Model.ImobilFilter.PretMax</span>
             <img onclick="$('#PretSelectMax').val('0') && submitForm()" style="cursor: pointer; width: 12px" src="~/Images/close.png" alt="X">
         </p>
     }
@@ -205,7 +206,7 @@
     @if (Model.ImobilFilter.CamereMax != 0)
     {
         <p class="combobox" style="display: inline-block; margin: 0 0 2px 2px; padding: 3px">
-            <span>Camere < @Model.ImobilFilter.CamereMax</span>
+            <span>Camere &lt; @Model.ImobilFilter.CamereMax</span>
             <img onclick="$('#NumarCamereMax').val('0') && submitForm()" style="cursor: pointer; width: 12px" src="~/Images/close.png" alt="X">
         </p>
     }
@@ -219,7 +220,7 @@
     @if (Model.ImobilFilter.MpMax != 0)
     {
         <p class="combobox" style="display: inline-block; margin: 0 0 2px 2px; padding: 3px">
-            <span>Mp < @Model.ImobilFilter.MpMax</span>
+            <span>Mp &lt; @Model.ImobilFilter.MpMax</span>
             <img onclick="$('#SuprafataSelectMax').val('0') && submitForm()" style="cursor: pointer; width: 12px" src="~/Images/close.png" alt="X">
         </p>
     }
@@ -227,7 +228,7 @@
     @if (Model.ImobilFilter.VechimeMaximaZile != 0)
     {
         <p class="combobox" style="display: inline-block; margin: 0 0 2px 2px; padding: 3px">
-            Vechime anunt < @Model.ImobilFilter.VechimeMaximaZile zile
+            Vechime anunt &lt; @Model.ImobilFilter.VechimeMaximaZile zile
             <img onclick="$('#DataAnuntSelect').val('0') && submitForm()" style="cursor: pointer; width: 12px" src="~/Images/close.png" alt="X">
         </p>
     }

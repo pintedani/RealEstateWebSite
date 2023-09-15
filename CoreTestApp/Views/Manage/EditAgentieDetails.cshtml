@@ -42,14 +42,14 @@
                     </div>
 
                     <div class="form-group col-xs-12 floating-label-form-group controls">
-                        @Html.Label("Descriere:")
+                        @Html.Label("", "Descriere:")
                         @Html.TextAreaFor(model => Model.Agentie.DescriereAgentie, new { style = "max-width: 600px; width: 100%; max-height: 100px", title = "Completati descrierea agentiei", placeholder = "Descriere", @class = "form-control" })
                         @Html.ValidationMessageFor(model => Model.Agentie.DescriereAgentie)
                     </div>
 
                     <div style="display: inline-block; position: relative; width: 100%">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
-                            @Html.Label("Localitate")
+                            @Html.Label("", "Localitate")
                             @*<input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceti Localitate" name="searchBox" />*@
                             <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(Model.Agentie.Oras != null ?  Model.Agentie.Oras.Nume : "Introduceti Localitate")" name="searchBox" @(Model.Agentie.Oras != null ? "disabled" : "") />
                             <input type="hidden" name="OrasSelect" id="OrasSelect" value="@(Model.Agentie.Oras != null ? Model.Agentie.Oras.Id : 0)" />

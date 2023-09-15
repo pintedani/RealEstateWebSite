@@ -1,5 +1,5 @@
-﻿using CoreTestApp.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Imobiliare.Entities;
+using Imobiliare.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Imobiliare.UI.Controllers.Api

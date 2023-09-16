@@ -496,6 +496,7 @@
         </section>
     }
 
+                @*  TODO: REENABLE
     @if (!Request.Url.AbsoluteUri.Contains("localhost"))
     {
         <div style="margin: 20px 0">
@@ -510,7 +511,7 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
-    }
+    }*@
 
     @if (Model.ImobilFilter.OrasId != 0)
     {
@@ -697,7 +698,9 @@
                     url: '@Url.Action("GetAnunturiForLocalitate", "Anunturi")',
                     type: "POST",
                     data: {
-                        imobilFilter: @Html.Raw(Json.Encode(Model.ImobilFilter)),
+                        @*
+                            TODO: REENABLE
+                        imobilFilter: @Html.Raw(Json.Encode(Model.ImobilFilter)),*@
                         latLong: encodeURIComponent(map.getBounds())
                     },
                     success: function (data) {

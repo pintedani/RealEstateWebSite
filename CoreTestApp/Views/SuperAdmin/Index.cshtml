@@ -115,7 +115,9 @@
                 <div class="col-xs-12 col-sm-2" style="padding-top: 5px">
                     @if (imobil.Poze != null)
                     {
-                        <img onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="img-thumbnail center-cropped" style="height: 130px; cursor: pointer" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" />
+
+                        @*  TODO: REENABLE
+            <img onclick="window.location = '@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)'" class="img-thumbnail center-cropped" style="height: 130px; cursor: pointer" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" />
                         <div style="position: absolute; top: 7px; left: 8px; opacity: 0.8; width: 40px; background-color: #fff; font-weight: bold; font-size: 11px;">
                             <span style="padding-left: 7px" class="glyphicon glyphicon-camera"></span>
                             <b style="padding-left: 2px; font-size: 1.2em">@imobil.Poze.Split(';').Count()</b>
@@ -123,7 +125,7 @@
                         if (imobil.Poze.Split(';').Count() > 1)
                         {
                             @Html.ActionLink("delPoze", "ClearPhotosExceptFirst", "SuperAdmin", new { anuntId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "label label-danger", style = "display: inline-block; margin-top: 2px" })
-                        }
+                        }*@
                     }
                     else
                     {
@@ -284,7 +286,9 @@ else
             <textarea style="display: inline-block; min-height: 110px; width: 100%" id="emailConfirmareAnuntMesaj" name="emailConfirmareAnuntMesaj"></textarea>*@
         <br />
         <br />
-        <input type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />
+        @*
+    TODO: REENABLE
+        <input type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />*@
         <input type="submit" value="Trimite Email" onclick="if ($('#emailConfirmareAnuntEmail').val().indexOf('Nu are email definit') != -1) { return confirm('Adresa de email invalida, apasati cancel!!!'); }" />
         <input type="button" value="Anuleaza" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();" />
     }
@@ -335,8 +339,9 @@ else
                 var tempPath = url.replace(/__id__/g, $(this).prev().val());
                 //&amp seems to be a general problema when passing params, therefore replace with simple &
                 var tempPath2 = tempPath.replace(/__stare__/g, $(this).val());
-                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g, "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));
-                window.location.href = finalPath;
+                //TODO: REENABLE
+                //var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g, "&returnUrl=" + encodeURIComponent('HttpContext.Current.Request.Url.AbsoluteUri'));
+                //window.location.href = finalPath;
             });
         });
 
@@ -430,9 +435,10 @@ else
                 var tempPath1 = url.replace(/__stareNoua__/g, stareNoua);
                 //&amp seems to be a general problema when passing params, therefore replace with simple &
                 var tempPath2 = tempPath1.replace(/&amp;ids=__ids__/g, "&ids=" + idList);
-                var currentUrl = encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri');
-                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnurl__/g, "&returnUrl=" + currentUrl);
-                window.location.href = finalPath;
+                //TODO: REENABLE
+                //var currentUrl = encodeURIComponent('HttpContext.Current.Request.Url.AbsoluteUri');
+                //var finalPath = tempPath2.replace(/&amp;returnUrl=__returnurl__/g, "&returnUrl=" + currentUrl);
+                //window.location.href = finalPath;
             });
 
 

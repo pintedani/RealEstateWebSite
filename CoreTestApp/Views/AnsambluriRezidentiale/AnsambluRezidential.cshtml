@@ -1,6 +1,7 @@
 ﻿@using Imobiliare.Entities
 @using Imobiliare.UI.BusinessLayer
 @using Imobiliare.UI.Utils.UrlSeoFormatters
+@using System.Web;
 @model Imobiliare.UI.Models.AnsambluRezidentialViewModel
 
 @{
@@ -69,7 +70,7 @@
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama sus articol --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="4618131363" data-ad-format="auto"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     <br />
-    <div style="font-size: 1.2em">@Html.Raw(HttpUtility.HtmlDecode(Model.Ansamblu.Continut.Replace("\n", "<br/>")))</div>
+    <div style="font-size: 1.2em">@Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Ansamblu.Continut.Replace("\n", "<br/>")))</div>
     <br />
     
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="2771138167" data-ad-format="auto"></ins>

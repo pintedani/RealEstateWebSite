@@ -227,7 +227,8 @@
             <textarea style="display: inline-block; min-height: 110px; width: 100%" id="emailConfirmareAnuntMesaj" name="emailConfirmareAnuntMesaj"></textarea>*@
         <br />
         <br />
-        <input type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />
+        @*TODO: REENABLE
+ type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />*@
         <input type="submit" value="Trimite Email" onclick="if ($('#emailConfirmareAnuntEmail').val().indexOf('Nu are email definit') != -1) { return confirm('Adresa de email invalida, apasati cancel!!!'); }" />
         <input type="button" value="Anuleaza" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();" />
     }

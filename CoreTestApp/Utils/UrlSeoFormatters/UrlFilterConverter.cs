@@ -8,7 +8,7 @@ namespace Imobiliare.UI.Utils.UrlSeoFormatters
 {
     using Imobiliare.Entities;
     using Imobiliare.Managers.ExtensionMethods;
-    using System.Web.Routing;
+    using Logging;
 
     public static class UrlFilterConverter
     {

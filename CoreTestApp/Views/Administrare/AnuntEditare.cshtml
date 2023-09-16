@@ -40,13 +40,15 @@
                 @*<h3>Maxim 8 poze</h3>*@
             </div>
             <div class="col-md-6">
-                @using (Ajax.BeginForm("DeleteImage", "Administrare", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ImageArea" }))
+
+@*  TOTO:Reenable            
+    @using (Ajax.BeginForm("DeleteImage", "Administrare", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "ImageArea" }))
                 {
                     <input type="hidden" name="imobilId" value="@Model.Id" />
                     <div id="ImageArea" class="col-md-6">
                         @Html.Partial("_pozeEditAnuntPartial")
                     </div>
-                }
+                }*@
             </div>
         </div>
         <br />
@@ -726,7 +728,8 @@
     @if (!Model.IsModAdaugare)
     {
         <script>
-        $(".ChangeState").change(function() {
+        @*TODO: REENABLE
+            $(".ChangeState").change(function() {
         var url =
           '@Url.Action("ChangeImobilState", "SuperAdmin", new { id = "__id__", stare = "__stare__", returnUrl = "__returnUrl__" })';
         var tempPath = url.replace(/__id__/g, @Model.Id);
@@ -735,7 +738,7 @@
         var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g,
           "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));
         window.location.href = finalPath;
-      });
+      });*@
 
     $(".js-aproba-anunt").click(function (e) {
         var link = $(e.target);

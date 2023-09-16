@@ -1,10 +1,12 @@
-﻿<style>
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+
+<style>
     .active > a {
         background-color: #F9F9F9 !important;
     }
 </style>
 <ul class="nav nav-tabs">
-    <li @(Request.Url.ToString().EndsWith("SuperAdmin") ? "class = active" : "")><a href="@Url.Action("Index","SuperAdmin")"><span class="glyphicon glyphicon-list"></span>&nbsp;Anunturi</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().EndsWith("SuperAdmin") ? "class = active" : "")><a href="@Url.Action("Index","SuperAdmin")"><span class="glyphicon glyphicon-list"></span>&nbsp;Anunturi</a></li>
     <li @(Request.Url.ToString().Contains("Users") ? "class = active" : "")><a href="@Url.Action("Users","SuperAdmin")"><span class="glyphicon glyphicon-user"></span>&nbsp;Useri</a></li>
     <li @(Request.Url.ToString().Contains("AgentiiImobiliare") ? "class = active" : "")><a href="@Url.Action("ToateAgentiileAdmin","AgentiiImobiliare")"><span class="glyphicon glyphicon-home"></span>&nbsp;Agentii</a></li>
     <li @(Request.Url.ToString().Contains("Ansambluri") ? "class = active" : "")><a href="@Url.Action("ToateAnsamblurileAdmin","AnsambluriRezidentiale")"><span class="glyphicon glyphicon-picture"></span>&nbsp;Ansambluri</a></li>

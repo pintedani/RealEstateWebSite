@@ -325,14 +325,14 @@ namespace Imobiliare.UI.Controllers
                     apartamentDetaliiData.LoggedInUserId = user.Id;
                 }
             }
-
-            if (!Request.Iscrawler() && IpHistoryCaching.ShouldLogFrequentAccesor(httpContext.Connection.RemoteIpAddress.ToString()))
-            {
-                log.DebugFormat("User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId.ParseToInt(), httpContext.Connection.RemoteIpAddress.ToString());
-                //if(!apartamentDetaliiData.IsCurrentUserAdmin)
-                this.unitOfWork.AnunturiRepository.IncrementNumarAccesari(parsedImobilId);
-                this.unitOfWork.Complete();
-            }
+            //TODO: REENABLE
+            //if (!Request.Iscrawler() && IpHistoryCaching.ShouldLogFrequentAccesor(httpContext.Connection.RemoteIpAddress.ToString()))
+            //{
+            //    log.DebugFormat("User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId.ParseToInt(), httpContext.Connection.RemoteIpAddress.ToString());
+            //    //if(!apartamentDetaliiData.IsCurrentUserAdmin)
+            //    this.unitOfWork.AnunturiRepository.IncrementNumarAccesari(parsedImobilId);
+            //    this.unitOfWork.Complete();
+            //}
 
             return View(apartamentDetaliiData);
         }

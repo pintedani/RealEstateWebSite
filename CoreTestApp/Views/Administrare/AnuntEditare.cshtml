@@ -94,7 +94,14 @@
                             {
                                 if (stareAprobare != StareAprobare.Toate)
                                 {
-                                    <option @(Model.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+                                    if (Model.StareAprobare == stareAprobare)
+                                    {
+                                        <option selected value="@stareAprobare">@stareAprobare</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@stareAprobare">@stareAprobare</option>
+                                    }
                                 }
                             }
                         </select>
@@ -226,7 +233,14 @@
                 <select id="TipVanzatorSelect" name="TipVanzator" class="form-select" aria-label="Tip vânzător" style="max-width: 600px; width: 100%">
                     @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
                     {
-                        <option value="@tipVanzator" @(Model.TipVanzator == tipVanzator ? "selected" : "")>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                        if (Model.TipVanzator == tipVanzator)
+                        {
+                            <option value="@tipVanzator" selected>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                        }
+                        else
+                        {
+                            <option value="@tipVanzator">@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                        }                        
                     }
                 </select>
 
@@ -271,7 +285,14 @@
                                 //{
                                 //    Model.Cartier = Model.Cartiere.First();
                                 //}
-                                <option @(Model.CartierId == cartier.Id ? "selected" : "") value="@cartier.Id">@cartier.Nume</option>
+                                if (Model.CartierId == cartier.Id)
+                                {
+                                    <option selected value="@cartier.Id">@cartier.Nume</option>
+                                }
+                                else
+                                {
+                                    <option value="@cartier.Id">@cartier.Nume</option>
+                                }                                
                             }
                         }
                     </select>
@@ -449,7 +470,14 @@
                             <select id="EtajSelect" name="Etaj" class="form-select" aria-label="Etaj">
                                 @foreach (var etaj in dictionary)
                                 {
-                                    <option value="@etaj.Key" @(Model.Etaj == etaj.Key ? "selected" : "")>@etaj.Value</option>
+                                    if (Model.Etaj == etaj.Key)
+                                    {
+                                        <option value="@etaj.Key" selected>@etaj.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@etaj.Key">@etaj.Value</option>
+                                    }                                    
                                 }
                             </select>
                         </div>
@@ -488,7 +516,14 @@
                             <select id="NumarTotalEtajSelect" name="NumarTotalEtaje" class="form-select" aria-label="Numar total Etaje">
                                 @foreach (var etaj in dictionaryTotal)
                                 {
-                                    <option value="@etaj.Key" @(Model.NumarTotalEtaje == etaj.Key ? "selected" : "")>@etaj.Value</option>
+                                    if (Model.NumarTotalEtaje == etaj.Key)
+                                    {
+                                        <option value="@etaj.Key" selected>@etaj.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@etaj.Key">@etaj.Value</option>
+                                    }
                                 }
                             </select>
                         </div>
@@ -626,7 +661,14 @@
                     <select id="ValabilitateSelect" name="Valabilitate" class="form-select" aria-label="Valabilitate">
                         @foreach (var item in dictionaryValabilitate)
                         {
-                            <option value="@item.Key" @(Model.Valabilitate == item.Key ? "selected" : "")>@item.Value</option>
+                            if (Model.Valabilitate == item.Key)
+                            {
+                                <option value="@item.Key" selected>@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }                            
                         }
                     </select>
 
@@ -804,6 +846,6 @@
         </script>
     }
 
-    @Scripts.Render("~/bundles/jqueryval")
+@*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

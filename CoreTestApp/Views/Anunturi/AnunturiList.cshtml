@@ -201,15 +201,27 @@
                             <div class="input-group">
                                 <input type="hidden" id="CartierSelect" name="CartierSelect" value="@Model.ImobilFilter.CartierId" />
                                 <select id="cartierSelect2" class="form-select form-control" aria-label="Cartier">
-                                    <option value="0" @(Model.ImobilFilter.CartierId == 0 ? "selected" : "")>Cartier</option>
+                                    @if(Model.ImobilFilter.CartierId == 0)
+                                    {
+                                        <option value="0" selected>Cartier</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="0">Cartier</option>
+                                    }
+                                  
                                     @foreach (var cartier in Model.SelectableCartiersWithNumber.Where(x => x.Value > 0))
                                     {
-                                        <option class="cartierOption" value="@cartier.Key.Id" @(Model.ImobilFilter.CartierId == cartier.Key.Id ? "selected" : "")>@cartier.Key.Nume <span class="badge @(cartier.Value > 0 ? "bg-primary" : "bg-secondary")">@cartier.Value</span></option>
+                                        if(Model.ImobilFilter.CartierId == cartier.Key.Id)
+                                        {
+                                            <option class="cartierOption" value="@cartier.Key.Id" selected>@cartier.Key.Nume <span class="badge @(cartier.Value > 0 ? "bg-primary" : "bg-secondary")">@cartier.Value</span></option>
+                                        }
+                                        else
+                                        {
+                                            <option class="cartierOption" value="@cartier.Key.Id">@cartier.Key.Nume <span class="badge @(cartier.Value > 0 ? "bg-primary" : "bg-secondary")">@cartier.Value</span></option>
+                                        }                                       
                                     }
                                 </select>
-                                @*<button type="button" class="clearInputTextBtn btn bg-transparent" style="margin-left: -80px; z-index: 100;">
-                    <i class="bi bi-x-lg"></i>
-                </button>*@
                             </div>
                             <hr />
                         }
@@ -238,7 +250,14 @@
                         <select id="TipVanzatorSelect" class="form-select" aria-label="Tip vânzător">
                             @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
                             {
-                                <option value="@tipVanzator" @(Model.ImobilFilter.TipVanzator == tipVanzator ? "selected" : "")>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                                    if(Model.ImobilFilter.TipVanzator == tipVanzator)
+                                    {
+                                        <option value="@tipVanzator" selected>@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@tipVanzator">@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)</option>
+                                    }                                
                             }
                         </select>
                         @*<div class="selectBoxSimulator dropdown">

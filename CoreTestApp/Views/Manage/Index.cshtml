@@ -1,4 +1,4 @@
-﻿@using Microsoft.Owin.Security
+﻿@*@using Microsoft.Owin.Security*@
 @model Imobiliare.UI.Models.ManageAccountViewModel
 @{
     ViewBag.Title = "Administreaza cont";
@@ -139,7 +139,7 @@
                             </tbody>
                         </table>
                     }
-                    @if (Model.OtherLogins.Count > 0)
+@*                    @if (Model.OtherLogins.Count > 0)
                     {
                         using (Html.BeginForm("LinkLogin", "Manage"))
                         {
@@ -160,12 +160,12 @@
                                         {
                                             <button id="@p.AuthenticationType" style="background: url(../../Images/facebook.png) no-repeat;" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType">@p.AuthenticationType</button>
                                         }
-                            @*<button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>*@
+                            
                                     }
                                 </p>
                             </div>
                         }
-                    }
+                    }*@
                     <hr />
                     <p><span class="badge alert-success">@Model.Logins.Count</span> Login externi</p>
                     @Html.ActionLink("Administreaza login extern", "ManageLogins", null, new { @class = "btn btn-success" })

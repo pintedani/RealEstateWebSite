@@ -11,14 +11,28 @@
     <select onchange="this.form.submit()" style="width: 170px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="TipVanzatorSelect">
         @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
         {
-            <option @(Model.SelectedTipVanzator == tipVanzator ? "selected=\"selected\"" : "") value="@tipVanzator">@tipVanzator</option>
+            if (Model.SelectedTipVanzator == tipVanzator)
+            {
+                <option selected value="@tipVanzator">@tipVanzator</option>
+            }
+            else
+            {
+                <option value="@tipVanzator">@tipVanzator</option>
+            }            
         }
     </select>
     <text>Role:</text>
     <select onchange="this.form.submit()" style="width: 170px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="TipRoleSelect">
         @foreach (Role role in Enum.GetValues(typeof(Role)))
         {
-            <option @(Model.SelectedRole == role ? "selected=\"selected\"" : "") value="@role">@role</option>
+            if (Model.SelectedRole == role)
+            {
+                <option selected value="@role">@role</option>
+            }
+            else
+            {
+                <option value="@role">@role</option>
+            }            
         }
     </select>
     <h4 style="display: inline-block; padding-left: 4px">Nume:</h4>

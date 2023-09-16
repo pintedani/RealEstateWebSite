@@ -1,4 +1,5 @@
-using CoreTestApp.Models;
+using Imobiliare.Entities;
+using Imobiliare.UI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

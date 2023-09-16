@@ -29,7 +29,14 @@
         <option value="0">Toate Judetele</option>
         @foreach (var judet in Model.Judets)
         {
-            <option @(Model.ImobilFilter.JudetId == judet.Id ? "selected=\"selected\"" : "") value="@judet.Id">@judet.Nume</option>
+            if (Model.ImobilFilter.JudetId == judet.Id)
+            {
+                <option selected value="@judet.Id">@judet.Nume</option>
+            }
+            else
+            {
+                <option value="@judet.Id">@judet.Nume</option>
+            }            
         }
     </select>
 
@@ -38,7 +45,14 @@
         <option value="0">--Toate--</option>
         @foreach (var oras in Model.Orases)
         {
-            <option @(Model.ImobilFilter.OrasId == oras.Id ? "selected=\"selected\"" : "") value="@oras.Id">@oras.Nume</option>
+            if (Model.ImobilFilter.OrasId == oras.Id)
+            {
+                <option selected value="@oras.Id">@oras.Nume</option>
+            }
+            else
+            {
+                <option value="@oras.Id">@oras.Nume</option>
+            }            
         }
     </select>
 
@@ -47,21 +61,42 @@
         <option value="0">--Toate--</option>
         @foreach (var cartier in Model.Cartiers)
         {
-            <option @(Model.ImobilFilter.CartierId == cartier.Id ? "selected=\"selected\"" : "") value="@cartier.Id">@cartier.Nume</option>
+            if (Model.ImobilFilter.CartierId == cartier.Id)
+            {
+                <option selected value="@cartier.Id">@cartier.Nume</option>
+            }
+            else
+            {
+                <option value="@cartier.Id">@cartier.Nume</option>
+            }            
         }
     </select>
     <text>User:</text>
     <select onchange="this.form.submit()" style="width: 130px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="TipVanzatorSelect">
         @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)))
         {
-            <option @(Model.ImobilFilter != null && Model.ImobilFilter.TipVanzator == tipVanzator ? "selected=\"selected\"" : "") value="@tipVanzator">@tipVanzator</option>
+            if (Model.ImobilFilter != null && Model.ImobilFilter.TipVanzator == tipVanzator)
+            {
+                <option selected value="@tipVanzator">@tipVanzator</option>
+            }
+            else
+            {
+                <option value="@tipVanzator">@tipVanzator</option>
+            }            
         }
     </select>
     <text>Stare:</text>
     <select onchange="this.form.submit()" style="width: 110px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" id="StareAprobareSelect" name="StareAprobareSelect">
         @foreach (StareAprobare stareAprobare in Enum.GetValues(typeof(StareAprobare)))
         {
-            <option @(Model.ImobilFilter != null && Model.ImobilFilter.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+            if (Model.ImobilFilter != null && Model.ImobilFilter.StareAprobare == stareAprobare)
+            {
+                <option selected value="@stareAprobare">@stareAprobare</option>
+            }
+            else
+            {
+                <option value="@stareAprobare">@stareAprobare</option>
+            }            
         }
     </select>
     @*<text>OnlyUsers</text>*@
@@ -161,7 +196,14 @@
                         {
                             if (stareAprobare != StareAprobare.Toate)
                             {
-                                <option @(imobil.StareAprobare == stareAprobare ? "selected=\"selected\"" : "") value="@stareAprobare">@stareAprobare</option>
+                                if (imobil.StareAprobare == stareAprobare)
+                                {
+                                    <option selected value="@stareAprobare">@stareAprobare</option>
+                                }
+                                else
+                                {
+                                    <option value="@stareAprobare">@stareAprobare</option>
+                                }                                
                             }
                         }
                     </select>

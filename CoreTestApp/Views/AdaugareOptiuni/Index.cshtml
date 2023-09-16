@@ -26,7 +26,14 @@
             <select onchange="this.form.submit()" style="width: 150px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="JudetSelect">
                 @foreach (var judet in Model.Judets)
                 {
-                    <option @(Model.SeletedJudet != null && Model.SeletedJudet.Id == judet.Id ? "selected=\"selected\"" : "") value="@judet.Id">@judet.Nume</option>
+                    if (Model.SeletedJudet != null && Model.SeletedJudet.Id == judet.Id)
+                    {
+                        <option selected value="@judet.Id">@judet.Nume</option>
+                    }
+                    else
+                    {
+                        <option value="@judet.Id">@judet.Nume</option>
+                    }
                 }
             </select>
         </div>
@@ -36,7 +43,28 @@
             <select onchange="this.form.submit()" style="width: 150px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="OrasSelect">
                 @foreach (var oras in Model.SelectableOrasesWithNumber)
                 {
-                    <option @(Model.SeletedOras != null && Model.SeletedOras.Id == oras.Key.Id ? "selected=\"selected\"" : "") @(Model.SeletedOras != null && !oras.Key.LocalitateMica ? "style=font-weight:bold;font-size:1.1em;color:green" : "") value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                    if (Model.SeletedOras != null && Model.SeletedOras.Id == oras.Key.Id)
+                    {
+                        if (Model.SeletedOras != null && !oras.Key.LocalitateMica)
+                        {
+                            <option selected style="font-weight:bold;font-size:1.1em;color:green" value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                        }
+                        else
+                        {
+                            <option selected value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                        }                        
+                    }
+                    else
+                    {
+                        if (Model.SeletedOras != null && !oras.Key.LocalitateMica)
+                        {
+                            <option style="font-weight:bold;font-size:1.1em;color:green" value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@oras.Key.Id">@oras.Key.Nume @oras.Value</option>
+                        }
+                    }                    
                 }
             </select>
         </div>
@@ -46,7 +74,15 @@
             <select onchange="this.form.submit()" style="margin-left: 3px; width: 145px" class="ui-corner-all ui-widget-shadow ui-widget" id="CartierSelect" name="CartierSelect">
                 @foreach (var cartier in Model.SelectableCartiersWithNumber)
                 {
-                    <option @(Model.SeletedCartier != null && Model.SeletedCartier.Id == cartier.Key.Id ? "selected=\"selected\"" : "") value="@cartier.Key.Id">@cartier.Key.Nume @cartier.Value</option>
+                    if (Model.SeletedCartier != null && Model.SeletedCartier.Id == cartier.Key.Id)
+                    {
+                        <option selected value="@cartier.Key.Id">@cartier.Key.Nume @cartier.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@cartier.Key.Id">@cartier.Key.Nume @cartier.Value</option>
+                    }
+@*                    <option @(Model.SeletedCartier != null && Model.SeletedCartier.Id == cartier.Key.Id ? "selected=\"selected\"" : "") value="@cartier.Key.Id">@cartier.Key.Nume @cartier.Value</option>*@
                 }
             </select>
         </div>

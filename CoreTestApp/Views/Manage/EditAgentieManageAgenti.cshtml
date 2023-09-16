@@ -8,13 +8,13 @@
 <div class="container">
     @Html.Partial("_MenuUserProfileB5")
 
-    @if (Request.UrlReferrer != null)
+@*    @if (Request.UrlReferrer != null)
     {
         /*TODO DAPI - maybe use actionlink to refresh page with added/removed users*/
         <a class="btn btn-primary" href="@Url.Action("EditUserDetails")" style="margin: 5px 0 10px 0"><span class="bi bi-arrow-left"></span> Înapoi la detalii cont</a>
-    }
+    }*@
 
-    @if (Model != null)
+@*    @if (Model != null)
     {
         using (Ajax.BeginForm("RegisterAgentByAgentImobiliar", "Account", new AjaxOptions
         {
@@ -27,7 +27,7 @@
                 @Html.Partial("_EditListaAgentiForAgentie", @Model.Agentie)
             </div>
         }
-    }
+    }*@
     else
     {
         <p>Nu s-a gasit agentia pentru acest user!</p>
@@ -35,6 +35,6 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

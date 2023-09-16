@@ -1,4 +1,4 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http.Extensions;
 @{
     ViewBag.Title = "Detalii Mesaj";
     Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
@@ -56,7 +56,7 @@
 
         @if (Model.MesajSelectat.Imobil != null)
         {
-            using (Html.BeginForm("RaspundeMesajAnuntRelated", "Mesaje", FormMethod.Post, new { ReturnUrl = Request.Url }))
+            using (Html.BeginForm("RaspundeMesajAnuntRelated", "Mesaje", FormMethod.Post, new { ReturnUrl = Context.Request.GetEncodedUrl() }))
             {
                 <input type="hidden" name="MesajId" value="@Model.MesajSelectat.Id" />
                 <input type="hidden" name="MesajLoggedInUserEmail" value="@Model.LoggedInUserEmail" />

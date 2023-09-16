@@ -1,6 +1,7 @@
 ﻿@using Imobiliare.Entities
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @model Imobiliare.UI.Models.ImobilsData
+@using Microsoft.AspNetCore.Http.Extensions;
 
 @{
     ViewBag.Title = "Administrare anunturi";
@@ -92,7 +93,7 @@
                                 {
                                     if (imobil.DataAdaugare.Day != DateTime.Now.Day)
                                     {
-                                        @Html.ActionLink("Reactualizare", "ApartamentReactualizare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-primary", onclick = "return confirm('Reactualizati Anuntul?')" })
+                                        @Html.ActionLink("Reactualizare", "ApartamentReactualizare", "Administrare", new { imobilId = imobil.Id, returnUrl = Context.Request.GetEncodedUrl() }, new { @class = "btn btn-primary", onclick = "return confirm('Reactualizati Anuntul?')" })
                                     }
                                     else
                                     {
@@ -101,14 +102,15 @@
                                     }
                                 }
 
-                                if (imobil.StareAprobare == StareAprobare.Aprobat || imobil.StareAprobare == StareAprobare.InAsteptare)
+@* TODO fix
+    if (imobil.StareAprobare == StareAprobare.Aprobat || imobil.StareAprobare == StareAprobare.InAsteptare)
                                 {
                                     @Html.ActionLink("Dezactivare", "Deactivare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-warning", onclick = "return confirm('Sunteti sigur ca doriti sa dezactivati anuntul? Acesta nu va mai fii vizibil pe site pana la reactivare.')" })
                                 }
                                 else if (imobil.StareAprobare == StareAprobare.Dezactivat || imobil.StareAprobare == StareAprobare.Expirat)
                                 {
                                     @Html.ActionLink("ReActivare", "ReActivare", "Administrare", new { imobilId = imobil.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-primary" })
-                                }
+                                }*@
                             }
 
                             <a class="js-sterge-anunt btn btn-danger" data-anunt-id="@imobil.Id">

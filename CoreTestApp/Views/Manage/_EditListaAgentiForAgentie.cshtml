@@ -1,5 +1,6 @@
 ﻿@using Imobiliare.Entities
 @model Imobiliare.Entities.Agentie
+@using Microsoft.AspNetCore.Http.Extensions;
 
 <div>
     <h3>Administreaza agenti imobiliari pentru agentie @Model.AgentieImobiliaraUserProfiles.Count / 10</h3>
@@ -34,8 +35,8 @@
                 <div class="col-md-3">
                     @*<button class="btn btn-danger" style="font-size: 1em">Sterge</button>*@
 
-                    @Html.ActionLink(@s.Anunturi.Count + " Anunturi", "AnunturiUtilizator", "Anunturi", new { userId = s.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-primary", @style = "font-size: 1em" })
-                    @Html.ActionLink("Stergere", "DeleteAccountByAdminAgent", "Account", new { userId = s.Id, agentieId = Model.Id, returnUrl = HttpContext.Current.Request.Url.AbsoluteUri }, new { @class = "btn btn-danger", @style = "font-size: 1em", onclick = "return confirm('Sunteti sigur ca doriti sa stergeti permanent agentul?')" })
+                    @Html.ActionLink(@s.Anunturi.Count + " Anunturi", "AnunturiUtilizator", "Anunturi", new { userId = s.Id, returnUrl = Context.Request.GetEncodedUrl() }, new { @class = "btn btn-primary", @style = "font-size: 1em" })
+                    @Html.ActionLink("Stergere", "DeleteAccountByAdminAgent", "Account", new { userId = s.Id, agentieId = Model.Id, returnUrl = Context.Request.GetEncodedUrl() }, new { @class = "btn btn-danger", @style = "font-size: 1em", onclick = "return confirm('Sunteti sigur ca doriti sa stergeti permanent agentul?')" })
                 </div>
             </div>
         }

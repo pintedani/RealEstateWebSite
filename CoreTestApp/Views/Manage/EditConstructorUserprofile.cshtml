@@ -10,7 +10,8 @@
     @Html.Partial("_MenuUserProfileB5")
 
     <div class="row" style="background-color: #f9f9f9; padding: 10px 0">
-        @using (Html.BeginForm("EditConstructorUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*TODO fix
+    @using (Html.BeginForm("EditConstructorUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
@@ -84,9 +85,6 @@
                     <div style="display: inline-block" onclick="$('#ProfileImage').click()">
                         <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.ConstructorPoza != null ? "Schimbă" : "Selectează") logo constructor</button>
                     </div>
-
-                    @*<img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px"/>
-                        <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poza profil agent</button>*@
                 </div>
                 <hr />
                 <button type="submit" class="btn btn-primary" style="margin: 0 0 0 10px"><span class="bi bi-check"></span> Salvează</button>
@@ -99,7 +97,7 @@
                     <span class="bi bi-star"></span>Utilizator de incredere
                 </h3>
             }
-        }
+        }*@
     </div>
 </div>
 
@@ -154,6 +152,6 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

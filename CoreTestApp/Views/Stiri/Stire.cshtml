@@ -2,6 +2,8 @@
 @using Imobiliare.UI.BusinessLayer
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @model Imobiliare.UI.Models.StireViewModel
+@using Microsoft.AspNetCore.Http.Extensions;
+@using System.Web;
 
 @{
     Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
@@ -30,7 +32,8 @@
         ViewBag.Keywords = Model.Stire.Keywords;
     }
 
-    ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+    //TODO fix
+    //ViewBag.ShareUrl = Request.Url.AbsoluteUri;
     ViewBag.ShareTitle = formattedTitle;
     ViewBag.ShareDescription = ViewBag.MetaDescription;
     if (!string.IsNullOrEmpty(Model.Stire.Poze))
@@ -88,7 +91,7 @@
             }
             <hr />
 
-            @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+            @if (!Context.Request.GetEncodedUrl().Contains("localhost"))
             {
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama sus articol --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="4618131363" data-ad-format="auto"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
@@ -101,7 +104,7 @@
             <div class="clearfix"></div>
             <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fapartamente24&width=450&layout=standard&action=like&show_faces=true&share=false&height=80&appId" width="350" height="80" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
 
-            @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+            @if (!Context.Request.GetEncodedUrl().Contains("localhost"))
             {
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama jos articol -->
                 <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-1474334984782094" data-ad-slot="6958224088"></ins>

@@ -10,8 +10,8 @@ namespace Imobiliare.UI.Models
                 applicationBuilder.ApplicationServices.CreateScope().
                 ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            if(!applicationDbContext.Imobile.Any()) 
-            {
+            //if(!applicationDbContext.Imobile.Any()) 
+            //{
                 //applicationDbContext.Imobils.Add(new Imobil()
                 //{
                 //    Title = "Apartament 1",
@@ -46,7 +46,7 @@ namespace Imobiliare.UI.Models
                 //});
 
                 //applicationDbContext.SaveChanges();
-            }
+            //}
         }
     }
 }

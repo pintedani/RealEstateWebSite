@@ -10,7 +10,8 @@
 @Html.Partial("_MenuUserProfile")
 
 <br/>
-@using (Html.BeginForm("EditUserDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*TODO fix
+    @using (Html.BeginForm("EditUserDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -81,7 +82,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            @*Put some sample text here*@
+
                             <p>Logo-ul firmei va apărea in dreptul anunțului, de exemplu:</p>
                             <img src="~/Images/DecorationImages/logoCompanieExemplu.JPG"/>
                         </div>
@@ -93,10 +94,6 @@
         <div class="panel panel-success">
             <div class="panel-heading">Telefon (numărul la care puteți fi contactat)</div>
             <div class="panel-body">
-
-                @*@Html.EditorFor(model => model.UserProfile.PhoneNumber, new { htmlAttributes = new { style = "max-width: 300px; width: 100%" }})
-                    @Html.ValidationMessageFor(model => model.UserProfile.PhoneNumber)*@
-
                 <div class="form-group col-xs-12 floating-label-form-group controls">
                     <label>Telefon</label>
                     @Html.TextBoxFor(model => model.UserProfile.PhoneNumber, new {title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", type = "tel", @class = "form-control"})
@@ -109,10 +106,6 @@
         <div class="panel panel-success">
             <div class="panel-heading">Newsletter</div>
             <div class="panel-body">
-                @*<div class="editor-field">
-                    @Html.EditorFor(model => Model.UserProfile.AbonatLaNewsLetter)
-                </div>*@
-
                 <div class="touchCheckbox">
                     <span style="font-size: 1.8em" class="glyphicon @(Model.UserProfile.AbonatLaNewsLetter ? "glyphicon-check" : "glyphicon-unchecked")"></span>
                     <input type="hidden" value="@(Model.UserProfile.AbonatLaNewsLetter ? "true" : "false")" name="UserProfile.AbonatLaNewsLetter">
@@ -135,7 +128,7 @@
         <br />
     </fieldset>
 }
-
+*@
 @*<div>
     <a href="@Url.Action("Index")" class="btn btn-success">
         <span class="glyphicon glyphicon-arrow-left"></span>
@@ -219,5 +212,5 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
 }

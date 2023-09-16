@@ -6,6 +6,7 @@
 @using Imobiliare.Entities
 @using Imobiliare.UI.Utils
 @using Imobiliare.UI.Utils.UrlSeoFormatters
+@using System.Web;
 @model Imobiliare.UI.Models.ApartamentDetaliiData
 
 
@@ -50,7 +51,8 @@
     }
     ViewBag.MetaDescription = HttpUtility.HtmlDecode(metaDescription) + " - " + Model.Imobil.Id;
 
-    ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+    //TODO fix
+    //ViewBag.ShareUrl = Request.Url.AbsoluteUri;
     ViewBag.ShareTitle = formattedTitle;
     ViewBag.ShareDescription = formattedTitle;
     ViewBag.ShareImage = "http://www.apartamente24.ro/Images/uploadedPhotos/" + Model.Imobil.FirstPhoto;
@@ -71,10 +73,10 @@
 
 <div class="container">
     <div class="d-flex my-4">
-        @if (Request.UrlReferrer != null)
+@*        @if (Request.UrlReferrer != null)
         {
             <a class="btn btn-light me-auto" href="@Request.UrlReferrer"><span class="bi bi-arrow-left"></span> Înapoi</a>
-        }
+        }*@
 
         @if (Model.IsCurrentUserAdmin || Model.LoggedInUserId == Model.Imobil.UserId)
         {
@@ -450,7 +452,7 @@
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
+@*                    using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
                     {
                         <div class="panel panel-success">
                             <div class="panel-heading">Trimite mesaj vanzatorului</div>
@@ -465,8 +467,6 @@
                                 <input type="hidden" value="@Model.Imobil.Id" />
 
                                 <div class="clearfix"></div>
-                                @*Recaptcha is reset in hideContactFormProgress*@
-                                @*<div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag"></div>*@
 
                                 <div style="margin-top: 10px">
                                     <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
@@ -476,7 +476,7 @@
                                 </div>
                             </div>
                         </div>
-                    }
+                    }*@
                 }
                 else
                 {
@@ -563,7 +563,7 @@
         </div>
     }
 
-    @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+@*    @if (!Request.Url.AbsoluteUri.Contains("localhost"))
     {
         <div style="margin: 20px 0">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -577,7 +577,7 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
-    }
+    }*@
 
     <section class="row">
         <h3 style="margin-bottom: 10px">Cele mai căutate rezultate</h3>

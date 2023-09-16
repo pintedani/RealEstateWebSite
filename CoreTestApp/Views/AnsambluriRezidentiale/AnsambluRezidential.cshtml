@@ -15,7 +15,8 @@
     ViewBag.Keywords = Model.Ansamblu.Keywords;
   }
 
-  ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+  //TODO fix
+  //ViewBag.ShareUrl = Request.Url.AbsoluteUri;
   ViewBag.ShareTitle = formattedTitle;
   ViewBag.ShareDescription = formattedTitle;
   if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))

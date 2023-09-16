@@ -11,14 +11,16 @@
 
     <br />
     <br />
-    @using (Ajax.BeginForm("TrimiteMesajContact", "Home", new AjaxOptions
+@*    
+TODO fix    
+@using (Ajax.BeginForm("TrimiteMesajContact", "Home", new AjaxOptions
     {
         UpdateTargetId = "statusTrimitereEmail",
         //Confirm = "Apasati OK pentru a confirma trimiterea mesajului!",
         InsertionMode = InsertionMode.Replace,
         OnBegin = "showContactFormProgress",
         OnSuccess = "hideContactFormProgress"
-    }))
+    }))*@
     {
 
         <div class="form-group floating-label-form-group controls">
@@ -90,6 +92,6 @@
             alert($('#statusTrimitereEmail').text());
         }
     </script>
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

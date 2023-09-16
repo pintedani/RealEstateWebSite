@@ -9,6 +9,7 @@
 <div class="container">
     @Html.Partial("_MenuUserProfileB5")
 
+@*  TODO fix  
     @using (Html.BeginForm("EditAgentieImobiliaraUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
@@ -58,9 +59,6 @@
                         <div style="display: inline-block" onclick="$('#ProfileImage').click()">
                             <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poză profil agent</button>
                         </div>
-
-                        @*<img src="~/Images/DecorationImages/profile-icon.png" style="width: 70px"/>
-                            <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="bi bi-plus-sign"></span> @(Model.Picture != null ? "Schimbă" : "Selectează") poza profil agent</button>*@
                     </div>
                     <hr />
                     <button type="submit" class="btn btn-primary" style="margin: 0 0 0 10px"><span class="bi bi-check"></span> Salvează</button>
@@ -137,7 +135,7 @@
                 </h3>
             }
         </div>
-    }
+    }*@
 </div>
 
 @section Scripts {
@@ -191,6 +189,6 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

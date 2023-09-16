@@ -9,14 +9,16 @@
 <div class="container">
     @Html.Partial("_MenuUserProfileB5")
 
-    @if (Request.UrlReferrer != null)
+@*    
+TODO fix    
+@if (Request.UrlReferrer != null)
     {
         <a class="btn btn-primary" href="@Url.Action("EditUserDetails")" style="margin: 5px 0 10px 0"><span class="bi bi-arrow-left"></span> Înapoi la detalii cont</a>
-    }
+    }*@
 
     <h3>Editeaza Detalii Agentie Imobiliara</h3>
 
-    @using (Html.BeginForm("EditAgentieDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*    @using (Html.BeginForm("EditAgentieDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -50,7 +52,6 @@
                     <div style="display: inline-block; position: relative; width: 100%">
                         <div class="form-group col-xs-12 floating-label-form-group controls">
                             @Html.Label("", "Localitate")
-                            @*<input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" placeholder="Introduceti Localitate" name="searchBox" />*@
                             <input type="text" autocomplete="off" style="max-width: 600px; width: 100%" class="searchBox form-control" value="@(Model.Agentie.Oras != null ?  Model.Agentie.Oras.Nume : "Introduceti Localitate")" name="searchBox" @(Model.Agentie.Oras != null ? "disabled" : "") />
                             <input type="hidden" name="OrasSelect" id="OrasSelect" value="@(Model.Agentie.Oras != null ? Model.Agentie.Oras.Id : 0)" />
                             <ul style="max-height:450px; overflow-y:scroll" class="localitatiSearchResult"></ul>
@@ -84,7 +85,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary my-2"><span class="bi bi-check"></span> Salvează</button>
-    }
+    }*@
 </div>
 
 @section Scripts {
@@ -153,6 +154,6 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 }

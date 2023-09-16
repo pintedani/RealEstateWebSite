@@ -1,7 +1,9 @@
-﻿@functions {
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+
+@functions {
     private string GetUrlWithoutPage()
     {
-        var nextUrl = Request.Url.AbsoluteUri;
+        var nextUrl = Context.Request.GetEncodedUrl();
         if (nextUrl.Contains("?page="))
         {
             var indexTostart = nextUrl.IndexOf("?page=");

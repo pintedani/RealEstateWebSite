@@ -40,7 +40,7 @@
             {
                 <tr onclick="window.location='@Url.Action("Details", new {id = item.Id})'" style="cursor: pointer">
                     <td>
-                        @Html.DisplayFor(modelItem => item.FromUser.Email.Split('@')[0])
+                        @Html.DisplayFor(modelItem => item.FromUser.Email)
                     </td>
                     <td>
                         @if (item.CitireDateTime != DateTime.MinValue)

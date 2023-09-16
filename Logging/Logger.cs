@@ -11,7 +11,7 @@ namespace Logging
     {
         public void Debug(string v)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         //TODO Implement inteface!

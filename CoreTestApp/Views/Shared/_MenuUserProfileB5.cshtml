@@ -1,4 +1,5 @@
-﻿<style>
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+<style>
 /*    .usermenu > .nav-item > .active {
         background-color: #007171;
         border-color: #7dad31;
@@ -7,12 +8,12 @@
 
 <div class="my-4">
     <nav class="nav nav-tabs usermenu flex-column flex-sm-row">
-            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Administrare") ? "active" : "")" aria-current="page" href="@Url.Action("Index", "Administrare")"><span class="bi bi-align-justify"></span> Anunțurile mele</a>
-            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Mesaje") ? "active" : "")" href="@Url.Action("Index", "Mesaje")"><span class="bi bi-envelope"></span> Mesaje</a>
-            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("Edit") ? "active" : "")" href="@Url.Action("EditUserDetails", "Manage")"><span class="bi bi-pencil"></span> Detalii cont</a>
-            <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("ChangePassword") ? "active" : "")" href="@Url.Action("ChangePassword", "Manage")">Schimbă parola</a>
-        <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("ManageLogins") ? "active" : "")" href="@Url.Action("ManageLogins", "Manage")">Login extern</a>
-        <a class="nav-link flex-sm-fill text-sm-center @(Request.Url.ToString().Contains("DeleteAccount") ? "active" : "")" href="@Url.Action("DeleteAccount", "Manage")">Șterge Cont</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("Administrare") ? "active" : "")" aria-current="page" href="@Url.Action("Index", "Administrare")"><span class="bi bi-align-justify"></span> Anunțurile mele</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("Mesaje") ? "active" : "")" href="@Url.Action("Index", "Mesaje")"><span class="bi bi-envelope"></span> Mesaje</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("Edit") ? "active" : "")" href="@Url.Action("EditUserDetails", "Manage")"><span class="bi bi-pencil"></span> Detalii cont</a>
+            <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("ChangePassword") ? "active" : "")" href="@Url.Action("ChangePassword", "Manage")">Schimbă parola</a>
+        <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("ManageLogins") ? "active" : "")" href="@Url.Action("ManageLogins", "Manage")">Login extern</a>
+        <a class="nav-link flex-sm-fill text-sm-center @(Context.Request.GetEncodedUrl().ToString().Contains("DeleteAccount") ? "active" : "")" href="@Url.Action("DeleteAccount", "Manage")">Șterge Cont</a>
     </nav>
 </div>
 

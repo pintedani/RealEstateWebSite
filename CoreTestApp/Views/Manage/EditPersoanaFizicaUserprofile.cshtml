@@ -10,7 +10,8 @@
 
     @Html.Partial("_MenuUserProfileB5")
     <div class="col-xs-12">
-        @using (Html.BeginForm("EditPersoanaFizicaUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@*  TODO fix     
+    @using (Html.BeginForm("EditPersoanaFizicaUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
@@ -19,7 +20,6 @@
             @Html.HiddenFor(model => model.Id)
             @Html.HiddenFor(model => model.UserName)
             @Html.HiddenFor(model => model.UserCreateDate)
-            @*@Html.HiddenFor(model => model.TipVanzator)*@
 
         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative p-2">
 
@@ -37,14 +37,6 @@
                 @Html.TextBoxFor(model => model.PhoneNumber, new { title = "Introduceti numarul dumneavoastra de telefon", placeholder = "Telefon", type = "tel", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.PhoneNumber)
             </div>
-            @*<div class="clearfix"></div>
-        <div class="touchCheckbox" style="padding: 15px; margin-top: 5px; background-color: white;">
-            <span style="font-size: 1.8em" class="glyphicon @(Model.AbonatLaNewsLetter ? "glyphicon-check" : "glyphicon-unchecked")"></span>
-            <input type="hidden" value="@(Model.AbonatLaNewsLetter ? "true" : "false")" name="AbonatLaNewsLetter">
-            <label>Abonat la newsletter</label>
-        </div>*@
-            @*@Html.CheckBoxFor(model => model.AbonatLaNewsLetter)*@
-            @*<input data-val="true" data-val-required="The AbonatLaNewsLetter field is required." id="AbonatLaNewsLetter" name="AbonatLaNewsLetter" type="checkbox" value="true">*@
             <div class="form-check my-4">
                 <input class="form-check-input" type="checkbox" value="@(Model.AbonatLaNewsLetter ? "true" : "false")" id="AbonatLaNewsLetter" name="AbonatLaNewsLetter">
                 <label class="form-check-label" for="AbonatLaNewsLetter">
@@ -55,7 +47,6 @@
         </div>
 
             <div class="panel panel-success">
-                @*<div class="panel-heading">Profilul tau are setat ca vanzator tipul @Model.TipVanzator</div>*@
                 <div class="panel-body">
 
                     <div class="form-group col-xs-12">
@@ -65,22 +56,10 @@
                     <div class="editor-field">
                         <div id="tipVanzatorSelectBox" class="selectBoxSimulator dropdown" style="margin-bottom: 10px">
                             <input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@Model.TipVanzator" />
-                            @*<button class="combobox dropdown-toggle" style="width: 250px" type="button" id="dropdownTipVanzatorSelectButton" data-toggle="dropdown">
-                                    @Model.TipVanzator
-                                    <span class="caret"></span>
-                                </button>*@
-                            @*<ul class="dropdown-menu">
-                                    @foreach (var tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
-                                    {
-                                        <li data-listvalue="@tipVanzator">@tipVanzator</li>
-                                    }
-                                </ul>*@
-
-                            @*<input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@TipVanzator.PersoanaFizica" />*@
                             <select id="tipVanzatorSelectBox" class="form-select" aria-label="Tip vânzător">
                                 @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
                                 {
-                                    <option data-listvalue="@tipVanzator">@*@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)*@ @tipVanzator</option>
+                                    <option data-listvalue="@tipVanzator">@tipVanzator</option>
                                 }
                             </select>
 
@@ -109,7 +88,6 @@
                         </div>
                         <hr class="hidden-md hidden-lg" />
                         <div class="col-md-6">
-                            @*Put some sample text here*@
                             <p>Este important sa incarcati o imagine pentru agentia imobiliara pentru o mai buna promovare a anunturilor. Logo-ul firmei va apărea in dreptul anunțului, de exemplu:</p>
                             <img src="~/Images/DecorationImages/logoCompanieExemplu.JPG" />
                         </div>
@@ -131,7 +109,7 @@
                 <button type="submit" class="btn btn-primary my-4"><span class="bi bi-save"></span> Salvează</button>
             </p>
             <br />
-        }
+        }*@
     </div>
 </div>
 
@@ -212,5 +190,5 @@
         }
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")
+    @*    @Scripts.Render("~/bundles/jqueryval")*@
 }

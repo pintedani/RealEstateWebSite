@@ -7,20 +7,20 @@
 </style>
 <ul class="nav nav-tabs">
     <li @(Context.Request.GetEncodedUrl().ToString().EndsWith("SuperAdmin") ? "class = active" : "")><a href="@Url.Action("Index","SuperAdmin")"><span class="glyphicon glyphicon-list"></span>&nbsp;Anunturi</a></li>
-    <li @(Request.Url.ToString().Contains("Users") ? "class = active" : "")><a href="@Url.Action("Users","SuperAdmin")"><span class="glyphicon glyphicon-user"></span>&nbsp;Useri</a></li>
-    <li @(Request.Url.ToString().Contains("AgentiiImobiliare") ? "class = active" : "")><a href="@Url.Action("ToateAgentiileAdmin","AgentiiImobiliare")"><span class="glyphicon glyphicon-home"></span>&nbsp;Agentii</a></li>
-    <li @(Request.Url.ToString().Contains("Ansambluri") ? "class = active" : "")><a href="@Url.Action("ToateAnsamblurileAdmin","AnsambluriRezidentiale")"><span class="glyphicon glyphicon-picture"></span>&nbsp;Ansambluri</a></li>
-    <li @(Request.Url.ToString().Contains("Logs") ? "class = active" : "")><a href="@Url.Action("Index","Logs")"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Logs</a></li>
-    <li @(Request.Url.ToString().Contains("AuditTrail") ? "class = active" : "")><a href="@Url.Action("Index","AuditTrails")"><span class="glyphicon glyphicon-time"></span>&nbsp;AuditTrail</a></li>
-    <li @(Request.Url.ToString().Contains("Maintenance") ? "class = active" : "")><a href="@Url.Action("Maintenance","SuperAdmin")"><span class="glyphicon glyphicon-erase"></span>&nbsp;Maintenance</a></li>
-    <li @(Request.Url.ToString().Contains("EmailTemplate") ? "class = active" : "")><a href="@Url.Action("Index","EmailTemplate")"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Emails Admin</a></li>
-    <li @(Request.Url.ToString().Contains("MassEmailMessage") ? "class = active" : "")><a href="@Url.Action("MassEmailMessage","SuperAdmin")"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Mass Email</a></li>
-    <li @(Request.Url.ToString().Contains("Stiri") ? "class = active" : "")><a href="@Url.Action("IndexAdmin","Stiri")"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;Stiri</a></li>
-    <li @(Request.Url.ToString().Contains("Rapoarte/") ? "class = active" : "")><a href="@Url.Action("Index","Rapoarte")"><span class="glyphicon glyphicon-stats"></span>&nbsp;Rapoarte1</a></li>
-    <li @(Request.Url.ToString().Contains("RapoarteActivitate") ? "class = active" : "")><a href="@Url.Action("Index","RaportActivitate")"><span class="glyphicon glyphicon-stats"></span>&nbsp;Rapoarte2</a></li>
-    <li @(Request.Url.ToString().Contains("SystemSettings") ? "class = active" : "")><a href="@Url.Action("Index","SystemSettings")"><span class="glyphicon glyphicon-cog"></span>&nbsp;Setari</a></li>
-    <li @(Request.Url.ToString().Contains("Blocked") ? "class = active" : "")><a href="@Url.Action("Index","BlockedIps")"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Block Ip</a></li>
-    <li @(Request.Url.ToString().Contains("Mesaj") ? "class = active" : "")><a href="@Url.Action("ToateMesajele","Mesaje")"><span class="glyphicon glyphicon-comment"></span>&nbsp;Mesaje User</a></li>
-    <li @(Request.Url.ToString().Contains("Judet") ? "class = active" : "")><a href="@Url.Action("Index","Judete")"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Judete</a></li>
-    <li @(Request.Url.ToString().Contains("AdaugareOptiuni") ? "class = active" : "")><a href="@Url.Action("Index","AdaugareOptiuni")"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Localitati</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Users") ? "class = active" : "")><a href="@Url.Action("Users","SuperAdmin")"><span class="glyphicon glyphicon-user"></span>&nbsp;Useri</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("AgentiiImobiliare") ? "class = active" : "")><a href="@Url.Action("ToateAgentiileAdmin","AgentiiImobiliare")"><span class="glyphicon glyphicon-home"></span>&nbsp;Agentii</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Ansambluri") ? "class = active" : "")><a href="@Url.Action("ToateAnsamblurileAdmin","AnsambluriRezidentiale")"><span class="glyphicon glyphicon-picture"></span>&nbsp;Ansambluri</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Logs") ? "class = active" : "")><a href="@Url.Action("Index","Logs")"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;Logs</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("AuditTrail") ? "class = active" : "")><a href="@Url.Action("Index","AuditTrails")"><span class="glyphicon glyphicon-time"></span>&nbsp;AuditTrail</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Maintenance") ? "class = active" : "")><a href="@Url.Action("Maintenance","SuperAdmin")"><span class="glyphicon glyphicon-erase"></span>&nbsp;Maintenance</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("EmailTemplate") ? "class = active" : "")><a href="@Url.Action("Index","EmailTemplate")"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Emails Admin</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("MassEmailMessage") ? "class = active" : "")><a href="@Url.Action("MassEmailMessage","SuperAdmin")"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Mass Email</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Stiri") ? "class = active" : "")><a href="@Url.Action("IndexAdmin","Stiri")"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;Stiri</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Rapoarte/") ? "class = active" : "")><a href="@Url.Action("Index","Rapoarte")"><span class="glyphicon glyphicon-stats"></span>&nbsp;Rapoarte1</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("RapoarteActivitate") ? "class = active" : "")><a href="@Url.Action("Index","RaportActivitate")"><span class="glyphicon glyphicon-stats"></span>&nbsp;Rapoarte2</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("SystemSettings") ? "class = active" : "")><a href="@Url.Action("Index","SystemSettings")"><span class="glyphicon glyphicon-cog"></span>&nbsp;Setari</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Blocked") ? "class = active" : "")><a href="@Url.Action("Index","BlockedIps")"><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;Block Ip</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Mesaj") ? "class = active" : "")><a href="@Url.Action("ToateMesajele","Mesaje")"><span class="glyphicon glyphicon-comment"></span>&nbsp;Mesaje User</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("Judet") ? "class = active" : "")><a href="@Url.Action("Index","Judete")"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Judete</a></li>
+    <li @(Context.Request.GetEncodedUrl().ToString().Contains("AdaugareOptiuni") ? "class = active" : "")><a href="@Url.Action("Index","AdaugareOptiuni")"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Localitati</a></li>
 </ul>

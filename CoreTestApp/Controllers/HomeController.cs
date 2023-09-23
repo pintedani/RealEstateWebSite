@@ -32,14 +32,14 @@ namespace Imobiliare.UI.Controllers
 
         public ActionResult Index()
         {
-            //ViewBag.TipOferta = TipProprietate.Toate.ToString();
+            ViewBag.TipOferta = TipProprietate.Toate.ToString();
 
-            //ViewBag.TotalNumberAnunturiPeJudete = this.unitOfWork.AnunturiRepository.GetTotalNumarAnunturiPerJudete();
-            //ViewBag.Judete = this.unitOfWork.JudetRepository.Judete();
-            //ViewBag.UltimeleStiri = this.unitOfWork.StiriRepository.GetLastAddedStiri();
+            ViewBag.TotalNumberAnunturiPeJudete = this.unitOfWork.AnunturiRepository.GetTotalNumarAnunturiPerJudete();
+            ViewBag.Judete = this.unitOfWork.JudetRepository.Judete();
+            ViewBag.UltimeleStiri = this.unitOfWork.StiriRepository.GetLastAddedStiri();
 
-            //ViewBag.LastAddedImobils = this.unitOfWork.AnunturiRepository.GetLastAddedImobils(4);
-            //ViewBag.LastAddedImobilsCautare = this.unitOfWork.AnunturiRepository.GetLastAddedAnunturiCautare(3);
+            ViewBag.LastAddedImobils = this.unitOfWork.AnunturiRepository.GetLastAddedImobils(4);
+            ViewBag.LastAddedImobilsCautare = this.unitOfWork.AnunturiRepository.GetLastAddedAnunturiCautare(3);
 
             return View();
         }

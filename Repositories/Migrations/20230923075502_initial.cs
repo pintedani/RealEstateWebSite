@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Imobiliare.UI.Migrations
+namespace Imobiliare.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -322,10 +322,10 @@ namespace Imobiliare.UI.Migrations
                     NumeComplet = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReceiveAdminReports = table.Column<bool>(type: "bit", nullable: false),
                     NumeAgentieImobiliara = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    AgentieId = table.Column<int>(type: "int", nullable: false),
+                    AgentieId = table.Column<int>(type: "int", nullable: true),
                     IsAgentieAdmin = table.Column<bool>(type: "bit", nullable: false),
                     DescriereAgent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ConstructorId = table.Column<int>(type: "int", nullable: false),
+                    ConstructorId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -480,7 +480,7 @@ namespace Imobiliare.UI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Imobils",
+                name: "Imobile",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -514,6 +514,7 @@ namespace Imobiliare.UI.Migrations
                     StareAprobare = table.Column<int>(type: "int", nullable: false),
                     GoogleMarkerCoordinateLat = table.Column<double>(type: "float", nullable: false),
                     GoogleMarkerCoordinateLong = table.Column<double>(type: "float", nullable: false),
+                    TipVanzator = table.Column<int>(type: "int", nullable: false),
                     Garaj = table.Column<bool>(type: "bit", nullable: false),
                     CT = table.Column<bool>(type: "bit", nullable: false),
                     AerConditionat = table.Column<bool>(type: "bit", nullable: false),
@@ -528,27 +529,27 @@ namespace Imobiliare.UI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Imobils", x => x.Id);
+                    table.PrimaryKey("PK_Imobile", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Imobils_AspNetUsers_UserId",
+                        name: "FK_Imobile_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Imobils_Cartiere_CartierId",
+                        name: "FK_Imobile_Cartiere_CartierId",
                         column: x => x.CartierId,
                         principalTable: "Cartiere",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Imobils_Judete_JudetId",
+                        name: "FK_Imobile_Judete_JudetId",
                         column: x => x.JudetId,
                         principalTable: "Judete",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Imobils_Orase_OrasId",
+                        name: "FK_Imobile_Orase_OrasId",
                         column: x => x.OrasId,
                         principalTable: "Orase",
                         principalColumn: "Id",
@@ -624,9 +625,9 @@ namespace Imobiliare.UI.Migrations
                 {
                     table.PrimaryKey("PK_FavoriteAnuntItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FavoriteAnuntItems_Imobils_ImobilId",
+                        name: "FK_FavoriteAnuntItems_Imobile_ImobilId",
                         column: x => x.ImobilId,
-                        principalTable: "Imobils",
+                        principalTable: "Imobile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -668,9 +669,9 @@ namespace Imobiliare.UI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Mesaje_Imobils_ImobilId",
+                        name: "FK_Mesaje_Imobile_ImobilId",
                         column: x => x.ImobilId,
-                        principalTable: "Imobils",
+                        principalTable: "Imobile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -690,9 +691,9 @@ namespace Imobiliare.UI.Migrations
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Imobils_ImobilId",
+                        name: "FK_OrderDetails_Imobile_ImobilId",
                         column: x => x.ImobilId,
-                        principalTable: "Imobils",
+                        principalTable: "Imobile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -717,9 +718,9 @@ namespace Imobiliare.UI.Migrations
                 {
                     table.PrimaryKey("PK_ShoppingCartItems", x => x.ShoppingCartItemId);
                     table.ForeignKey(
-                        name: "FK_ShoppingCartItems_Imobils_ImobilId",
+                        name: "FK_ShoppingCartItems_Imobile_ImobilId",
                         column: x => x.ImobilId,
-                        principalTable: "Imobils",
+                        principalTable: "Imobile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -804,23 +805,23 @@ namespace Imobiliare.UI.Migrations
                 column: "ImobilId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imobils_CartierId",
-                table: "Imobils",
+                name: "IX_Imobile_CartierId",
+                table: "Imobile",
                 column: "CartierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imobils_JudetId",
-                table: "Imobils",
+                name: "IX_Imobile_JudetId",
+                table: "Imobile",
                 column: "JudetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imobils_OrasId",
-                table: "Imobils",
+                name: "IX_Imobile_OrasId",
+                table: "Imobile",
                 column: "OrasId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imobils_UserId",
-                table: "Imobils",
+                name: "IX_Imobile_UserId",
+                table: "Imobile",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -938,7 +939,7 @@ namespace Imobiliare.UI.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Imobils");
+                name: "Imobile");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Imobiliare.UI.Migrations
+namespace Imobiliare.Repositories.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230711071536_setnullablecolumns")]
-    partial class setnullablecolumns
+    [Migration("20230923075502_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Imobiliare.UI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CoreTestApp.Models.Agentie", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Agentie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Agenties");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Ansamblu", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Ansamblu", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Ansambluri");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.AuditTrail", b =>
+            modelBuilder.Entity("Imobiliare.Entities.AuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,7 +157,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("AuditTrail");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.BlockedIp", b =>
+            modelBuilder.Entity("Imobiliare.Entities.BlockedIp", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -196,7 +196,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("BlockedIps");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Cartier", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Cartier", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -218,7 +218,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Cartiere");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Constructor", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Constructor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -257,7 +257,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Constructori");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.EmailTemplate", b =>
+            modelBuilder.Entity("Imobiliare.Entities.EmailTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -291,7 +291,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("EmailTemplates");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.FavoriteAnuntItem", b =>
+            modelBuilder.Entity("Imobiliare.Entities.FavoriteAnuntItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -312,7 +312,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("FavoriteAnuntItems");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Imobil", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Imobil", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -436,6 +436,9 @@ namespace Imobiliare.UI.Migrations
                     b.Property<int>("TipProprietate")
                         .HasColumnType("int");
 
+                    b.Property<int>("TipVanzator")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -461,10 +464,10 @@ namespace Imobiliare.UI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Imobils");
+                    b.ToTable("Imobile");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Judet", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Judet", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -493,7 +496,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Judete");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Log", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Log", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -529,7 +532,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Mesaj", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Mesaj", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -579,7 +582,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Mesaje");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Oras", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Oras", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -619,7 +622,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Orase");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Order", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -685,7 +688,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.OrderDetail", b =>
+            modelBuilder.Entity("Imobiliare.Entities.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -714,7 +717,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.RaportActivitate", b =>
+            modelBuilder.Entity("Imobiliare.Entities.RaportActivitate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -771,7 +774,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("RaportActivitates");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.ShoppingCartItem", b =>
+            modelBuilder.Entity("Imobiliare.Entities.ShoppingCartItem", b =>
                 {
                     b.Property<int>("ShoppingCartItemId")
                         .ValueGeneratedOnAdd()
@@ -795,7 +798,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("ShoppingCartItems");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Stire", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Stire", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -863,7 +866,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("Stires");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.SystemSettings", b =>
+            modelBuilder.Entity("Imobiliare.Entities.SystemSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -909,7 +912,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("SystemSettings");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.UserProfile", b =>
+            modelBuilder.Entity("Imobiliare.Entities.UserProfile", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -1039,7 +1042,7 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.UserRating", b =>
+            modelBuilder.Entity("Imobiliare.Entities.UserRating", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1208,9 +1211,9 @@ namespace Imobiliare.UI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Agentie", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Agentie", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Oras", "Oras")
+                    b.HasOne("Imobiliare.Entities.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasSelect")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1218,15 +1221,15 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Oras");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Ansamblu", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Ansamblu", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Oras", "Oras")
+                    b.HasOne("Imobiliare.Entities.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasSelect")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "UserProfile")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1237,9 +1240,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Cartier", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Cartier", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Oras", "Oras")
+                    b.HasOne("Imobiliare.Entities.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1248,9 +1251,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Oras");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Constructor", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Constructor", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Oras", "Oras")
+                    b.HasOne("Imobiliare.Entities.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1259,9 +1262,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Oras");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.FavoriteAnuntItem", b =>
+            modelBuilder.Entity("Imobiliare.Entities.FavoriteAnuntItem", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
+                    b.HasOne("Imobiliare.Entities.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1270,27 +1273,27 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Imobil");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Imobil", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Imobil", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Cartier", "Cartier")
+                    b.HasOne("Imobiliare.Entities.Cartier", "Cartier")
                         .WithMany()
                         .HasForeignKey("CartierId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.Judet", "Judet")
+                    b.HasOne("Imobiliare.Entities.Judet", "Judet")
                         .WithMany()
                         .HasForeignKey("JudetId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.Oras", "Oras")
+                    b.HasOne("Imobiliare.Entities.Oras", "Oras")
                         .WithMany()
                         .HasForeignKey("OrasId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "UserProfile")
                         .WithMany("Anunturi")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1305,27 +1308,27 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Mesaj", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Mesaj", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", "FromUser")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "FromUser")
                         .WithMany()
                         .HasForeignKey("FromUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
+                    b.HasOne("Imobiliare.Entities.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.UserProfile", "ToUser")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "ToUser")
                         .WithMany()
                         .HasForeignKey("ToUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.UserProfile", "UserContactForm")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "UserContactForm")
                         .WithMany()
                         .HasForeignKey("UserContactFormId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1340,9 +1343,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("UserContactForm");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Oras", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Oras", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Judet", "Judet")
+                    b.HasOne("Imobiliare.Entities.Judet", "Judet")
                         .WithMany()
                         .HasForeignKey("JudetId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1351,15 +1354,15 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Judet");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.OrderDetail", b =>
+            modelBuilder.Entity("Imobiliare.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
+                    b.HasOne("Imobiliare.Entities.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.Order", "Order")
+                    b.HasOne("Imobiliare.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1370,9 +1373,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.ShoppingCartItem", b =>
+            modelBuilder.Entity("Imobiliare.Entities.ShoppingCartItem", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Imobil", "Imobil")
+                    b.HasOne("Imobiliare.Entities.Imobil", "Imobil")
                         .WithMany()
                         .HasForeignKey("ImobilId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1381,9 +1384,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Imobil");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Stire", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Stire", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", "UserProfile")
+                    b.HasOne("Imobiliare.Entities.UserProfile", "UserProfile")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1392,14 +1395,14 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("UserProfile");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.UserProfile", b =>
+            modelBuilder.Entity("Imobiliare.Entities.UserProfile", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.Agentie", "Agentie")
+                    b.HasOne("Imobiliare.Entities.Agentie", "Agentie")
                         .WithMany("AgentieImobiliaraUserProfiles")
                         .HasForeignKey("AgentieId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("CoreTestApp.Models.Constructor", "Constructor")
+                    b.HasOne("Imobiliare.Entities.Constructor", "Constructor")
                         .WithMany("ConstructorUserProfiles")
                         .HasForeignKey("ConstructorId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1409,9 +1412,9 @@ namespace Imobiliare.UI.Migrations
                     b.Navigation("Constructor");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.UserRating", b =>
+            modelBuilder.Entity("Imobiliare.Entities.UserRating", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", null)
+                    b.HasOne("Imobiliare.Entities.UserProfile", null)
                         .WithMany("UserRatings")
                         .HasForeignKey("UserProfileId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1428,7 +1431,7 @@ namespace Imobiliare.UI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", null)
+                    b.HasOne("Imobiliare.Entities.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1437,7 +1440,7 @@ namespace Imobiliare.UI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", null)
+                    b.HasOne("Imobiliare.Entities.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1452,7 +1455,7 @@ namespace Imobiliare.UI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CoreTestApp.Models.UserProfile", null)
+                    b.HasOne("Imobiliare.Entities.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1461,29 +1464,29 @@ namespace Imobiliare.UI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CoreTestApp.Models.UserProfile", null)
+                    b.HasOne("Imobiliare.Entities.UserProfile", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Agentie", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Agentie", b =>
                 {
                     b.Navigation("AgentieImobiliaraUserProfiles");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Constructor", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Constructor", b =>
                 {
                     b.Navigation("ConstructorUserProfiles");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.Order", b =>
+            modelBuilder.Entity("Imobiliare.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("CoreTestApp.Models.UserProfile", b =>
+            modelBuilder.Entity("Imobiliare.Entities.UserProfile", b =>
                 {
                     b.Navigation("Anunturi");
 

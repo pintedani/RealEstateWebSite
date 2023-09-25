@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imobiliare.Repositories.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230923075502_initial")]
-    partial class initial
+    [Migration("20230925063801_singularizeTableNames")]
+    partial class singularizeTableNames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -464,7 +464,7 @@ namespace Imobiliare.Repositories.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Imobile");
+                    b.ToTable("Imobil", (string)null);
                 });
 
             modelBuilder.Entity("Imobiliare.Entities.Judet", b =>
@@ -493,7 +493,7 @@ namespace Imobiliare.Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Judete");
+                    b.ToTable("Judet", (string)null);
                 });
 
             modelBuilder.Entity("Imobiliare.Entities.Log", b =>

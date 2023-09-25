@@ -4,6 +4,7 @@ using Imobiliare.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imobiliare.Repositories.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230925063039_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,7 +464,7 @@ namespace Imobiliare.Repositories.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Imobil", (string)null);
+                    b.ToTable("Imobile");
                 });
 
             modelBuilder.Entity("Imobiliare.Entities.Judet", b =>
@@ -490,7 +493,7 @@ namespace Imobiliare.Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Judet", (string)null);
+                    b.ToTable("Judete");
                 });
 
             modelBuilder.Entity("Imobiliare.Entities.Log", b =>

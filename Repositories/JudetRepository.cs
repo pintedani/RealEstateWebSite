@@ -23,6 +23,7 @@ namespace Imobiliare.Repositories
                 return LocatiiCaching.Judete;
             }
 
+            //var emails = this.DbContext.EmailTemplates.ToList();
             var judete = this.DbContext.Judete.ToList();
 
             LocatiiCaching.Judete = judete;

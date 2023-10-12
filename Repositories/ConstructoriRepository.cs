@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Imobiliare.Entities;
+﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {

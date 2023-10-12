@@ -1,16 +1,15 @@
-﻿@using Imobiliare.UI.BusinessLayer
-@using Imobiliare.Entities
-@using Imobiliare.UI.Utils.UrlSeoFormatters
+﻿@using Imobiliare.Entities;
+@using Imobiliare.UI.BusinessLayer;
+@using Imobiliare.UI.Utils.UrlSeoFormatters;
+@model HomeViewModel
 
 @{
-    ViewBag.Title = "Anunturi Imobiliare Gratuite, Apartamente Vanzare Inchiriere";
-    ViewBag.MetaDescription = "Apartamente, Garsoniere, Case sau Terenuri de vanzare sau inchiriere din Romania. Anunturi imobiliare gratuite si actualizate pe apartamente24.ro";
-    //Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+    Layout = "_LayoutB5";
 }
 
 <style>
     .jumbotron-homepage {
-        background: url('../../Images/homebackground3.jpg') no-repeat center;
+        background: url('Images/homebackground3.jpg') no-repeat center;
         background-position: center center;
         border-radius: 10px;
     }
@@ -189,29 +188,32 @@
 
         @foreach (var anunt in ViewBag.LastAddedImobils)
         {
-            <a href="@UrlBuilder.BuildAnuntPageUrl(anunt.Oras.Nume, anunt.TipProprietate, anunt.TipOfertaGen, anunt.Title, anunt.Id)" class="linkDiv col">
-                <div>
-                    <div class="card rounded mb-3 shadow-sm">
-                        <img class="card-img-top center-cropped" src="~/Images/uploadedPhotos/@anunt.FirstPhoto" alt="poza anunt @anunt.FirstPhoto">
-                        <div class="card-body">
-                            <div style="height: 55px">
-                                <h5 class="card-title">@anunt.Oras.Nume, @TipOfertaDisplayFormatter.GetDisplayString(anunt.TipProprietate, anunt.TipOfertaGen)</h5>
+            if (anunt.Oras != null)
+            {
+                <a href="@UrlBuilder.BuildAnuntPageUrl(anunt.Oras.Nume, anunt.TipProprietate, anunt.TipOfertaGen, anunt.Title, anunt.Id)" class="linkDiv col">
+                    <div>
+                        <div class="card rounded mb-3 shadow-sm">
+                            <img class="card-img-top center-cropped" src="~/Images/uploadedPhotos/@anunt.FirstPhoto" alt="poza anunt @anunt.FirstPhoto">
+                            <div class="card-body">
+                                <div style="height: 55px">
+                                    <h5 class="card-title">@anunt.Oras.Nume, @TipOfertaDisplayFormatter.GetDisplayString(anunt.TipProprietate, anunt.TipOfertaGen)</h5>
+                                </div>
+                                <p class="card-text" style="display: flex;">
+                                    <span>@anunt.Suprafata m²</span>
+                                    <span style="flex-grow:1"></span>
+                                    @if (anunt.NumarCamere > 0)
+                                    {
+                                        <span>@anunt.NumarCamere camere</span>
+                                    }
+                                </p>
                             </div>
-                            <p class="card-text" style="display: flex;">
-                                <span>@anunt.Suprafata m²</span>
-                                <span style="flex-grow:1"></span>
-                                @if (anunt.NumarCamere > 0)
-                                {
-                                    <span>@anunt.NumarCamere camere</span>
-                                }
-                            </p>
-                        </div>
-                        <div class="card-footer">
-                            <p class="btn btn-primary">Detalii</p>
+                            <div class="card-footer">
+                                <p class="btn btn-primary">Detalii</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            }
         }
     </div>
 </div>
@@ -388,143 +390,11 @@
     }
 </div>
 
-@*<a type="button" href="shoppingbasket.html" class="btn btn-success float-end"
-       data-bs-toggle="offcanvas" data-bs-target="#shoppingCart" aria-controls="shoppingCart">
-        Add to cart
-    </a>*@
 
-@*<div class="offcanvas offcanvas-start shopping-cart-offcanvas" data-bs-scroll="true" tabindex="-1"
-         id="shoppingCart" aria-labelledby="shoppingCartLabel">
-
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="shoppingCartLabel">Your shopping cart</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                    aria-label="Close"></button>
-        </div>
-
-        <div class="offcanvas-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Pie name</th>
-                            <th>Quantity</th>
-                            <th class="text-center">Price</th>
-                            <th class="text-center">Total</th>
-                            <th> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-sm-8 col-md-6">
-                                <div class="media">
-                                    <img class="mr-3 thumbnail img-fluid" width="75"
-                                         src="images/products/pumpkinpiesmall.jpg" alt="pumpkin pie">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 media-heading text-primary">Pumpkin pie</h5>
-                                        <span>Status: </span><span class="text-success">
-                                            <strong>
-                                                In
-                                                Stock
-                                            </strong>
-                                        </span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="col-sm-1 col-md-1" style="text-align: center">
-                                <input type="number" class="form-control" value="2">
-                            </td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$29.90</strong></td>
-                            <td class="col-sm-1 col-md-1">
-                                <button type="button" class="btn btn-danger">
-                                    X
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-sm-8 col-md-6">
-                                <div class="media">
-                                    <img class="mr-3 thumbnail" width="75" src="images/products/applepiesmall.jpg"
-                                         alt="apple pie">
-                                    <div class="media-body">
-                                        <h5 class="mt-0 media-heading text-primary">Apple pie</h5>
-                                        <span>Status: </span><span class="text-warning">
-                                            <strong>
-                                                Last
-                                                items
-                                            </strong>
-                                        </span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="col-sm-1 col-md-1" style="text-align: center">
-                                <input type="number" class="form-control" value="1">
-                            </td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
-                            <td class="col-sm-1 col-md-1 text-center"><strong>$14.95</strong></td>
-                            <td class="col-sm-1 col-md-1">
-                                <button type="button" class="btn btn-danger">
-                                    X
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-right">
-                                <h5>Subtotal</h5>
-                            </td>
-                            <td class="text-center">
-                                <h5><strong>$44.85</strong></h5>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-right">
-                                <h5>Shipping</h5>
-                            </td>
-                            <td class="text-center">
-                                <h5><strong>$10.00</strong></h5>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-right">
-                                <h3>Total</h3>
-                            </td>
-                            <td class="text-center">
-                                <h3><strong>$54.85</strong></h3>
-                            </td>
-                            <td></td>
-
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <form class="m-1">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Promo code">
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary">Redeem</button>
-                    </div>
-                </div>
-            </form>
-            <a type="button" href="order.html" class="m-1 btn btn-success">
-                Go to order page
-            </a>
-
-            <a type="button" href="" class="m-1 btn btn-danger" data-bs-toggle="modal"
-               data-bs-target="#cancelModal">
-                Clear your shopping cart
-            </a>
-
-        </div>
-    </div>*@
 
 @section Scripts {
     <script>
         var enableautorefresh = false;
     </script>
-    @Html.Partial("_GenericAnunturiFilter")
+    @*@Html.Partial("_GenericAnunturiFilter")*@
 }

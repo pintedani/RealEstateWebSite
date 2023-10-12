@@ -2,12 +2,12 @@
 {
   using System;
   using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
   using Imobiliare.Entities;
   using Imobiliare.Repositories.Interfaces;
     using Logging;
+    using Microsoft.EntityFrameworkCore;
 
     public class CartierRepository : Repository<Cartier>, ICartierRepository
   {

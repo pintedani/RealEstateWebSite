@@ -26,9 +26,20 @@ namespace Imobiliare.Entities
 
         public string? Poze { get; set; }
 
+        [ForeignKey(nameof(Judet))]
+        public int? Judet_Id { get; set; }
+
+        [ForeignKey("Judet_Id")]
         public Judet Judet { get; set; }
 
+        [ForeignKey(nameof(Oras))]
+        public int? Oras_Id { get; set; }
+
+        [ForeignKey("Oras_Id")]
         public Oras Oras { get; set; }
+
+        [ForeignKey(nameof(Cartier))]
+        public int? Cartier_Id { get; set; }
 
         public Cartier Cartier { get; set; }
 

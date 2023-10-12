@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Logging;
 
 namespace Imobiliare.Repositories
 {
@@ -40,6 +41,14 @@ namespace Imobiliare.Repositories
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //https://stackoverflow.com/questions/63898775/enable-db-context-logging-in-net-core-with-entity-framework-2-2
+            optionsBuilder
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //builder.Entity<Ansamblu>()
@@ -53,20 +62,21 @@ namespace Imobiliare.Repositories
             builder.Entity<UserProfile>().Property(m => m.ConstructorId).IsRequired(false);
 
 
-            //builder.Entity<Agentie>().ToTable(nameof(Agentie));
-            //builder.Entity<AuditTrail>().ToTable(nameof(AuditTrail));
-            //builder.Entity<BlockedIp>().ToTable(nameof(BlockedIp));
-            //builder.Entity<Cartier>().ToTable(nameof(Cartier));
-            //builder.Entity<Constructor>().ToTable(nameof(Constructor));
-            //builder.Entity<EmailTemplate>().ToTable(nameof(EmailTemplate));
+            //Needed because we have Imobile as name in DBContext
+            builder.Entity<Agentie>().ToTable(nameof(Agentie));
+            builder.Entity<AuditTrail>().ToTable(nameof(AuditTrail));
+            builder.Entity<BlockedIp>().ToTable(nameof(BlockedIp));
+            builder.Entity<Cartier>().ToTable(nameof(Cartier));
+            builder.Entity<Constructor>().ToTable(nameof(Constructor));
+            builder.Entity<EmailTemplate>().ToTable(nameof(EmailTemplate));
             builder.Entity<Imobil>().ToTable(nameof(Imobil));
             builder.Entity<Judet>().ToTable(nameof(Judet));
-            //builder.Entity<Log>().ToTable(nameof(Log));
-            //builder.Entity<Mesaj>().ToTable(nameof(Mesaj));
-            //builder.Entity<Oras>().ToTable(nameof(Oras));
-            //builder.Entity<RaportActivitate>().ToTable(nameof(RaportActivitate));
-            //builder.Entity<Stire>().ToTable(nameof(Stire));
-            //builder.Entity<SystemSettings>().ToTable(nameof(SystemSettings));
+            builder.Entity<Log>().ToTable(nameof(Log));
+            builder.Entity<Mesaj>().ToTable(nameof(Mesaj));
+            builder.Entity<Oras>().ToTable(nameof(Oras));
+            builder.Entity<RaportActivitate>().ToTable(nameof(RaportActivitate));
+            builder.Entity<Stire>().ToTable(nameof(Stire));
+            builder.Entity<SystemSettings>().ToTable(nameof(SystemSettings));
 
             base.OnModelCreating(builder);
 

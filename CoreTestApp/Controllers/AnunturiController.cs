@@ -21,10 +21,10 @@ namespace Imobiliare.UI.Controllers
         private static readonly ILog log = LogManager.GetLogger(typeof(AnunturiController));
         private HttpContext httpContext;
 
-        public AnunturiController(IUnitOfWork unitOfWork, HttpContext httpContext)
+        public AnunturiController(IUnitOfWork unitOfWork/*, HttpContext httpContext*/)
         {
             this.unitOfWork = unitOfWork;
-            this.httpContext = httpContext;
+            //this.httpContext = httpContext;
         }
         public ActionResult ApartamentdetaliiIT()
         {

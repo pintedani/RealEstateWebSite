@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Imobiliare.Entities;
+using Imobiliare.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using Imobiliare.Entities;
-using Imobiliare.Repositories.Interfaces;
 
 namespace Imobiliare.Repositories
 {
@@ -87,7 +87,8 @@ namespace Imobiliare.Repositories
         /// </returns>
         private static object CreateEvent(Type genericEventType, Type entityType, Entity entity, IUnitOfWork unitOfWork, IReadOnlyDictionary<string, PropertyChange> changedProperties)
         {
-            Type[] typeArgs = { entityType.Namespace == "System.Data.Entity.DynamicProxies" ? entityType.BaseType : entityType };
+            //TODO: check if Microsoft.EntityFrameworkCore has dynamic proxies like old EF 6
+            Type[] typeArgs = { entityType.Namespace == "Microsoft.EntityFrameworkCore.DynamicProxies" ? entityType.BaseType : entityType };
             var concreteType = genericEventType.MakeGenericType(typeArgs);
             return Activator.CreateInstance(concreteType, entity, unitOfWork, changedProperties);
         }
@@ -109,8 +110,8 @@ namespace Imobiliare.Repositories
         {
             Type[] typeArgs =
             {
-        entityType1.Namespace == "System.Data.Entity.DynamicProxies" ? entityType1.BaseType : entityType1,
-        entityType2.Namespace == "System.Data.Entity.DynamicProxies" ? entityType2.BaseType : entityType2
+        entityType1.Namespace == "Microsoft.EntityFrameworkCore.DynamicProxies" ? entityType1.BaseType : entityType1,
+        entityType2.Namespace == "Microsoft.EntityFrameworkCore.DynamicProxies" ? entityType2.BaseType : entityType2
       };
 
             var concreteType = genericEventType.MakeGenericType(typeArgs);

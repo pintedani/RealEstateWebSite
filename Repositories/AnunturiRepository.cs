@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
@@ -14,6 +13,7 @@ using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.Utilities;
 using Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {
@@ -125,10 +125,10 @@ namespace Imobiliare.Repositories
 
             var lastAddedImobils = new List<Imobil>();
 
-            var query = this.DbContext.Imobile.Include("Cartier");
-            query.Include("Oras");
-            query.Include("Judet");
-            //Doar anunturile de oferta, nu si de cautare
+            var query = this.DbContext.Imobile.Include("Cartier")
+                .Include("Oras")
+                .Include("Judet");
+
             lastAddedImobils =
               query.OrderByDescending(x => x.DataAdaugare)
                 .Where(

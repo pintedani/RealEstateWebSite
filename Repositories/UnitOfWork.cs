@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
-using Imobiliare.Entities;
+﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.CommitStrategies;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 
 namespace Imobiliare.Repositories
 {

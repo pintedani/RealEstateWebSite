@@ -5,6 +5,7 @@ using Imobiliare.Repositories.Interfaces;
 
 namespace Imobiliare.Repositories
 {
+    //TODO old EF 6, replace
     using System.Data.Entity;
 
     using Imobiliare.Entities;

@@ -1,8 +1,6 @@
 ﻿namespace Imobiliare.UI.Models
 {
-  using System.Web;
   using System.ComponentModel.DataAnnotations;
-  using System.Data.Entity;
   using Imobiliare.Entities;
 
   //public class UsersContext : DbContext

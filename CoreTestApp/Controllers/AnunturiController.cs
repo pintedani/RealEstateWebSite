@@ -300,7 +300,8 @@ namespace Imobiliare.UI.Controllers
             if (!string.IsNullOrEmpty(titlu) && titlu != newTitle)
             {
                 log.WarnFormat("Redirect permanent because of anunt title change for anunt {0} with original title {1} and updated title {2}", imobil.Id, titlu, newTitle);
-                return RedirectPermanent(url);
+                //TODO reenable redirect
+                //return RedirectPermanent(url);
             }
 
             //User of anunt - different of null all the time
@@ -309,7 +310,7 @@ namespace Imobiliare.UI.Controllers
             apartamentDetaliiData.AnunturiSimilare = this.unitOfWork.AnunturiRepository.GetSimilarAnunturi(parsedImobilId);
 
             var name = string.Empty;
-            if (User.Identity.Name != string.Empty)
+            if (!string.IsNullOrEmpty(User.Identity.Name))
             {
                 name = User.Identity.Name;
 

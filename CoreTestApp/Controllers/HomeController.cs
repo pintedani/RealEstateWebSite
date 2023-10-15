@@ -7,6 +7,7 @@ using Imobiliare.UI.Models;
 using Imobiliare.UI.ViewModels;
 using Logging;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text.RegularExpressions;
 
 namespace Imobiliare.UI.Controllers
@@ -32,6 +33,9 @@ namespace Imobiliare.UI.Controllers
 
         public ActionResult Index()
         {
+            //https://localhost:7034/Anunturi/ApartamentDetalii?imobilid=27765&titlu=sfd
+            var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+
             ViewBag.TipOferta = TipProprietate.Toate.ToString();
 
             ViewBag.TotalNumberAnunturiPeJudete = this.unitOfWork.AnunturiRepository.GetTotalNumarAnunturiPerJudete();

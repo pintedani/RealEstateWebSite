@@ -2,14 +2,14 @@
 using System.Linq.Expressions;
 
 using Imobiliare.Repositories.Interfaces;
+//TODO old EF 6, replace
+//using System.Data.Entity;
+
+using Imobiliare.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {
-    //TODO old EF 6, replace
-    using System.Data.Entity;
-
-    using Imobiliare.Entities;
-
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationDbContext DbContext;
@@ -140,7 +140,7 @@ namespace Imobiliare.Repositories
 
         protected List<string> IncludeList { get; private set; }
 
-        protected virtual IQueryable<TEntityDerived> AddIncludes<TEntityDerived>(IQueryable<TEntityDerived> dbSet) where TEntityDerived : TEntity
+        protected virtual IQueryable<TEntityDerived> AddIncludes<TEntityDerived>(IQueryable<TEntityDerived> dbSet) where TEntityDerived : class
         {
             var dbQuery = dbSet;
 

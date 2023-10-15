@@ -14,13 +14,13 @@ namespace Imobiliare.Entities
 
         public TipVanzator TipVanzator { get; set; }
 
-        public string Picture { get; set; }
+        public string? Picture { get; set; }
 
-        public string ConfirmationToken { get; set; }
+        public string? ConfirmationToken { get; set; }
 
         public StareUser StareUser { get; set; }
 
-        //A trusted user is allowed to add items without the need to be approved
+        //A trusted user is allowed to add items without the need to be approvedConfirmationToken
         public bool TrustedUser { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yy HH:mm}")]
@@ -29,7 +29,7 @@ namespace Imobiliare.Entities
         [DisplayFormat(DataFormatString = "{0:dd/MM/yy HH:mm}")]
         public DateTime? LastLoginTime { get; set; }
 
-        public string Flags { get; set; }
+        public string? Flags { get; set; }
 
         public bool AbonatLaNewsLetter { get; set; } = true;
 
@@ -37,7 +37,7 @@ namespace Imobiliare.Entities
 
         public List<Imobil> Anunturi { get; set; }
 
-        public string NumeComplet { get; set; }
+        public string? NumeComplet { get; set; }
 
         public bool ReceiveAdminReports { get; set; }
 
@@ -45,7 +45,7 @@ namespace Imobiliare.Entities
         #region Agentie properties
 
         [StringLength(40, ErrorMessage = "Numele agentiei nu trebuie sa depaseasca 40 de caractere")]
-        public string NumeAgentieImobiliara { get; set; }
+        public string? NumeAgentieImobiliara { get; set; }
 
         public Agentie Agentie { get; set; }
 
@@ -56,7 +56,7 @@ namespace Imobiliare.Entities
 
         public List<UserRating> UserRatings { get; set; }
 
-        public string DescriereAgent { get; set; }
+        public string? DescriereAgent { get; set; }
 
         #endregion
 

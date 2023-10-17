@@ -1,0 +1,110 @@
+﻿@using Imobiliare.Entities;
+@using Imobiliare.UI.BusinessLayer;
+@using Imobiliare.UI.Utils.UrlSeoFormatters;
+@model Imobiliare.Entities.Imobil
+
+@{
+    var anunt = Model;
+    var anuntUrl = UrlBuilder.BuildAnuntPageUrl(anunt.Oras.Nume, anunt.TipProprietate, anunt.TipOfertaGen, anunt.Title, anunt.Id);
+}
+
+<a href="@anuntUrl" class="anuntBox row linkDiv my-4" style="@(anunt.PromotedLevel > PromovatLevel.Nepromovat ? "background-color:#EEFFE0" : "")">
+    <div class="col-sm-5 g-0">
+        @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Imagini, anunt.TipProprietate, anunt.TipOfertaGen))
+        {
+            <div style="display: inline-block; position: relative; width: 100%">
+
+                <img class="center-cropped" style="height: 220px; cursor: pointer" onclick="window.location = '@anuntUrl'" alt="@HtmlHelpers.RemoveSpecialCharacters(anunt.Title, ' ', false)"
+                     src="~/Images/uploadedPhotos/@anunt.FirstPhoto" />
+                @if (anunt.Poze != null)
+                {
+                    <div style="position: absolute; top: 7px; left: 8px; opacity: 0.8; width: 40px; background-color: #fff; font-weight: bold; font-size: 11px;">
+                        <span style="padding-left: 7px" class="bi bi-camera"></span>
+                        <b style="padding-left: 2px; font-size: 1.2em">@anunt.Poze.Split(';').Count()</b>
+                    </div>
+                }
+
+                @if (anunt.UserProfile.Agentie != null && !string.IsNullOrEmpty(anunt.UserProfile.Agentie.PozaAgentie) &&
+               anunt.UserProfile.Role != Role.Administrator && anunt.TipVanzator == TipVanzator.AgentieImobiliara)
+                {
+                    <div style="position: absolute; cursor: pointer; top: 175px; left: 10px; height: 50px; text-align: center;"
+                         onclick="var url = '@Url.Action("AnunturiUtilizator", "Anunturi", new {userId = anunt.UserId})';window.location = url;">
+                        <img class="img-thumbnail" style="max-height: 40px; max-width: 50px; vertical-align: middle;" src="~/Images/LogoAgentii/@anunt.UserProfile.Agentie.PozaAgentie" alt="agentie imobiliara logo" />
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="col-xs-12 col-sm-7" style="overflow: hidden">
+        <div>
+            <div class="col-xs-12">
+                <div>
+                    @if (anunt.DataAdaugareInitiala.AddDays(14) > DateTime.Now)
+                    {
+                        <span class="badge bg-primary">nou</span>
+                    }
+
+                    @if (anunt.PromotedLevel > PromovatLevel.Nepromovat)
+                    {
+                        <span class="badge bg-primary"><span class="bi bi-star"></span>promovat</span>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 d-flex">
+            <div>
+                <div style="white-space: nowrap; overflow: hidden">
+
+                    <p style="margin-top: 8px; display: inline-block" title="@anunt.Title"><i class="bi bi-building"></i> @TipOfertaDisplayFormatter.GetDisplayString(anunt.TipProprietate, anunt.TipOfertaGen)</p>
+
+                    <p>
+                        @Html.DisplayFor(model => anunt.Judet.Nume), @Html.DisplayFor(model => anunt.Oras.Nume)
+                        @if (anunt.Cartier != null)
+                        {
+                            @:, @Html.DisplayFor(model => anunt.Cartier.Nume)
+                        }
+                    </p>
+
+                    @if (anunt.TipVanzator == TipVanzator.PersoanaFizica)
+                    {
+                        <p style="margin: 5px 0 0 0; overflow: hidden; white-space: nowrap">Persoană Fizică</p>
+                    }
+                    else
+                    {
+                        if (anunt.TipVanzator == TipVanzator.AgentieImobiliara)
+                        {
+                            <p style="margin: 5px 0 0 0; overflow: hidden; white-space: nowrap">Ag imobiliară</p>
+                        }
+                        else if (anunt.TipVanzator == TipVanzator.Constructor)
+                        {
+                            <p style="margin: 5px 0 0 0; overflow: hidden; white-space: nowrap">Constructor</p>
+                        }
+                    }
+
+
+                </div>
+            </div>
+            <div class="flex-grow-1"></div>
+            <div class="align-content-end">
+                <h3>@Html.DisplayFor(model => anunt.Price) €</h3>
+                <p>
+                    <b><i class="bi bi-layers"></i> @Html.DisplayFor(model => anunt.Suprafata)</b> m²
+                </p>
+
+
+                @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.NumarCamere, anunt.TipProprietate, anunt.TipOfertaGen) &&
+                anunt.NumarCamere > 0)
+                {
+                    <p>
+                        <b>@Html.DisplayFor(model => anunt.NumarCamere) Camere</b>
+                    </p>
+                }
+
+
+            </div>
+        </div>
+    </div>
+</a>

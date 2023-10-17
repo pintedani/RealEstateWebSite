@@ -34,13 +34,13 @@ namespace Imobiliare.UI.Controllers
         public ActionResult Index()
         {
             //https://localhost:7034/Anunturi/ApartamentDetalii?imobilid=27765&titlu=sfd
-            var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+            //var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
 
             ViewBag.TipOferta = TipProprietate.Toate.ToString();
 
             ViewBag.TotalNumberAnunturiPeJudete = this.unitOfWork.AnunturiRepository.GetTotalNumarAnunturiPerJudete();
             ViewBag.Judete = this.unitOfWork.JudetRepository.Judete();
-            //ViewBag.UltimeleStiri = this.unitOfWork.StiriRepository.GetLastAddedStiri();
+            ViewBag.UltimeleStiri = this.unitOfWork.StiriRepository.GetLastAddedStiri();
 
             ViewBag.LastAddedImobils = this.unitOfWork.AnunturiRepository.GetLastAddedImobils(4);
             ViewBag.LastAddedImobilsCautare = this.unitOfWork.AnunturiRepository.GetLastAddedAnunturiCautare(3);

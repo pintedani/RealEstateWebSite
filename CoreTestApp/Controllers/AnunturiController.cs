@@ -92,7 +92,7 @@ namespace Imobiliare.UI.Controllers
                 Oras oras = this.unitOfWork.OrasRepository.GetUniqueSelectableOras(searchValues[0]);
                 if (oras != null)
                 {
-                    return RedirectToAction(nameof(AnunturiList), new { filters = GenerateAnunturiFilter(oras, oras.JudetId, tipProprietateEnum, tipOfertaEnum, pretMin, pretMax, camereMin, camereMax, mpMin, mpMax, page, mapMode, cartier, vanzator) });
+                    return RedirectToAction(nameof(AnunturiList), new { filters = GenerateAnunturiFilter(oras, oras.JudetId.Value, tipProprietateEnum, tipOfertaEnum, pretMin, pretMax, camereMin, camereMax, mpMin, mpMax, page, mapMode, cartier, vanzator) });
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace Imobiliare.UI.Controllers
                 var oras = this.unitOfWork.OrasRepository.GetSelectableOrases(selectedJudet.Id).FirstOrDefault(x => x.Nume == searchValues[0].TrimEnd(' '));
                 if (oras != null)
                 {
-                    return RedirectToAction(nameof(AnunturiList), new { filters = GenerateAnunturiFilter(oras, oras.JudetId, tipProprietateEnum, tipOfertaEnum, pretMin, pretMax, camereMin, camereMax, mpMin, mpMax, page, mapMode, cartier, vanzator) });
+                    return RedirectToAction(nameof(AnunturiList), new { filters = GenerateAnunturiFilter(oras, oras.JudetId.Value, tipProprietateEnum, tipOfertaEnum, pretMin, pretMax, camereMin, camereMax, mpMin, mpMax, page, mapMode, cartier, vanzator) });
                 }
             }
 
@@ -196,6 +196,7 @@ namespace Imobiliare.UI.Controllers
         /// <param name="judetName"></param>
         /// <param name="filters"></param>
         /// <returns></returns>
+        [Route("Anunturi/Lista/{*filters}")]
         public ActionResult AnunturiList(string filters)
         {
             var imobilFilter = new ImobilFilter() { StareAprobare = StareAprobare.Aprobat };
@@ -268,6 +269,7 @@ namespace Imobiliare.UI.Controllers
         //---------------------------------------------------------------------------------------------------------------------
 
         [HttpGet]
+        [Route("Localitate-{orasName}/{tipOferta}/{titlu}/{imobilId}")]
         public ActionResult ApartamentDetalii(string imobilId, string titlu)
         {
             if (imobilId == null)

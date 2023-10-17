@@ -26,7 +26,8 @@ namespace Imobiliare.Repositories
 
         public List<Oras> GetSelectableOrases(int judetId)
         {
-            var orases = this.DbContext.Orase.Where(x => x.JudetId == judetId);
+            //var allOrase = this.DbContext.Orase.Where(x=>x.Id > 0).ToList();
+            var orases = this.DbContext.Orase.Where(x => x.JudetId == judetId).ToList();
             return orases.OrderBy(x => x.Nume).ToList();
         }
 

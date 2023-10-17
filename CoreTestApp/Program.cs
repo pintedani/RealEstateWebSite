@@ -9,6 +9,7 @@ using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.ServiceLayer.ExternalSiteContentParser;
 using Imobiliare.ServiceLayer;
+using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -59,6 +60,14 @@ builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<Appl
 
 var app = builder.Build();
 
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllerRoute(
+//            name: "SelectAnunt",
+//            pattern: "Localitate-{orasName}/{tipOferta}/{titlu}/{imobilId}",
+//            defaults: new { controller = "Anunturi", action = "ApartamentDetalii", titlu = "", imobilId = "" });
+//});
+
 app.UseStaticFiles();
 app.UseSession();
 app.UseAuthentication();
@@ -71,7 +80,6 @@ if (app.Environment.IsDevelopment())
 app.MapDefaultControllerRoute();
 
 app.MapRazorPages();
-
 DBInitializer.Seed(app);
 
 app.Run();

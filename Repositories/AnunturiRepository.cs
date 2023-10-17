@@ -65,12 +65,12 @@ namespace Imobiliare.Repositories
             if (userProfile != null)
                 userProfileId = userProfile.Id;
 
-            var query = this.DbContext.Imobile.Include("Cartier");
-            query.Include("UserProfile");
-            query.Include("UserProfile.Agentie");
-            query.Include("UserProfile.Constructor");
-            query.Include("Judet");
-            query.Include("Oras");
+            var query = this.DbContext.Imobile.Include("Cartier")
+            .Include("Judet")
+            .Include("Oras")
+            .Include("UserProfile")
+            .Include("UserProfile.Agentie")
+            .Include("UserProfile.Constructor");
             var allFilteredImobils =
               query.OrderByDescending(x => x.DataAdaugare)
                 .Where(x =>
@@ -128,6 +128,7 @@ namespace Imobiliare.Repositories
             var query = this.DbContext.Imobile.Include("Cartier")
                 .Include("Oras")
                 .Include("Judet");
+                //.Include("UserProfile");
 
             lastAddedImobils =
               query.OrderByDescending(x => x.DataAdaugare)

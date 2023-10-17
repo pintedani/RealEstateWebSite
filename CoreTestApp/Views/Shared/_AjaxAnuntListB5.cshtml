@@ -19,10 +19,15 @@
     Func<String, IHtmlContent> foo = @<div>Say @item</div>;
 }*@
 
+@*@{
+    void DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
+    {
+        return "<p>This is dynamic HTML content.</p>";
+    }
+}
 
-@*
-    TODO: Reenable with solution for helpers in asp.net core
-    @helper DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
+
+@helper DisplayAnunt(Imobil anunt, string anuntUrl, List<string> anunturiSalvate)
 {
     <a href="@anuntUrl" class="anuntBox row linkDiv my-4" style="@(anunt.PromotedLevel > PromovatLevel.Nepromovat ? "background-color:#EEFFE0" : "")">
         <div class="col-sm-5 g-0">
@@ -124,17 +129,17 @@
             </div>
         </div>
     </a>
-}
+}*@
 
 @if (Model.Imobils.Any())
 {
     var anunturiSalvate = new List<string>();
-    var anunturiSalvateCookie = Request.Cookies["AnunturiSalvate"];
+@*    var anunturiSalvateCookie = Request.Cookies["AnunturiSalvate"];
     if (anunturiSalvateCookie != null)
     {
         var formattedCookie = anunturiSalvateCookie.Value.Replace("%2C", ",");
         anunturiSalvate = new List<string>(formattedCookie.Split(','));
-    }
+    }*@
 
     var randomPromovatedAnunturiIndex = 0;
     if (Model.PromovatedImobils.Count > 0)
@@ -147,7 +152,7 @@
         var anuntUrl = UrlBuilder.BuildAnuntPageUrl(anunt.Oras.Nume, anunt.TipProprietate, anunt.TipOfertaGen, anunt.Title, anunt.Id);
         //Show google ad inline if more than 6 anunturi at position 5
         var index = Model.Imobils.FindIndex(a => a == anunt);
-        if (!Request.Url.AbsoluteUri.Contains("localhost") && Model.Imobils.Count > 6 && index == 5)
+@*        if (!Request.Url.AbsoluteUri.Contains("localhost") && Model.Imobils.Count > 6 && index == 5)
         {
             <div style="margin: 20px 0">
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -159,13 +164,14 @@
                      data-ad-format="auto"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
-        }
+        }*@
         if (Model.PromovatedImobils.Count > 0 && index == randomPromovatedAnunturiIndex)
         {
             foreach (var promoAnunt in Model.PromovatedImobils)
             {
                 anuntUrl = UrlBuilder.BuildAnuntPageUrl(promoAnunt.Oras.Nume, promoAnunt.TipProprietate, promoAnunt.TipOfertaGen, promoAnunt.Title, promoAnunt.Id);
-                @DisplayAnunt(promoAnunt, anuntUrl, anunturiSalvate)
+@*                @DisplayAnunt(promoAnunt, anuntUrl, anunturiSalvate)*@
+                @Html.Partial("_AjaxAnunt", anunt)
             }
         }
 
@@ -180,7 +186,8 @@
         }
         if (!(any))
         {
-            @DisplayAnunt(anunt, anuntUrl, anunturiSalvate)
+@*            @DisplayAnunt(anunt, anuntUrl, anunturiSalvate)*@
+            @Html.Partial("_AjaxAnunt", anunt)
         }
     }
 }
@@ -219,4 +226,4 @@ else
         </div>
     }
     }
-}*@
+}

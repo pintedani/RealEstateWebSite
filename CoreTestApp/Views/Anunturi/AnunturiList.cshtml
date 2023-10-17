@@ -89,8 +89,6 @@
     ViewBag.Title = formattedTitle + " Anunturi Gratuite - apartamente24";
 
     ViewBag.MetaDescription = formattedTitle + " Oferte Imobiliare. Cauta proprietatea dorita";
-
-    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
 }
 
 <div id="searchDiv" style="padding-top: 5px; border: 1px solid rgb(183, 183, 183); border-radius: 3px; background-color: #F9F9F9">
@@ -405,7 +403,7 @@
                         foreach (var imobil in @Model.LastAddedImobils)
                         {
                             <a style="width: 155px" class="card rounded mb-3 mx-1 shadow-sm linkDiv" href="@UrlBuilder.BuildAnuntPageUrl(imobil.Oras.Nume, imobil.TipProprietate, imobil.TipOfertaGen, imobil.Title, imobil.Id)">
-                                <img class="center-cropped" style="height: 100px" src="~/Images/uploadedPhotos/@imobil.FirstPhoto" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)" />
+                                <img class="center-cropped" style="height: 100px" src="/Images/uploadedPhotos/@imobil.FirstPhoto" alt="@HtmlHelpers.RemoveSpecialCharacters(imobil.Title, ' ', false)" />
                                 <div class="p-1">
                                     <p>@TipOfertaDisplayFormatter.GetDisplayString(imobil.TipProprietate, imobil.TipOfertaGen)</p>
                                     <div>

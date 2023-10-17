@@ -15,10 +15,10 @@ namespace Imobiliare.Entities
     public CategorieStire CategorieStire { get; set; }
 
     [Required]
-    public string Titlu { get; set; }
+    public string? Titlu { get; set; }
 
     [Required]
-    public string Continut { get; set; }
+    public string? Continut { get; set; }
 
     public DateTime DateCreated { get; set; }
 
@@ -27,26 +27,26 @@ namespace Imobiliare.Entities
     public UserProfile UserProfile { get; set; }
 
     [ForeignKey("UserProfile")]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     public int NumarVizualizari { get; set; }
 
-    public string Poze { get; set; }
+    public string? Poze { get; set; }
 
     public bool Active { get; set; }
 
     public bool AfiseazaPrimaPagina { get; set; }
 
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 
     [DisplayName("Localitatea pentru afisare anunturi")]
     public int OrasSelect { get; set; }
 
-    public string LinkExtern { get; set; }
+    public string? LinkExtern { get; set; }
 
-    public string TitluUrl { get; set; }
+    public string? TitluUrl { get; set; }
 
-    public string MetaDescription { get; set; }
+    public string? MetaDescription { get; set; }
   }
 
   public enum CategorieStire

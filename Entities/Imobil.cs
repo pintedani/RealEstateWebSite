@@ -50,10 +50,11 @@ namespace Imobiliare.Entities
 
         public TipProprietate TipProprietate { get; set; }
 
+        [ForeignKey("UserId")]
         public UserProfile UserProfile { get; set; }
 
         [ForeignKey(nameof(UserProfile))]
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
 
         //Se modifica la adaugarea anutului si la oricare actualizare
         [DisplayFormat(DataFormatString = "{0:dd/MM/yy HH:mm}")]

@@ -37,7 +37,11 @@ namespace Imobiliare.UI.Controllers
 
         private AgentiiViewModel CreateAgentiiViewModel(int? page)
         {
-            var localitateId = Request.Form["OrasSelect"];
+            string localitateId = null;
+            if (Request.HasFormContentType)
+            {
+                localitateId = Request.Form["OrasSelect"];
+            }
 
             Oras oras = null;
             int orasId = 0;

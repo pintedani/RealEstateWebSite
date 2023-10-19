@@ -14,7 +14,7 @@ namespace Imobiliare.Entities
       this.AfisarePrimaPagina = true;
     }
 
-    public string Nume { get; set; }
+    public string? Nume { get; set; }
 
     [ForeignKey(nameof(OrasSelect))]
     public Oras Oras { get; set; }
@@ -23,13 +23,13 @@ namespace Imobiliare.Entities
 
     public List<UserProfile> AgentieImobiliaraUserProfiles { get; set; }
 
-    public string DescriereAgentie { get; set; }
+    public string? DescriereAgentie { get; set; }
 
-    public string Website { get; set; }
+    public string? Website { get; set; }
 
-    public string PozaAgentie { get; set; }
+    public string? PozaAgentie { get; set; }
 
-    public string TelefonAgentie { get; set; }
+    public string? TelefonAgentie { get; set; }
 
     public bool AfisarePrimaPagina { get; set; }
 

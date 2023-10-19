@@ -12,10 +12,10 @@ namespace Imobiliare.Entities
   public class Ansamblu : Entity
   {
     [Required]
-    public string Titlu { get; set; }
+    public string? Titlu { get; set; }
 
     [Required]
-    public string Continut { get; set; }
+    public string? Continut { get; set; }
 
     public DateTime DateCreated { get; set; }
 
@@ -24,15 +24,15 @@ namespace Imobiliare.Entities
     public UserProfile UserProfile { get; set; }
 
     [ForeignKey(nameof(UserProfile))]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     public int NumarVizualizari { get; set; }
 
-    public string Poze { get; set; }
+    public string? Poze { get; set; }
 
     public bool Active { get; set; }
 
-    public string Keywords { get; set; }
+    public string? Keywords { get; set; }
 
     public Oras Oras { get; set; }
 

@@ -34,7 +34,7 @@ namespace Imobiliare.Repositories
             var allFilteredImobils =
                 query.OrderByDescending(x => x.Id)
                     .Where(x => (filter.OrasId == 0 || x.OrasSelect == filter.OrasId)
-                                && (filter.Active == null || x.Active == filter.Active.Value));
+                                && (filter.Active == null || x.Active == filter.Active.Value)).ToList();
                         
 
             totalNumberOfPages = allFilteredImobils.Count();

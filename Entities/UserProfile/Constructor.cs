@@ -5,7 +5,7 @@ namespace Imobiliare.Entities
 {
   public class Constructor : Entity
   {
-    public string Nume { get; set; }
+    public string? Nume { get; set; }
 
     [ForeignKey(nameof(OrasId))]
     public Oras Oras { get; set; }
@@ -14,12 +14,12 @@ namespace Imobiliare.Entities
 
     public List<UserProfile> ConstructorUserProfiles { get; set; }
 
-    public string Descriere { get; set; }
+    public string? Descriere { get; set; }
 
-    public string Website { get; set; }
+    public string? Website { get; set; }
 
-    public string Poza { get; set; }
+    public string? Poza { get; set; }
 
-    public string Telefon { get; set; }
+    public string? Telefon { get; set; }
   }
 }

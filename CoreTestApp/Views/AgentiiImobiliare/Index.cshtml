@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = "Agenții Imobiliare.";
     ViewBag.MetaDescription = "Agenții imobiliare. Caută agenție imobiliară pentru a găsi oferta potrivită.";
+    Layout = "_Layout";
 }
 
 <style>
@@ -132,7 +133,7 @@
 
 @section Scripts {
     @Html.Partial("_SearchBoxOrasFindWithRemoveScript")
-    @Html.Partial("_GenericPaging")
+    @Html.Partial("_GenericPagingB5")
     <script type="text/javascript">
         $(document).mousedown(function (e) {
             var container4 = $("#custom-dropdown-tipoferta");

@@ -197,6 +197,8 @@ namespace Imobiliare.UI.Controllers
         /// <param name="filters"></param>
         /// <returns></returns>
         [Route("Anunturi/Lista/{*filters}")]
+        //https://localhost:7034/Anunturi/judet-Cluj - deprecated
+        [Route("Anunturi/judet-{judetName}/{*filters}")]
         public ActionResult AnunturiList(string filters)
         {
             var imobilFilter = new ImobilFilter() { StareAprobare = StareAprobare.Aprobat };

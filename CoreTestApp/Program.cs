@@ -58,8 +58,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+//builder.Services.AddAuthentication("CookieAuthenticationScheme")
+//        .AddCookie("CookieAuthenticationScheme", options =>
+//        {
+//            options.AccessDeniedPath = "/Account/AccessDenied";
+//            options.LoginPath = "/Identity/Account/Login";
+//        });
+
 var app = builder.Build();
 
+//Routes should be configured directly on action methods
 //app.UseEndpoints(endpoints =>
 //{
 //    endpoints.MapControllerRoute(

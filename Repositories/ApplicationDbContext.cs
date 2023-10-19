@@ -64,6 +64,7 @@ namespace Imobiliare.Repositories
 
             //Needed because we have Imobile as name in DBContext
             builder.Entity<Agentie>().ToTable(nameof(Agentie));
+            builder.Entity<Ansamblu>().ToTable(nameof(Ansamblu));
             builder.Entity<AuditTrail>().ToTable(nameof(AuditTrail));
             builder.Entity<BlockedIp>().ToTable(nameof(BlockedIp));
             builder.Entity<Cartier>().ToTable(nameof(Cartier));

@@ -4,7 +4,7 @@ namespace Imobiliare.Entities
 {
   public class Cartier : Entity
   {
-    public string Nume { get; set; }
+    public string? Nume { get; set; }
 
     public int OrasId { get; set; }
 

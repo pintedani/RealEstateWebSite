@@ -29,7 +29,11 @@ namespace Imobiliare.UI.Controllers
 
         private AnsambluriViewModel CreateAnsambluriViewModel(int? page, bool? active)
         {
-            var localitateId = Request.Form["OrasSelect"];
+            string localitateId = null;
+            if (Request.HasFormContentType)
+            {
+                localitateId = Request.Form["OrasSelect"];
+            }
 
             Oras oras = null;
             int orasId = 0;

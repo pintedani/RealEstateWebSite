@@ -67,20 +67,20 @@ namespace Imobiliare.Repositories
 
         public void Complete()
         {
-            var entityChanges = this.DetectChanges();
+            //var entityChanges = this.DetectChanges();
 
             //this.preCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
 
             dbContext.SaveChanges();
 
-            try
-            {
-                this.postCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
-            }
-            catch (Exception e)
-            {
-                log.ErrorFormat($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
-            }
+            //try
+            //{
+            //    this.postCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
+            //}
+            //catch (Exception e)
+            //{
+            //    log.ErrorFormat($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
+            //}
         }
 
         public IReadOnlyList<EntityChange> DetectChanges()

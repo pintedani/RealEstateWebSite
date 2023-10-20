@@ -10,6 +10,7 @@ using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.ServiceLayer.ExternalSiteContentParser;
 using Imobiliare.ServiceLayer;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -58,12 +59,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-//builder.Services.AddAuthentication("CookieAuthenticationScheme")
-//        .AddCookie("CookieAuthenticationScheme", options =>
-//        {
-//            options.AccessDeniedPath = "/Account/AccessDenied";
-//            options.LoginPath = "/Identity/Account/Login";
-//        });
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie(options => {
+//        options.LoginPath = "/Identity/Account/Login";
+//        // Other options here
+//    });
+
 
 var app = builder.Build();
 
@@ -79,6 +80,7 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseSession();
 app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {

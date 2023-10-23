@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "Agenții Imobiliare.";
     ViewBag.MetaDescription = "Agenții imobiliare. Caută agenție imobiliară pentru a găsi oferta potrivită.";
-    Layout = "_Layout";
+    Layout = "_LayoutB4";
 }
 
 <style>
@@ -148,15 +148,15 @@
 
 
         $(function () {
-            $('#body').css('opacity', '0.1');
+            //$('#body').css('opacity', '0.1');
 
             //Assuming Backgrounds between homeBackGround1->homeBackGround4(extend if new ones are added)
             $('#body').css('background-image', 'url(' + '../../Images/DecorationImages/AgentiiImobiliare_logo2.jpg' + ')');
             $('#body').css('background-repeat', 'no-repeat');
-            $('#body').animate({ opacity: 1 }, 2000, function () {
-                $(".TipOfertaSelect").effect("highlight", {}, 1500);
-                $(".highlightTextBox").effect("highlight", {}, 3000);
-            });
+            //$('#body').animate({ opacity: 1 }, 2000, function () {
+            //    $(".TipOfertaSelect").effect("highlight", {}, 1500);
+            //    $(".highlightTextBox").effect("highlight", {}, 3000);
+            //});
 
             $("#overlay").css({
                 opacity: 0.5,

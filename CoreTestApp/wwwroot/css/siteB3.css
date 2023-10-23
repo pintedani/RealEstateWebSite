@@ -1,0 +1,514 @@
+﻿body {
+    background-color: #fff;
+    color: #333;
+    font-size: 13px;
+    font-family: "Trebuchet MS",Verdana,Helvetica,Sans-Serif
+}
+
+#body {
+    padding-bottom: 35px
+}
+
+::selection {
+    background: #5eab1f;
+    color: #fff
+}
+
+.localitatiSearchResult {
+    position: absolute;
+    display: none;
+    background-color: #fff;
+    z-index: 20;
+    text-align: left;
+    width: 280px;
+    font-size: 1.2em;
+    padding-left: 5px;
+    border: 1px solid #b7b7b7;
+    border-radius: 4px
+}
+
+    .localitatiSearchResult > li.selected {
+        background-color: #efefef
+    }
+
+::-moz-selection {
+    background: #5eab1f;
+    color: #fff
+}
+
+ul.ui-autocomplete {
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 0
+}
+
+.tipOfertaIconContainer {
+    display: inline-block;
+    width: 57px
+}
+
+.tipOfertaIcon {
+    height: 50px
+}
+
+#custom-dropdown-tipoferta li {
+    font-weight: bold;
+    cursor: pointer;
+    width: 300px
+}
+
+.red {
+    color: rgba(208,19,19,1)
+}
+
+.green {
+    color: green
+}
+
+.btn {
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.2em
+}
+
+.btn-success {
+    color: #fff !important
+}
+
+.btn-light {
+    border: 1px solid transparent;
+    border-color: #67a0d7;
+    background-color: #fff
+}
+
+    .btn-light:hover {
+        background-color: #faf7fd
+    }
+
+.seoLinksContainer a {
+    text-decoration: none
+}
+
+a {
+    color: #333
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #333
+    }
+
+.navbar-default {
+    background-color: #fff;
+    color: #000;
+    background-image: none;
+    background-repeat: no-repeat;
+    filter: none
+}
+
+.navbar-nav > li > a {
+    font-size: 18px;
+    text-decoration: none;
+    color: #5eab1f !important;
+    line-height: 5px
+}
+
+.combobox {
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1.1em;
+    box-shadow: 0 1px 5px rgba(0,0,0,.1) inset;
+    border: none;
+    background-color: #efefef
+}
+
+.selectBox {
+    margin-top: 5px
+}
+
+ul, li {
+    list-style-type: none
+}
+
+    li:hover {
+        opacity: .6;
+        filter: alpha(opacity=60)
+    }
+
+.selectBox:after, .selectBox:before {
+    bottom: 100%;
+    left: 20%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none
+}
+
+.selectBox:after {
+    border-color: rgba(136,183,213,0);
+    border-bottom-color: #fff;
+    border-width: 10px;
+    margin-left: -10px
+}
+
+.selectBox:before {
+    border-color: rgba(194,225,245,0);
+    border-bottom-color: #5eab1f;
+    border-width: 11px;
+    margin-left: -11px
+}
+
+.selectBoxSimulator {
+    display: inline-block
+}
+
+    .selectBoxSimulator ul {
+        height: auto;
+        max-height: 350px;
+        overflow-x: hidden
+    }
+
+    .selectBoxSimulator li {
+        cursor: pointer;
+        padding: 5px
+    }
+
+    .selectBoxSimulator .selBoxSelected {
+        background-color: #d3d3d3
+    }
+
+.actionLinkButton {
+    background-color: #5eab1f;
+    border: 1px solid #787878;
+    cursor: pointer;
+    font-size: 1.3em;
+    font-weight: 600;
+    padding: 7px;
+    margin-right: 8px;
+    margin-top: 18px;
+    width: auto;
+    color: #fff !important;
+    border-radius: 4px;
+    text-decoration: none
+}
+
+.warningActionLinkButton {
+    background-color: #ed8686
+}
+
+header, footer, hgroup, nav, section {
+    display: block
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #000;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-weight: bold
+}
+
+h1 {
+    font-size: 2em
+}
+
+h2 {
+    font-size: 1.75em
+}
+
+h3 {
+    font-size: 1.2em
+}
+
+h4 {
+    font-size: 1.1em
+}
+
+h5, h6 {
+    font-size: 1em
+}
+
+.main-content {
+    padding-left: 10px;
+    padding-top: 0
+}
+
+footer {
+    clear: both;
+    background-color: #e2e2e2;
+    box-shadow: 0 500px 0 500px #e2e2e2
+}
+
+input[type="email"], input[type="text"], input[type="password"], textarea {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    color: #333;
+    font-size: 1.2em;
+    padding: 5px;
+    max-width: 350px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.1) inset;
+    border-radius: 4px
+}
+
+.field-validation-error, .validation-summary-errors {
+    color: red
+}
+
+.form-group {
+    background-color: #fff
+}
+
+.floating-label-form-group {
+    font-size: 14px;
+    position: relative;
+    margin-bottom: 0;
+    margin-top: 5px;
+    padding-bottom: .5em;
+    border-bottom: 1px solid #eee;
+    border-radius: 3px;
+    border: 1px solid #ccc
+}
+
+    .floating-label-form-group input, .floating-label-form-group textarea {
+        z-index: 1;
+        position: relative;
+        padding-right: 0;
+        padding-left: 0;
+        border: none;
+        border-radius: 0;
+        font-size: 1.2em;
+        background: none;
+        box-shadow: none !important;
+        resize: none
+    }
+
+    .floating-label-form-group label {
+        display: block;
+        z-index: 0;
+        position: relative;
+        top: 2em;
+        margin: 0;
+        font-size: .85em;
+        line-height: 1.764705882em;
+        vertical-align: middle;
+        vertical-align: baseline;
+        opacity: 0;
+        -webkit-transition: top .3s ease,opacity .3s ease;
+        -moz-transition: top .3s ease,opacity .3s ease;
+        -ms-transition: top .3s ease,opacity .3s ease;
+        transition: top .3s ease,opacity .3s ease
+    }
+
+    .floating-label-form-group::not(:first-child) {
+        padding-left: 14px;
+        border-left: 1px solid #eee
+    }
+
+.floating-label-form-group-with-value label {
+    top: 0;
+    opacity: 1
+}
+
+.floating-label-form-group-with-focus label {
+    color: #0085a1
+}
+
+form .row:first-child .floating-label-form-group {
+    border-top: 1px solid #eee
+}
+
+.touchCheckbox {
+    margin-top: 10px;
+    cursor: pointer;
+    padding-left: 10px
+}
+
+    .touchCheckbox span {
+        font-size: 2em;
+        vertical-align: middle
+    }
+
+    .touchCheckbox label {
+        padding-top: 10px;
+        vertical-align: middle
+    }
+
+    .touchCheckbox .glyphicon-check {
+        color: green
+    }
+
+    .touchCheckbox .glyphicon-unchecked {
+    }
+
+@media(max-width: 767px) {
+    #body {
+        margin-left: 6px
+    }
+
+    #MainPageSearchDiv {
+        padding: 20px;
+        margin-top: 15px
+    }
+
+    #anunturiSalvate {
+        width: 80%
+    }
+
+    #footer {
+        width: 60%
+    }
+
+    .white_content {
+        width: 80%;
+        left: 5%;
+        top: 5%;
+        height: 80%
+    }
+
+    .white_content_map {
+        top: 10%;
+        left: 5%;
+        height: 90%
+    }
+
+    .oneTwoSelectBox {
+        width: 250px
+    }
+
+    #map_canvas_adaugareoptiuni, #map_canvas_editareap, #map_canvas_detaliiap, #map_canvas_getFiltered {
+        height: 280px
+    }
+
+    #searchDivMainPage {
+        height: 275px
+    }
+
+    h1 {
+        font-size: 1.6em
+    }
+
+    h2 {
+        font-size: 1.45em
+    }
+
+    h3 {
+        font-size: 1.2em
+    }
+
+    h4 {
+        font-size: 1.1em
+    }
+
+    h5, h6 {
+        font-size: 1em
+    }
+
+    .btn {
+        padding: 6px 10px
+    }
+
+    .panel-body {
+        padding: 5px 0
+    }
+
+    .no-pad-xs {
+        padding-left: 0;
+        padding-right: 0
+    }
+}
+
+@media(min-width: 768px) {
+    #hartaInteractivaDiv {
+        margin-top: -150px
+    }
+
+    #body {
+        background-size: 1400px
+    }
+
+    #MainPageSearchDiv {
+        padding: 25px;
+        margin-top: 20px
+    }
+
+    #footer {
+        width: 23%
+    }
+
+    .white_content {
+        width: 50%;
+        left: 25%;
+        top: 25%;
+        height: 50%
+    }
+
+    .white_content_map {
+        top: 10%;
+        left: 5%;
+        width: 100%;
+        height: 80%
+    }
+
+    .oneTwoSelectBox {
+        width: 500px
+    }
+
+    #map_canvas_adaugareoptiuni {
+        height: 600px
+    }
+
+    #map_canvas_editareap {
+        height: 350px
+    }
+
+    #map_canvas_detaliiap {
+        height: 350px
+    }
+
+    #map_canvas_getFiltered {
+        height: 600px
+    }
+
+    #searchDivMainPage {
+        height: 375px
+    }
+
+    #searchDivMainPageContent {
+        background-color: #fff
+    }
+
+    .no-pad {
+        padding: 0
+    }
+}
+
+@media(min-width: 992px) {
+}
+
+@media(min-width: 1400px) {
+    #hartaInteractivaDiv {
+        background-color: #fff;
+        margin-top: -60px
+    }
+
+    #body {
+        background-size: 1926px
+    }
+
+    #MainPageSearchDiv {
+        padding: 35px;
+        margin-top: 30px
+    }
+
+    .searchBox {
+        width: 250px
+    }
+}
+
+@media(min-width: 1920px) {
+    #body {
+        background-size: 100%
+    }
+}

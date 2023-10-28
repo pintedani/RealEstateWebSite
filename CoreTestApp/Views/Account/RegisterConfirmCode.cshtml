@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Confirma cont adresa email";
+    Layout = "~/Views/Shared/_LayoutBootstrap5.cshtml";
+}
+
+<div class="container">
+    <h2 class="my-2">Introduceti codul primit pe email</h2>
+
+    @using (Html.BeginForm("RegisterConfirmCode", "Account", null, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <p>Vă rugăm introduceți codul de 4 cifre primit pe adresa de email:</p>
+
+        <input class="form-control" name="code" type="text" title="Introduceti codul" />
+
+        <input type="hidden" name="email" value="@ViewBag.Email"/>
+
+        <input class="btn btn-primary my-2" type="submit" value="Confirma codul" id="submitButton" />
+
+        <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" />
+    }
+</div>

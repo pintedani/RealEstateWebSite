@@ -1,0 +1,43 @@
+﻿@model Imobiliare.UI.Models.ExternalLoginConfirmationViewModel
+@{
+    ViewBag.Title = "Inregistrare";
+}
+
+<h3>Asociază contul tău de @ViewBag.LoginProvider</h3>
+
+@*@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <p class="text-info">
+        V-ați autentificat cu succes prin <strong>@ViewBag.LoginProvider</strong>.
+        Vă rugăm apăsați butonul de mai jos pentru a confirma contul.
+    </p>
+    <p><strong>@Model.Email</strong></p>
+    if (Model.Email != null)
+    {
+        @Html.HiddenFor(m => m.Email)
+    }
+    else
+    {
+
+            <hr/>
+            <p class="text-info">Vă rugăm introduceți o adresă de email validă pentru confirmarea contului. O adresă validă este necesară pentru a vă putea folosi contul.</p>
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+                @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+            </div>
+    }
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-success" value="Confirmă cont" />
+        </div>
+    </div>
+}*@
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}

@@ -9,7 +9,6 @@ using Imobiliare.Repositories.Interfaces;
 using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.ServiceLayer.ExternalSiteContentParser;
 using Imobiliare.ServiceLayer;
-using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,8 +56,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //builder.Services.AddDefaultIdentity<UserProfile>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<UserProfile, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/LogOff";
+    });
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //    .AddCookie(options => {
 //        options.LoginPath = "/Identity/Account/Login";
@@ -68,17 +73,10 @@ builder.Services.AddDefaultIdentity<UserProfile>().AddEntityFrameworkStores<Appl
 
 var app = builder.Build();
 
-//Routes should be configured directly on action methods
-//app.UseEndpoints(endpoints =>
-//{
-//    endpoints.MapControllerRoute(
-//            name: "SelectAnunt",
-//            pattern: "Localitate-{orasName}/{tipOferta}/{titlu}/{imobilId}",
-//            defaults: new { controller = "Anunturi", action = "ApartamentDetalii", titlu = "", imobilId = "" });
-//});
-
 app.UseStaticFiles();
 app.UseSession();
+
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 

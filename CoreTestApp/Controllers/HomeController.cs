@@ -6,6 +6,7 @@ using Imobiliare.UI.BusinessLayer;
 using Imobiliare.UI.Models;
 using Imobiliare.UI.ViewModels;
 using Logging;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text.RegularExpressions;
@@ -23,18 +24,32 @@ namespace Imobiliare.UI.Controllers
         public HomeController(
           IUnitOfWork unitOfWork,
           IEmailManagerService emailManagerService,
-          IRecaptchaValidator recaptchaValidator)
+          IRecaptchaValidator recaptchaValidator,
+          RoleManager<IdentityRole> roleManager,
+          UserManager<UserProfile> userManager)
         {
             this.emailManagerService = emailManagerService;
             this.recaptchaValidator = recaptchaValidator;
 
             this.unitOfWork = unitOfWork;
+
+            if (!roleManager.RoleExistsAsync("Admin").Result)
+            {
+                //var adminRole = new IdentityRole("Admin");
+                //roleManager.CreateAsync(adminRole).Wait();
+
+                //var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+                //var role = userProfile.Role;
+                //userManager.AddToRoleAsync(userProfile, "Admin");
+            }
         }
 
         public ActionResult Index()
         {
             //https://localhost:7034/Anunturi/ApartamentDetalii?imobilid=27765&titlu=sfd
-            //var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+            var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+            var role = userProfile.Role;
+            //userManager.AddToRoleAsync(user, "Admin")
 
             ViewBag.TipOferta = TipProprietate.Toate.ToString();
 

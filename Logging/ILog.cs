@@ -26,7 +26,9 @@ namespace Logging
         void ErrorFormat(string v, string path, string message);
         void ErrorFormat(string v, string nume, int judetId, Exception exception);
         void ErrorFormat(string v, int id, string? name, string message);
+        void ErrorFormat(string v, string email, string password, object value);
         void InfoFormat(string v);
+        void InfoFormat(string v, string provider);
         void Warn(string message);
         void WarnFormat(string v, string userid, int count);
         void WarnFormat(string v);

@@ -96,9 +96,19 @@ namespace Logging
             
         }
 
+        public void ErrorFormat(string v, string email, string password, object value)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InfoFormat(string v)
         {
             
+        }
+
+        public void InfoFormat(string v, string provider)
+        {
+            throw new NotImplementedException();
         }
 
         public void Warn(string message)

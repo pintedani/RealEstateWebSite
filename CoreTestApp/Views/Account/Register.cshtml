@@ -1,0 +1,211 @@
+﻿@using Imobiliare.Entities
+@using Imobiliare.UI.Models
+@model Imobiliare.UI.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Creează cont gratuit";
+    ViewBag.MetaDescription = "Creează cont gratuit pe site-ul de anunțuri imobiliare apartamente24.ro";
+}
+
+<style>
+    .validation-summary-errors{
+        color: red;
+    }
+</style>
+
+<div class="row m-2" id="registerform">
+
+    <div class="col-lg-7 row justify-content-center align-items-center">
+        <div class="col-md-10 mt-4">
+            <h3>Crează cont pe apartamente24.ro</h3>
+            <p class="my-3">Publicați anunțul dvs. imobiliar gratuit acum</p>
+
+            <div class="row justify-content-md-center col-lg-10">
+
+                <div class="row mt-4 justify-content-center">
+                    <div class="col" style="max-width: 300px">
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("Register", "Account", null, FormMethod.Post, true, new { enctype = "multipart/form-data", id = "RegisterForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
+
+                    <div class="row d-flex justify-content-center my-3">
+                        <hr class="col-5 align-self-baseline" />
+                        <p class="col-2 align-self-baseline text-center">sau</p>
+                        <hr class="col-5 align-self-baseline" />
+                    </div>
+
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-at"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați adresa de email" id="UserName" name="UserName" type="text" value="@Model.UserName" placeholder="Adresa de e-mail">
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați parola" id="Password" name="Password" type="password" placeholder="Introduceti Parola">
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați parola" id="ConfirmPassword" name="ConfirmPassword" type="password" placeholder="Confirmati Parola">
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați Telefon" id="Telefon" name="Telefon" type="tel" placeholder="Telefon">
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@TipVanzator.PersoanaFizica" />
+                        <select id="tipVanzatorSelectBox" class="form-select" aria-label="Tip vânzător">
+                            @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
+                            {
+                                <option data-listvalue="@tipVanzator">@*@TipVanzatorDisplayFormatter.GetDisplayString(tipVanzator)*@ @tipVanzator</option>
+                            }
+                        </select>
+
+                        <div class="mx-2 my-4" id="agentieImobiliaraDiv">
+                            <div class="panel-body row">
+                                <div class="col-md-6">
+                                    <div class="form-group col-xs-12 floating-label-form-group controls">
+                                        <label>Nume firmă</label>
+                                        @Html.TextBoxFor(m => m.NumeAgentieImobiliara, new { title = "Introduceti numele companiei", placeholder = "Nume firmă", type = "text", @class = "form-control" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <br />
+                                    <div class="clearfix"></div>
+                                    <div onclick="$('#ProfileImage').click()">
+                                        <button id="SelectLogoButton" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus-sign"></span> Selectează logo firmă</button>
+                                    </div>
+                                    <div>
+                                        <input id="ProfileImage" type="file" name="ProfileImage" style="opacity: 0" />
+                                    </div>
+                                    <div id="filesInfo"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    @*Put some sample text here*@
+                                    <p>Este important să încărcați o imagine pentru firmă pentru o mai bună promovare a anunțurilor. Logo-ul firmei va apărea in dreptul anunțului, de exemplu:</p>
+                                    <img src="~/Images/DecorationImages/logoCompanieExemplu.JPG" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input id="submitButton" type="submit" value="Creează Cont Gratuit" class="btn btn-primary w-100" />
+
+
+                    <p>* Creând un cont sunteți de acord cu <a href="@Url.Action("TermenisiConditii", "Home")" style="text-decoration: underline">Termeni și condiții de utilizare</a> al site-ului apartamente24.ro</p>
+                    <div class="clearfix"></div>
+                    <hr />
+                }
+            </div>
+
+            <p class="my-4">
+                Ai deja cont?
+                @Html.ActionLink("Intră in Cont", "Login", "Account", new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-5 d-flex justify-content-center align-items-center p-2 flex-grow-1" style="border: 1px solid #ddd; background: #e5f0f5;">
+        <div class="m-2">
+            <h3 style="padding: 10px">Înregistrează-te pe apartamente24.ro - Așa ușor funcționează:</h3>
+            <ul class="detaliiFeature">
+                <li>1. Intră în cont sau crează un cont nou pentru a te autentifica.</li>
+                <li>2. Adaugă anunțuri imobiliare gratuite nelimitat.</li>
+                <li>3. Anunțul va apărea pe site.</li>
+                <li>4. Veți fi contactat de persoane interesate.</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+@*-----------------------------------------Scripts-----------------------------------------------------*@
+
+@*Se cheama din _Layout.cshtml*@
+@section Scripts {
+
+    @*<script src="https://www.google.com/recaptcha/api.js" async defer></script>*@
+    <script>
+        $(document).ready(function () {
+            if ($("#TipVanzatorSelect").val() != "AgentieImobiliara" && $("#TipVanzatorSelect").val() != "Constructor") {
+                $("#agentieImobiliaraDiv").css({ "display": "none" });
+            }
+
+            $('#tipVanzatorSelectBox').change(function () {
+                var value = $(this).val();
+
+                var isPf = value.indexOf('Persoan') !== -1;
+                if (isPf) {
+                    $("#agentieImobiliaraDiv").fadeOut();
+                } else {
+                    $("#agentieImobiliaraDiv").fadeIn();
+                }
+
+                $('#TipVanzatorSelect').val(value);
+            });
+
+            $('#RegisterForm').submit(function (e) {
+                if ($(this).valid()) {
+                    $('#submitButton').hide();
+                }
+                else {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+    <script>
+        //Preview Image
+        window.onload = init;
+
+        function init() {
+            document.getElementById('ProfileImage').addEventListener('change', fileSelect, false);
+        }
+
+        function fileSelect(evt) {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var files = evt.target.files;
+
+                var result = '';
+                var file;
+                for (var i = 0; file = files[i]; i++) {
+                    // if the file is not an image, continue
+                    if (!file.type.match('image.*')) {
+                        alert("Va rugam selectati o imagine(.jpg .png)");
+                        continue;
+                    }
+
+                    reader = new FileReader();
+                    reader.onload = (function (tFile) {
+                        return function (evt) {
+
+                            var div = document.createElement('div');
+                            div.innerHTML = '<img style="width: 90px;" src="' + evt.target.result + '" />';
+                            document.getElementById('filesInfo').innerHTML = "";
+                            document.getElementById('filesInfo').appendChild(div);
+                            $("#SelectLogoButton").html('Schimbă logo firmă');
+                        };
+                    }(file));
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+            }
+        }
+    </script>
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}
+

@@ -1,0 +1,134 @@
+﻿@using Imobiliare.UI.Models
+@model Imobiliare.UI.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Intra In Cont | Adauga Anunt Gratuit";
+    ViewBag.MetaDescription = "Adauga Anunt Gratuit Apartamente Vanzare Inchiriere";
+}
+
+<style>
+    .detaliiFeature {
+        font-size: 1.2em;
+        padding: 10px;
+    }
+
+        .detaliiFeature > li {
+            padding: 5px;
+        }
+
+    .validation-summary-errors {
+        color: red;
+    }
+</style>
+
+<div class="row m-2" id="loginform">
+    <div class="col-lg-7 row justify-content-center align-items-center">
+        <div class="col-md-10 mt-4">
+            <h3>Conectați-vă la apartamente24.ro</h3>
+            <p class="my-3">Publicați anunțul dvs. imobiliar gratuit acum</p>
+
+            <div class="row justify-content-md-center col-lg-10">
+
+                <div class="row mt-4 justify-content-center">
+                    <div class="col" style="max-width: 300px">
+                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+                {
+
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+
+                    <div class="row d-flex justify-content-center my-3">
+                        <hr class="col-5 align-self-baseline" />
+                        <p class="col-2 align-self-baseline text-center">sau</p>
+                        <hr class="col-5 align-self-baseline" />
+                    </div>
+
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-at"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați adresa de email" id="UserName" name="UserName" type="text" value="" placeholder="Adresa de e-mail">
+                            @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input class="form-control" data-val="true" data-val-required="Completați parola" id="Password" name="Password" type="password" placeholder="Introdu Parola">
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+
+                    <input type="submit" value="Intră în cont" class="btn btn-primary w-100" />
+
+                    <hr />
+                    <div style="display: inline-block">
+                        <div class="form-check">
+                            @Html.EditorFor(model => model.RememberMe, new { htmlAttributes = new { @class = "form-check-input" } })
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+
+
+                    <a href="@Url.Action("ForgotPassword")" class="btn btn-link" style="float: right"><span class="glyphicon glyphicon-chevron-right"></span>&nbsp;Ai uitat parola?</a>
+                    <div class="clearfix"></div>
+                    <hr />
+                }
+            </div>
+
+            <p class="my-4">
+                Nu ai cont?
+                @Html.ActionLink("Creează Cont Gratuit", "Register", "Account", new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-5 d-flex justify-content-center align-items-center p-2 flex-grow-1" style="border: 1px solid #ddd; background: #e5f0f5;">
+        <div class="m-2">
+            @if (ViewBag.LoginInformation != null)
+            {
+                if (ViewBag.LoginInformation == "AnuntAdaugare")
+                {
+                    <h3 style="padding: 10px">Adaugă anunț gratuit - Așa ușor funcționează:</h3>
+                    <ul class="detaliiFeature">
+                        <li>1. Intră în cont sau crează un cont nou pentru a te autentifica.</li>
+                        <li>2. Adaugă anunțuri imobiliare gratuite nelimitat.</li>
+                        <li>3. Anunțul va apărea pe site.</li>
+                        <li>4. Veți fi contactat de persoane interesate.</li>
+                    </ul>
+                }
+                else if (ViewBag.LoginInformation == "ProfilAdaugare")
+                {
+                    <h3 style="padding: 10px">Adăugați un profil - Așa ușor funcționează:</h3>
+                    <ul class="detaliiFeature">
+                        <li>1. Descrieți profilul tău de cumpărător/chiriaș și introduceți datele Dumneavoastră de contact.</li>
+                        <li>2. Profilul va apare pe apartamente24.ro.</li>
+                        <li>3. Veți fi contactat direct de potențiali proprietari pentru a discuta următorii pași.</li>
+                    </ul>
+                }
+            }
+            else
+            {
+                <h3 style="padding: 10px">Intră in cont - Așa ușor funcționează:</h3>
+                <ul class="detaliiFeature">
+                    <li>1. Introdu adresa ta de email si parola.</li>
+                    <li>2. Adaugă anunțuri imobiliare gratuite.</li>
+                    <li>3. Salvează-ți anunțurile si căutările favorite.</li>
+                    <li>4. Crează profile de cumpărător/chiriaș.</li>
+                </ul>
+            }
+        </div>
+    </div>
+
+</div>
+
+@*-----------------------------------------Scripts-----------------------------------------------------*@
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+}
+

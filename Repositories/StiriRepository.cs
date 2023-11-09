@@ -10,6 +10,7 @@ using Caching;
 using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Imobiliare.Repositories
 {
@@ -85,7 +86,7 @@ namespace Imobiliare.Repositories
 
             //itemToremove.Poze = newPictureList != string.Empty ? newPictureList : null;
 
-            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Stiri"), pozadeSters);
+            //string path = Path.Combine(HttpContext.Server.MapPath("~/Images/Stiri"), pozadeSters);
             //var fileDel = new FileInfo(path);
             //if (fileDel.Exists)
             //{

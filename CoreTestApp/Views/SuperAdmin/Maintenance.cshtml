@@ -1,6 +1,10 @@
 ﻿@Html.Partial("_MenuSuperAdmin")
 @model Imobiliare.UI.Models.SuperAdmin.MaintenanceData
 
+@{
+    Layout = "_LayoutB4";
+}
+
 <h2>Maintenance</h2>
 <div class="row" style="padding: 0 10px; border: 1px solid rgb(183, 183, 183); border-radius: 3px; background-color: #F9F9F9">
     <h3>Db usage - @Model.UsedDbInMb MB of @Model.MaxDbSizeInMb MB => @Model.UsedPercentage% Used</h3>

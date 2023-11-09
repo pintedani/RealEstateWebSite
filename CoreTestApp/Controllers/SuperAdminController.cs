@@ -163,26 +163,29 @@ namespace Imobiliare.UI.Controllers
         public ActionResult Users(string selectSingleUserEmail)
         {
             var page = 1;
-            if (Request.Form["page"].ToString != null)
-            {
-                page = Request.Form["page"].ToString().ParseToInt();
-            }
+            //if (Request.Form["page"].ToString != null)
+            //{
+            //    page = Request.Form["page"].ToString().ParseToInt();
+            //}
 
-            string tipVanzator = Request.Form["TipVanzatorSelect"];
+            //string tipVanzator = Request.Form["TipVanzatorSelect"];
+            string tipVanzator = null;
             var tip = TipVanzator.TotiVanzatorii;
             if (tipVanzator != null)
             {
                 tip = tipVanzator.EnumParse<TipVanzator>();
             }
 
-            string selectedRole = Request.Form["TipRoleSelect"];
+            //string selectedRole = Request.Form["TipRoleSelect"];
+            string selectedRole = null;
             var role = Role.Toti;
             if (selectedRole != null)
             {
                 role = selectedRole.EnumParse<Role>();
             }
 
-            var userName = Request.Form["UserName"].ToString();
+            //var userName = Request.Form["UserName"].ToString();
+            string userName = null;
             if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(selectSingleUserEmail))
             {
                 userName = selectSingleUserEmail;

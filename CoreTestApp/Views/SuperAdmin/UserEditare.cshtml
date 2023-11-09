@@ -2,6 +2,11 @@
   
 <link href="~/Content/bootstrap-toggle.min.css" rel="stylesheet" />
 
+@{
+    ViewBag.Title = "UserEditAdmin";
+    Layout = "_LayoutB4";
+}
+
 <h2>@Model.UserName</h2>
 @if (!string.IsNullOrEmpty(Model.Picture))
 {

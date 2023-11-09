@@ -1,60 +1,604 @@
-﻿<!DOCTYPE html>
+﻿@using System.Configuration
+@using Imobiliare.UI.Models.HelperModels
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Apartamente24.ro</title>
-    <link href='https://fonts.googleapis.com/css?family=Work+Sans' rel='stylesheet' type='text/css'>
-    <script src="~/lib/jquery/jquery.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
-    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
-        <script src="~/lib/jquery-validate/jquery-validate.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <base href="/" />
+    <meta charset="utf-8" />
+    @*Use Html.Raw to show in src diacritice normal, nu ca si encoded*@
+    <title>@Html.Raw(ViewBag.Title)</title>
+    <meta name="description" content="@Html.Raw(ViewBag.MetaDescription)" />
+    @if (ViewBag.Keywords != null)
+    {
+        <meta name="keywords" content="@Html.Raw(ViewBag.Keywords)" />
+    }
+
+    @if (ViewBag.ShareUrl != null && ViewBag.ShareTitle != null && ViewBag.ShareDescription != null && ViewBag.ShareImage != null)
+    {
+        <meta property="og:url" content="@ViewBag.ShareUrl" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="@ViewBag.ShareTitle" />
+        <meta property="og:description" content="@ViewBag.ShareDescription" />
+        <meta property="og:image" content="@ViewBag.ShareImage" />
+        //Pre-caching avoid https://developers.facebook.com/docs/sharing/best-practices#tags
+        if (@ViewBag.ShareImageWidth != null)
+        {
+            <meta property="og:image:width" content="@ViewBag.ShareImageWidth" />
+        }
+        if (@ViewBag.ShareImageHeight != null)
+        {
+            <meta property="og:image:height" content="@ViewBag.ShareImageHeight" />
+        }
+    }
+
+    <link href="~/Images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="~/css/siteb3.css" rel="stylesheet" />
+    @*    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    *@    @*     @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/themes/base/css")*@
+    @RenderSection("nextprev", required: false)
+
+    <style>
+        .availableJudet {
+            display: inline-block;
+            width: 135px;
+            padding-left: 20px;
+        }
+
+            .availableJudet:hover {
+                color: #5EAB1F;
+            }
+
+        #footer {
+            position: fixed;
+            right: 5px;
+            bottom: 5px;
+            background: #d3d3d3;
+            text-align: center;
+            color: #042E64;
+            font-size: 14px;
+            font-family: sans-serif;
+            font-weight: bold;
+            text-shadow: 0 1px 0 #84BAFF;
+            box-shadow: 0 0 15px #00214B;
+            display: none;
+        }
+
+        .black_overlay_anunturi_salvate {
+            display: none;
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 1001;
+            -moz-opacity: 0.4;
+            opacity: .40;
+            filter: alpha(opacity=40);
+        }
+
+        .white_content_anunturi_salvate {
+            display: none;
+            position: fixed;
+            bottom: 15%;
+            right: 0;
+            width: 21%;
+            height: 66%;
+            padding: 5px;
+            border: 5px solid #a7d582;
+            background-color: white;
+            z-index: 1002;
+            overflow: auto;
+            opacity: 0.9;
+        }
+
+        /*Important: for links reference a whole container*/
+        .link-spanner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            /*z-index: 1;*/
+        }
+
+        .anchor-link-spanner, .anchor-link-spanner:hover {
+            text-decoration: none;
+            background-color: inherit;
+            /*Marginea aceea vizibila*/
+            padding: 0;
+        }
+
+        #footerStatus {
+            position: fixed;
+            /*z-index: -1;*/
+            bottom: 0;
+            width: 100%;
+            padding-bottom: 15px;
+            margin-bottom: 0;
+            text-align: center;
+            display: none;
+            opacity: 0.9; /* Fallback for web browsers that doesn't support RGBa */
+        }
+
+        #cookieHeader {
+            margin-bottom: 0;
+            padding-top: 4px;
+            padding-right: 20px;
+            padding-bottom: 4px;
+            display: none;
+        }
+
+        .navbar-default {
+            text-align: center;
+        }
+
+        .navbar-nav {
+            display: inline-block;
+            float: none;
+        }
+
+        /*If this set, it makes menu sit on top of popup windows*/
+        /*.navbar .nav > li {
+                          z-index: 10000;
+                        }*/
+
+        /*dropdown*/
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content a:hover {
+                    background-color: #f1f1f1
+                }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /*https://www.w3docs.com/snippets/css/how-to-crop-and-center-an-image-automatically-in-css.html*/
+        .center-cropped {
+            object-fit: cover;
+            object-position: center;
+            width: 100%;
+        }
+
+        .imageBox {
+            box-shadow: 4px 4px 2px #888888;
+        }
+    </style>
+
+    @*To show custom logo ony for development*@
+    @if (Convert.ToBoolean(ConfigurationManager.AppSettings["DeveloperVersion"]))
+    {
+        <style>
+            .navbar-default {
+                background-color: grey;
+            }
+
+            #hartaInteractiva {
+                display: none;
+            }
+
+            #body {
+                background-image: none;
+            }
+        </style>
+    }
 </head>
 <body>
-    <div class="container">
+    <header>
+        <div id="cookieHeader" class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            apartamente24.ro folosește cookies. Continuarea navigării se consideră acceptare a @Html.ActionLink("politicii de utilizare", "DespreCookies", "Home") a cookies. <strong id="AcceptCookies" style="cursor: pointer; text-decoration: underline">Acceptați</strong>
+        </div>
+        @*<p id="something"></p>*@
 
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary"
-                 aria-label="Bethany's Pie Shop navigation header">
-                <div class="container-xl">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                        <img src="images/bethanys-pie-shop-logo_horiz-white.png" width="151" height="47" class="d-inline-block align-top mb-2 mt-1"
-                             alt="Bethany's Pie Shop Logo">
-                    </a>
-
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+        <div class="container hidden-xs">
+            <div class="row">
+                <div style="vertical-align: top; float: left; margin-top: 5px">
+                    @if (!Convert.ToBoolean(ConfigurationManager.AppSettings["DeveloperVersion"]))
+                    {
+                        <a class="anchor-link-spanner" href="@Url.Action("Index", "Home")"><img style="width: 240px" src="~/Images/DecorationImages/apartamente24.png" alt="apartamente romania 24" /></a>
+                    }
+                    else
+                    {
+                        <a class="anchor-link-spanner" href="@Url.Action("Index", "Home")"><img style="width: 240px" src="~/Images/DecorationImages/apartamente24_developer.png" alt="apartamente romania 24" /></a>
+                    }
+                </div>
+                <div id="loginDiv" style="float: right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                </div>
+                <div style="float: right; padding-top: 10px; padding-right: 20px">
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a data-toggle="modal" data-target="#modalAdaugaAnuntLogin" class="btn btn-success"><span class="glyphicon glyphicon-pushpin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-success"><span class="glyphicon glyphicon-pushpin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-default" style="margin-bottom: 5px; min-height: 45px; border: none">
+            <nav class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" style="margin-left: 5px" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
-
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            @*<vc:category-menu></vc:category-menu>*@
-                            <li class="nav-item">
-                                <a asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Search">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                        <vc:shopping-cart-summary></vc:shopping-cart-summary>
-                        <partial name="_LoginPartial"/>
+                    <div class="visible-xs" style="padding: 6px 0 0 8px; color: white; font-size: 1.1em; font-weight: bold; text-decoration: none">
+                        <div class="btn" style="float: right">
+                            <a href="@Url.Action("EditUserDetails", "Manage")">
+                                <span class="glyphicon glyphicon-user"></span>
+                                <div style="display: inline-block; text-decoration: none">
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <span style="font-size: 0.5em">@User.Identity.Name.Substring(0, 5)..</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="font-size: 0.5em">Contul meu</span>
+                                    }
+                                </div>
+                            </a>
+                        </div>
+                        <div style="float: left; padding-top: 3px">
+                            <a class="anchor-link-spanner" href="@Url.Action("Index", "Home")"><img style="width: 145px" src="~/Images/DecorationImages/apartamente24.png" alt="Anunturi Imobiliare Romania" /></a>
+                        </div>
                     </div>
                 </div>
-            </nav>
-        </header>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="@Url.Action("Index", "Home")" style="padding-top: 7px; padding-bottom: 7px" title="Cauta anunturi imobiliare"><span class="glyphicon glyphicon-search"></span>&nbsp;Caută</a>
+                            <hr class="visible-xs" style="margin: 10px 0" />
+                        </li>
+                        <li class="visible-xs">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a data-toggle="modal" data-target="#modalAdaugaAnuntLogin" style="padding-top: 7px; padding-bottom: 7px; cursor: pointer" title="Adauga anunt GRATUIT"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Adaugă Anunț</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("AnuntEditare", "Administrare")" style="padding-top: 7px; padding-bottom: 7px" title="Adauga anunt GRATUIT"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Adaugă Anunț</a>
+                            }
+                            <hr class="visible-xs" style="margin: 10px 0" />
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Stiri")" style="padding-top: 7px; padding-bottom: 7px" title="Știri"><span class="glyphicon glyphicon-info-sign"></span>&nbsp;Știri</a>
+                            <hr class="visible-xs" style="margin: 10px 0" />
+                        </li>
+                        <li>
+                            @Html.ActionLink("Ansambluri Rezidentiale", "Index", "AnsambluriRezidentiale", null, new { title = "Ansambluri Rezidentiale" })
+                            <hr class="visible-xs" style="margin: 10px 0" />
+                        </li>
+                        <li>
+                            @Html.ActionLink("Agenții", "Index", "AgentiiImobiliare", null, new { title = "Agenții" })
+                            <hr class="visible-xs" style="margin: 10px 0" />
+                        </li>
 
-        @RenderBody()
-        @RenderSection("Scripts", required:false)
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            //var isInRole = User.IsInRole("Admin");
+                            <li>
+                                @Html.ActionLink("Anunțurile mele", "Index", "Administrare", null, new { title = "Administreaza anunturile tale" })
+                                <hr class="visible-xs" style="margin: 10px 0" />
+                            </li>
+                        }
+
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="dropdown">
+                                    @Html.ActionLink("Admin", "Index", "SuperAdmin")
+                                    <hr class="visible-xs" style="margin: 10px 0" />
+
+                                    @*<div class="dropdown-content hidden-xs">
+                            <a href="@Url.Action("Index", "SuperAdmin")"><span class="glyphicon glyphicon-list"></span>&nbsp;Anunturi</a>
+                            <a href="@Url.Action("Users", "SuperAdmin")"><span class="glyphicon glyphicon-user"></span>&nbsp;Useri</a>
+                            @Html.ActionLink("Logs", "Logs", "SuperAdmin")
+                            @Html.ActionLink("Stiri", "IndexAdmin", "Stiri")
+                            @Html.ActionLink("Ansambluri", "ToateAnsamblurileAdmin", "AnsambluriRezidentiale")
+                            @Html.ActionLink("Agentii", "ToateAgentiileAdmin", "AgentiiImobiliare")
+                            </div>*@
+                                </li>
+                            }
+                            <li class="visible-xs">
+                                <a href="@Url.Action("Index", "Mesaje")" style="padding-top: 7px; padding-bottom: 7px"><span class="glyphicon glyphicon-envelope"></span>&nbsp;Mesaje</a>
+                                <hr class="visible-xs" style="margin: 10px 0" />
+                            </li>
+                            <li class="visible-xs">
+                                @Html.ActionLink("Contul meu", "EditUserDetails", "Manage")
+                                <hr class="visible-xs" style="margin: 10px 0" />
+                            </li>
+
+                            //Seems to work only this way with post
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm2" }))
+                            {
+                                @Html.AntiForgeryToken()
+                            }
+                            <li class="visible-xs"><a href="javascript:document.getElementById('logoutForm2').submit()"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Deconectare</a></li>
+                        }
+                        else
+                        {
+                            <li class="visible-xs">@Html.ActionLink("Login", "Login", "Account")</li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection("featured", required: false)
+        @*<div class="visible-xs" style="background: none repeat scroll 0 0 rgba(255, 255, 255, 0.75); border-radius: 2px; width: 200px; display: block; margin: 0 auto; text-align: center">
+        <a class="anchor-link-spanner" href="@Url.Action("Index", "Home")" style="background-color: rgba(255, 255, 255, 0.1);"><img style="width: 190px" src="~/Images/DecorationImages/apartamente24.png" alt="Anunturi Imobiliare Romania" /></a>
+        </div>*@
+        <section class="main-content clear-fix container">
+            @if (ViewBag.Message != null)
+            {
+                <h2 class="alert alert-success"><span class="glyphicon glyphicon-ok-circle"></span> @ViewBag.Message</h2>
+            }
+            @if (TempData[TempDataSeverity.Message.ToString()] != null)
+            {
+                <h2 class="alert alert-success" style="color: #1885F0"><span class="glyphicon glyphicon-ok-circle"></span> @TempData["Message"]</h2>
+                <br />
+            }
+            @if (TempData[TempDataSeverity.WarningMessage.ToString()] != null)
+            {
+                <h2 class="alert alert-warning" style="color: #1885F0"><span class="glyphicon glyphicon-info-sign"></span> @TempData["WarningMessage"]</h2>
+                <br />
+            }
+            @if (TempData[TempDataSeverity.ErrorMessage.ToString()] != null)
+            {
+                <h2 class="alert alert-danger" style="color: #1885F0"><span class="glyphicon glyphicon-exclamation-sign"></span> @TempData["ErrorMessage"]</h2>
+                <br />
+            }
+            @RenderBody()
+        </section>
     </div>
+    <footer>
+        <div class="container" style="text-align: left">
+            <div>
+                <p>&copy; @DateTime.Now.Year - apartamente24.ro</p>
+                <a href="@Url.Action("Contact","Home")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Contact</a>
+                <a href="@Url.Action("TermenisiConditii","Home")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Termeni și condiții</a>
+                <a href="@Url.Action("DespreCookies","Home")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Cookies</a>
+                <a href="@Url.Action("Despre","Home")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Despre</a>
+                <a href="@Url.Action("Index","Stiri")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Știri</a>
+                <a href="@Url.Action("Index","AgentiiImobiliare")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Agenții</a>
+                <a href="@Url.Action("Index", "AnsambluriRezidentiale")" class="btn btn-link"><span class="glyphicon glyphicon-chevron-right" style="color: #5EAB1F"></span>&nbsp;Ansambluri Rezidentiale</a>
+            </div>
+            <div>
+                <p class="hidden-xs">
+                    Ce este <b style="cursor: pointer" onclick="var url = '@Url.Action("Index", "Home")'; window.location.href = url;">apartamente24.ro</b>? <b>apartamente24.ro</b> este un site de anunțuri imobiliare care vă ajută să vindeți sau să cumpărați orice tip de oferte imobiliare.
+                    Cum? Dându-vă posibilitatea de a adăuga anunțuri <b>GRATUITE</b> astfel încât să găsiți un cumpărător. Pentru cumpărători vă oferim o gamă
+                    variată de anunțuri imobiliare astfel încât sa găsiți proprietatea dorită. Pentru Vânzători vă oferim posibilitatea de a adăuga anunțuri
+                    cât mai detaliate, fie că sunteți persoană fizică, fie agenție imobiliară.
+                </p>
+                <p>
+                    De ce să adaugi un anunț pe <b>apartamente24.ro</b>? Deoarece este absolut gratuit, adăugarea de anunțuri este cât se poate de simplă, iar conținutul site-ului este
+                    cât mai intuitiv posibil.
+                </p>
+            </div>
+            @RenderSection("facebookLike", required: false)
+
+            <br />
+            <div>
+                <a class="anchor-link-spanner" href="@Url.Action("Index", "Home")">
+                    <img style="width: 275px" src="~/Images/DecorationImages/apartamente24_jos.png" />
+                </a>
+                <br />
+                <br />
+            </div>
+        </div>
+    </footer>
+
+    <div id="footer">
+        <button style="display: inline-block; margin: 10px 0 10px 0" class="anunutiSalvateNumber btn btn-success">Anunturi salvate</button>
+    </div>
+    <div id="fadeLayout" class="black_overlay_anunturi_salvate"></div>
+    <div id="anunturiSalvate" class="white_content_anunturi_salvate">
+    </div>
+
+    @if (TempData["FooterStatus"] != null)
+    {
+        <div id="footerStatus" class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>@TempData["FooterStatus"]</strong>
+        </div>
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <!-- Modal Adauga anunt invalid-->
+        <div class="modal fade" id="modalAdaugaAnuntLogin" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content" style="text-align: center">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Intră în cont pentru a adăuga anunțuri sau a trimite mesaje</h4>
+                    </div>
+                    <div class="modal-body">
+                        Ai deja cont?
+                        <a class="btn btn-success" href="@Url.Action("Login", "Account", new { returnUrl = @Url.Action("AnuntEditare", "Administrare") })"><span class="glyphicon glyphicon-log-in"></span> Intră în cont</a>
+                        <hr />
+                        <p>
+                            Nu ai cont?
+                            @Html.ActionLink("Creează Cont Gratuit", "Register", "Account", null, new { @class = "btn btn-success" })
+                        </p>
+                        <hr />
+                        @*                        @{
+                    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+                    if (loginProviders.Count() == 0)
+                    {
+                    <div>
+                    <p>
+                    There are no external authentication services configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                    for details on setting up this ASP.NET application to support logging in via external services.
+                    </p>
+                    </div>
+                    }
+                    else
+                    {
+                    using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Request.Url }))
+                    {
+                    <p>SAU</p>
+                    @Html.AntiForgeryToken()
+                    <div id="socialLoginList">
+                    <p>
+                    @foreach (AuthenticationDescription p in loginProviders.Reverse())
+                    {
+                    if (p.AuthenticationType == "Facebook")
+                    {
+                    <button class="btn" id="@p.AuthenticationType" style="height: 39px; border: none; background-color: #3b5998; color: white" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType">
+                    <div>
+                    <img style="height: 30px" src="~/Images/facebook.png" /> Conectare cu Facebook
+                    </div>
+                    </button>
+                    }
+                    else if (p.AuthenticationType == "Google")
+                    {
+                    <br />
+                    <br />
+                    <button class="btn" id="@p.AuthenticationType" style="height: 39px; border: none; background-color: #c23321; color: white" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType">
+                    <div>
+                    <img style="height: 30px" src="~/Images/google.png" /> Conectare cu Gmail &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    </button>
+                    }
+                    else
+                    {
+                    <button id="@p.AuthenticationType" style="background: url(../../Images/facebook.png) no-repeat;" type="submit" name="provider" value="@p.AuthenticationType" title="Inregistreaza-te folosind contul de @p.AuthenticationType">@p.AuthenticationType</button>
+                    }
+                    }
+                    </p>
+                    </div>
+                    }
+                    }
+                    }*@
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">Închide</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }@*-----------------------------------------Scripts-----------------------------------------------------*@
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    @*    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>*@
+    @*    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>*@
+    @*    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>*@
+    @*    @Scripts.Render("~/bundles/jquery")*@
+
+    @*Disable caching with timestamp*@
+
+
+    @*<script src="@Url.Content("~/Views/Shared/savedAnunturiAndCautari.js?<" + @DateTime.Now.Ticks.ToString() + ">")"></script>*@
+
+    @Html.Partial("_SavedAnunturiAndCautariScript")
+
+    <script>
+        $(function () {
+            //var cookieAccepted = $.cookie("cookieAccepted");
+            //if (!cookieAccepted) {
+            //    $("#cookieHeader").show();
+
+            //    //Auto accept cookies once it is show once, no need to click button mandatory
+            //    $.cookie('cookieAccepted', "true", { expires: 30, path: '/' });
+            //}
+            //$("#AcceptCookies").on("click", function () {
+            //    $.cookie('cookieAccepted', "true", { expires: 30, path: '/' });
+            //    $("#cookieHeader").hide();
+            //});
+
+            //Input styling begin
+            $("body").on("input propertychange", ".floating-label-form-group", function (e) {
+                $(this).toggleClass("floating-label-form-group-with-value", !!$(e.target).val());
+            }).on("focus", ".floating-label-form-group", function () {
+                $(this).addClass("floating-label-form-group-with-focus");
+            }).on("blur", ".floating-label-form-group", function () {
+                $(this).removeClass("floating-label-form-group-with-focus");
+            });
+
+            $('.floating-label-form-group input').each(function () {
+                if ($(this).val() != "") {
+                    $(this).closest('div').addClass("floating-label-form-group-with-value");
+                };
+            });
+
+            $('.touchCheckbox').on("click", function () {
+                $(this).find("span").toggleClass("glyphicon-check glyphicon-unchecked");
+
+                var inputval = $(this).find("input").val();
+                $(this).find("input").val(inputval === "true" ? "false" : "true");
+            });
+            //Input styling end
+        });
+    </script>
+
+    @*google analytics script. DO NOT modify*@
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-53397068-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+    @if (TempData["FooterStatus"] != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $("#footerStatus").delay(1000).fadeIn("slow").delay(8000).fadeOut("slow");
+            });
+
+        </script>
+    }
+
+    @RenderSection("scripts", required: false)
 </body>
 </html>

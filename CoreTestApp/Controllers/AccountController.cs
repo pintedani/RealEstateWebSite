@@ -1,6 +1,5 @@
 ﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
-using Imobiliare.Repositories;
 using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.UI.Models.HelperModels;
 using Imobiliare.UI.Models;
@@ -8,7 +7,6 @@ using Logging;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 

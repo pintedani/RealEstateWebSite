@@ -1,5 +1,4 @@
-﻿using Caching;
-using Imobiliare.Entities;
+﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.UI.Models.HelperModels;
 using Imobiliare.UI.Models;
@@ -9,9 +8,7 @@ using System.Text.RegularExpressions;
 using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.UI.Utils.UrlSeoFormatters;
 using Imobiliare.UI.BusinessLayer;
-using Imobiliare.UI.Utils;
 using Logging;
-using Microsoft.AspNetCore.Http;
 
 namespace Imobiliare.UI.Controllers
 {

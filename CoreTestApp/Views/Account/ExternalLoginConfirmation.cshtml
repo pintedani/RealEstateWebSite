@@ -5,7 +5,7 @@
 
 <h3>Asociază contul tău de @ViewBag.LoginProvider</h3>
 
-@*@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -36,7 +36,7 @@
             <input type="submit" class="btn btn-success" value="Confirmă cont" />
         </div>
     </div>
-}*@
+}
 
 @section Scripts {
     @*@Scripts.Render("~/bundles/jqueryval")*@

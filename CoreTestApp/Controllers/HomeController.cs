@@ -145,20 +145,21 @@ namespace Imobiliare.UI.Controllers
         {
             if (judetId != 0)
             {
-                return Json(this.unitOfWork.OrasRepository.GetSelectableOrases(judetId), new Newtonsoft.Json.JsonSerializerSettings());
+                return Json(this.unitOfWork.OrasRepository.GetSelectableOrases(judetId));
             }
-            return this.Json(new List<Oras>(), new Newtonsoft.Json.JsonSerializerSettings());
+            return this.Json(new List<Oras>());
         }
 
         public ActionResult Cartiere(int orasId)
         {
             if (orasId != 0)
             {
-                return Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId), new Newtonsoft.Json.JsonSerializerSettings());
+                return Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId));
             }
-            return this.Json(new List<Cartier>(), new Newtonsoft.Json.JsonSerializerSettings());
+            return this.Json(new List<Cartier>());
         }
 
+        [HttpGet]
         public ActionResult LocationSearchResults(string searchText, bool includingTotJudet)
         {
             if (!string.IsNullOrEmpty(searchText) && searchText.Length > 0)
@@ -171,9 +172,9 @@ namespace Imobiliare.UI.Controllers
                     jsonList.Add(location.Key + "|" + location.Value);
                 }
 
-                return Json(jsonList, new Newtonsoft.Json.JsonSerializerSettings());
+                return Json(jsonList);
             }
-            return this.Json(new List<string>(), new Newtonsoft.Json.JsonSerializerSettings());
+            return this.Json(new List<string>());
         }
 
         public ActionResult RetrieveTelefon(string anuntId)
@@ -181,9 +182,9 @@ namespace Imobiliare.UI.Controllers
             if (anuntId != string.Empty && anuntId.Length > 0)
             {
                 string telefon = this.unitOfWork.AnunturiRepository.GetTelefonForAnunt(anuntId);
-                return Json(telefon, new Newtonsoft.Json.JsonSerializerSettings());
+                return Json(telefon);
             }
-            return this.Json(string.Empty, new Newtonsoft.Json.JsonSerializerSettings());
+            return this.Json(string.Empty);
         }
 
         public JsonResult GetSavedAnunturiFromCookie(List<string> savedIds)

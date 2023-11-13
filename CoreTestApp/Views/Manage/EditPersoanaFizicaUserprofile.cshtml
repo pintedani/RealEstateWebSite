@@ -9,9 +9,8 @@
 <div class="container">
 
     @Html.Partial("_MenuUserProfileB5")
-    <div class="col-xs-12">
-@*  TODO fix     
-    @using (Html.BeginForm("EditPersoanaFizicaUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    <div class="col-xs-12">    
+    @using (Html.BeginForm("EditPersoanaFizicaUserprofile", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
@@ -109,7 +108,7 @@
                 <button type="submit" class="btn btn-primary my-4"><span class="bi bi-save"></span> Salvează</button>
             </p>
             <br />
-        }*@
+        }
     </div>
 </div>
 

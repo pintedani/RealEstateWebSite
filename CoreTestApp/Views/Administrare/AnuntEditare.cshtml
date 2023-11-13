@@ -129,43 +129,6 @@
             <div class="no-pad-xs col-lg-7" style="display: inline-block; white-space: nowrap; overflow: hidden">
 
                 @Html.Label("", "Tip Proprietate *", new { @class = "mt-4 mb-2", style = "width: 100px" })
-                @*<div class="selectBoxSimulator dropdown" id="dropdownTipOfertaSelectButtonDiv">
-                        <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
-                        <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipProprietateSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            @Model.TipProprietate
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownTipProprietateSelectButton">
-                            @foreach (TipProprietate tipOfertaGen in Enum.GetValues(typeof(TipProprietate)).Cast<TipProprietate>().Except(new[] { TipProprietate.Toate }))
-                            {
-                                <li @(Model.TipProprietate == tipOfertaGen ? "class = selBoxSelected" : "") data-listvalue="@tipOfertaGen">@tipOfertaGen</li>
-                            }
-                        </ul>
-                    </div>*@
-
-                @*<div id="TipProprietateSelectControl" class="input-group input-group-lg">
-                        <input type="hidden" id="TipProprietateSelect" name="TipProprietate" value="@Model.TipProprietate" />
-                        <button id="TipProprietateDropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-building"></i> Apartament</button>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-item" data-val="Apartament">
-                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare1" id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1"><i class="bi bi-building"></i> Apartament</label>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li class="dropdown-item" data-val="Garsoniera">
-                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2"><i class="bi bi-house-door-fill"></i> Garsoniera</label>
-                            </li>
-                            <li class="dropdown-item" data-val="Casa">
-                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault3">
-                                <label class="form-check-label" for="flexRadioDefault3"><i class="bi bi-house-heart-fill"></i> Casa</label>
-                            </li>
-                            <li class="dropdown-item" data-val="Teren">
-                                <input class="form-check-input" type="radio" name="Model.TipProprietate" value="Vanzare2" id="flexRadioDefault4">
-                                <label class="form-check-label" for="flexRadioDefault4"><i class="bi bi-layers"></i> Teren</label>
-                            </li>
-                        </ul>
-                    </div>*@
 
                 <div class="pb-1 me-2">
                     <div id="TipProprietateSelectControl" class="input-group input-group-lg flex-wrap">
@@ -217,19 +180,6 @@
                 }
 
                 @Html.Label("", "Tip Vânzator *", new { @class = "mt-4 mb-2", style = "width: 100px" })
-                @*<div class="selectBoxSimulator dropdown">
-                        <input type="hidden" id="TipVanzatorSelect" name="TipVanzator" value="@Model.TipVanzator" />
-                        <button class="combobox dropdown-toggle" style="width: 200px" type="button" id="dropdownTipVanzatorSelectButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            @Model.TipVanzator
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownTipVanzatorSelectButton">
-                            @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
-                            {
-                                <li @(Model.TipVanzator == tipVanzator ? "class = selBoxSelected" : "") data-listvalue="@tipVanzator">@tipVanzator</li>
-                            }
-                        </ul>
-                    </div>*@
 
                 <select id="TipVanzatorSelect" name="TipVanzator" class="form-select" aria-label="Tip vânzător" style="max-width: 600px; width: 100%">
                     @foreach (TipVanzator tipVanzator in Enum.GetValues(typeof(TipVanzator)).Cast<TipVanzator>().Except(new[] { TipVanzator.TotiVanzatorii }))
@@ -848,6 +798,10 @@
         </script>
     }
 
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+@*    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>*@
+    <script src="https://cdn.jsdelivr.net/jquery.unobtrusive-ajax/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 @*    @Scripts.Render("~/bundles/jqueryval")*@
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+@*    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
 }

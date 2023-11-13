@@ -113,6 +113,9 @@ namespace Imobiliare.UI.Controllers
             return View(imobilsData);
         }
 
+        //write method to generate random number    
+
+
         [HttpGet]
         public ActionResult AnuntEditare(int? id, string tipOferta)
         {

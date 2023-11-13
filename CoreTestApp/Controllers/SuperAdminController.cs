@@ -456,7 +456,7 @@ namespace Imobiliare.UI.Controllers
         //    {
         //        externalSourceAnunt = new ExternalSourceAnunt() { EroareParsare = "Linkul este atribuit unui anunt anterior! A fost adaugat un anunt deja cu linkul specificat." };
         //    }
-        //    return this.Json(externalSourceAnunt, new Newtonsoft.Json.JsonSerializerSettings());
+        //    return this.Json(externalSourceAnunt);
         //}
 
         public ActionResult ClearPhotosExceptFirst(int anuntId, string returnUrl)
@@ -578,7 +578,7 @@ namespace Imobiliare.UI.Controllers
             var urlList = this.externalSiteContentParser.GetPicturesUrlList(url);
 
             //https://stackoverflow.com/questions/38578463/asp-net-core-the-name-jsonrequestbehavior-does-not-exist-in-the-current-cont
-            return this.Json(urlList, new Newtonsoft.Json.JsonSerializerSettings());
+            return this.Json(urlList);
         }
 
         public ActionResult UploadExternalSiteImages(string link, int idanunt)

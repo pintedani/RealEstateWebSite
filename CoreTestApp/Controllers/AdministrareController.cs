@@ -19,14 +19,18 @@ namespace Imobiliare.UI.Controllers
 
         private readonly IEmailManagerService emailManagerService;
 
+        private readonly IWebHostEnvironment hostingEnvironment;
+
         private static readonly ILog log = LogManager.GetLogger(typeof(AdministrareController));
 
         public AdministrareController(
           IUnitOfWork unitOfWork,
-          IEmailManagerService emailManagerService)
+          IEmailManagerService emailManagerService,
+          IWebHostEnvironment hostingEnvironment)
         {
             this.emailManagerService = emailManagerService;
             this.unitOfWork = unitOfWork;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -326,14 +330,17 @@ namespace Imobiliare.UI.Controllers
         }
 
         //[AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult DeleteImage()
+        public ActionResult DeleteImage(string anuntId, string photoToDelete, string movePozaUp, string movePozaDown, string rotatePoza)
         {
-            string imobilIdString = Request.Form["imobilId"];
-            int imobilId = imobilIdString.ParseToInt();
-            string photoToDelete = Request.Form["pozaDeSters"];
-            string movePozaUp = Request.Form["movePozaUp"];
-            string movePozaDown = Request.Form["movePozaDown"];
-            string rotatePoza = Request.Form["rotatePoza"];
+            int imobilId = 0;
+            if (!string.IsNullOrEmpty(anuntId))
+            {
+                imobilId = anuntId.ParseToInt();
+            }
+            //string photoToDelete = Request.Form["pozaDeSters"];
+            //string movePozaUp = Request.Form["movePozaUp"];
+            //string movePozaDown = Request.Form["movePozaDown"];
+            //string rotatePoza = Request.Form["rotatePoza"];
             if (photoToDelete != null)
             {
                 log.DebugFormat("Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
@@ -382,31 +389,31 @@ namespace Imobiliare.UI.Controllers
             return null;
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public ActionResult AddImageNoAjax(IFormFile file)
-        //{
-        //    int imobilId = int.Parse(Request.Form["imobilId"]);
-        //    if (file != null)
-        //    {
-        //        var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
-        //        if (!string.IsNullOrEmpty(imageName))
-        //        {
-        //            this.unitOfWork.Complete();
-        //            log.DebugFormat("Added images for imobil NOT async with id {0} by user {1}, imageName: {2}",
-        //                imobilId, User.Identity.Name, imageName);
-        //        }
-        //        else
-        //        {
-        //            TempData["ErrorMessage"] = "Eroare la incarcarea fisierului. Verificati sa fie de tipul imagine!";
-        //        }
-        //    }
-        //    else
-        //    {
-        //        log.DebugFormat("No image selected for imobil NOT async  by user {0}", User.Identity.Name);
-        //    }
-        //    return RedirectToAction(nameof(AnuntEditare), new RouteValueDictionary(new Dictionary<string, object>() { { "id", imobilId } }));
-        //}
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddImageNoAjax(IFormFile file)
+        {
+            int imobilId = int.Parse(Request.Form["imobilId"]);
+            if (file != null)
+            {
+                var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file }, hostingEnvironment.WebRootPath);
+                if (!string.IsNullOrEmpty(imageName))
+                {
+                    this.unitOfWork.Complete();
+                    log.DebugFormat("Added images for imobil NOT async with id {0} by user {1}, imageName: {2}",
+                        imobilId, User.Identity.Name, imageName);
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Eroare la incarcarea fisierului. Verificati sa fie de tipul imagine!";
+                }
+            }
+            else
+            {
+                log.DebugFormat("No image selected for imobil NOT async  by user {0}", User.Identity.Name);
+            }
+            return RedirectToAction(nameof(AnuntEditare), new RouteValueDictionary(new Dictionary<string, object>() { { "id", imobilId } }));
+        }
 
         public ActionResult Deactivare(int imobilid, string returnUrl)
         {

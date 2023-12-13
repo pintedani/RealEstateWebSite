@@ -48,6 +48,14 @@
                         @Html.Partial("_pozeEditAnuntPartial")
                     </div>
                 }*@
+
+                <form id="myForm" action="@Url.Action("DeleteImage", "Administrare")">
+                    <input type="hidden" name="anuntId" value="@Model.Id" />
+                    <div id="ImageArea" class="col-md-6">
+                        @Html.Partial("_pozeEditAnuntPartial")
+                    </div>
+                </form>
+
             </div>
         </div>
         <br />
@@ -277,16 +285,6 @@
                         @Html.TextBoxFor(model => Model.Price, new { style = "max-width: 600px; width: 100%", title = "Completati pretul proprietatii(de ex 30000)", Value = pretEuro, onClick = "if(this.value == 0) {this.value=''}", placeholder = "Preț Euro *", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.Price)
                     </div>
-                    @*<div class="touchCheckbox col-xs-12 col-md-4">
-                            <span style="font-size: 1.8em" class="bi @(Model.Negociabil ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.Negociabil ? "true" : "false")" name="Negociabil">
-                            <label>Negociabil</label>
-                        </div>*@
-
-                    @*<div class="form-check my-4">
-                            <input class="form-check-input" type="checkbox" value="@(Model.Negociabil ? "true" : "false")" id="Negociabil" name="Negociabil">
-                            <label class="form-check-label" for="AbonatLaNewsLetter">Negociabil</label>
-                        </div>*@
 
                     <div class="form-check">
                         @Html.EditorFor(model => model.Negociabil, new { htmlAttributes = new { @class = "form-check-input" } })
@@ -407,16 +405,6 @@
                                 dictionary.Add(-1, "Mansardă");
 
                             }
-                            @*<button class="combobox dropdown-toggle" style="width: 110px" type="button" id="dropdownEtaj" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    @dictionary[Model.Etaj]
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownEtaj">
-                                    @foreach (var item in dictionary)
-                                    {
-                                        <li @(Model.Etaj == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@dictionary[item.Key]</li>
-                                    }
-                                </ul>*@
 
                             <select id="EtajSelect" name="Etaj" class="form-select" aria-label="Etaj">
                                 @foreach (var etaj in dictionary)
@@ -453,16 +441,6 @@
                                 dictionaryTotal.Add(13, "13");
                                 dictionaryTotal.Add(14, "14");
                             }
-                            @*<button class="combobox dropdown-toggle" style="width: 110px" type="button" id="dropdownTotalEtaje" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    @dictionaryTotal[Model.NumarTotalEtaje]
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownTotalEtaje">
-                                    @foreach (var item in dictionaryTotal)
-                                    {
-                                        <li @(Model.NumarTotalEtaje == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@dictionaryTotal[item.Key]</li>
-                                    }
-                                </ul>*@
 
                             <select id="NumarTotalEtajSelect" name="NumarTotalEtaje" class="form-select" aria-label="Numar total Etaje">
                                 @foreach (var etaj in dictionaryTotal)
@@ -488,11 +466,6 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.AerConditionat, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.AerConditionat ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.AerConditionat ? "true" : "false")" name="AerConditionat">
-                            <label>Aer Condiționat</label>
-                        </div>*@
                     <div class="form-check">
                         @Html.EditorFor(model => model.AerConditionat, new { htmlAttributes = new { @class = "form-check-input" } })
                         @*@Html.LabelFor(m => m.AerConditionat)*@
@@ -502,11 +475,6 @@
                 }
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Centralatermica, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.CT ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.CT ? "true" : "false")" name="CT">
-                            <label>Centrală termică</label>
-                        </div>*@
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.CT, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="CT">Centrală termică</label>
@@ -515,12 +483,6 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Garaj, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.Garaj ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.Garaj ? "true" : "false")" name="Garaj">
-                            <label>Garaj</label>
-                        </div>*@
-
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.Garaj, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="Garaj">Garaj</label>
@@ -528,12 +490,6 @@
                 }
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocParcare, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.LocParcare ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.LocParcare ? "true" : "false")" name="LocParcare">
-                            <label>Loc Parcare</label>
-                        </div>*@
-
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.LocParcare, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="LocParcare">Loc Parcare</label>
@@ -542,12 +498,6 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Decomandat, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.Decomandat ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.Decomandat ? "true" : "false")" name="Decomandat">
-                            <label>Decomandat</label>
-                        </div>*@
-
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.Decomandat, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="Decomandat">Decomandat</label>
@@ -556,12 +506,6 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.Finisat, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.Finisat ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.Finisat ? "true" : "false")" name="Finisat">
-                            <label>Finisat</label>
-                        </div>*@
-
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.Finisat, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="Finisat">Finisat</label>
@@ -570,12 +514,6 @@
 
                 @if (TipOfertaOptions.OptionVisible(AnuntOptiuni.LocInPivnita, Model.TipProprietate, Model.TipOfertaGen))
                 {
-                    @*<div class="touchCheckbox">
-                            <span style="font-size: 1.8em" class="bi @(Model.LocInPivnita ? "bi-check" : "bi-unchecked")"></span>
-                            <input type="hidden" value="@(Model.LocInPivnita ? "true" : "false")" name="LocInPivnita">
-                            <label>Loc în pivniță</label>
-                        </div>*@
-
                     <div class="form-check mt-2">
                         @Html.EditorFor(model => model.LocInPivnita, new { htmlAttributes = new { @class = "form-check-input" } })
                         <label for="LocInPivnita">Loc în pivniță</label>
@@ -599,16 +537,7 @@
                             Model.Valabilitate = 60;
                         }
                     }
-                    @*<button class="combobox dropdown-toggle" style="width: 150px" type="button" id="dropdownValabilitate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            @dictionaryValabilitate[Model.Valabilitate == 0 ? 60 : Model.Valabilitate]
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownNumarBalcoane">
-                            @foreach (var item in dictionaryValabilitate)
-                            {
-                                <li @(Model.NrBalcoane == item.Key ? "class = selBoxSelected" : "") data-listvalue="@item.Key">@item.Value</li>
-                            }
-                        </ul>*@
+
                     <select id="ValabilitateSelect" name="Valabilitate" class="form-select" aria-label="Valabilitate">
                         @foreach (var item in dictionaryValabilitate)
                         {
@@ -671,13 +600,71 @@
                 var selectedOferta = $(this).data("val");
                 $("#TipOfertaGenSelect").val(selectedOferta);
             });
+
+            $('#myForm').submit(function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                
+                //var formData = $(this).serialize();
+                // var additionalData = $('#ImageArea').find('button').serialize();
+                // formData += '&' + additionalData;
+
+                var formData = $(this).serializeArray();
+                var clickedButtonName = $('button[type="submit"]:focus').attr('name');
+                var clickedButtonValue = $(this).find('button[type="submit"]:focus').val();
+                formData.push({ name: clickedButtonName, value: clickedButtonValue });
+                //alert(formData);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        $('#ImageArea').html(response);
+                        // var target = $($(this).data('update-target'));
+                        // var insertionMode = $($(this).data('insertion-mode'));
+
+                        // if (insertionMode === 'Replace') {
+                        //     target.html(response);
+                        // }
+                        // Add other insertion mode handling if needed
+
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
         });
+
+        //function submitForm() {
+        //    var formData = $('#myForm').serialize();
+
+        //    $.ajax({
+        //        url: $('#myForm').attr('action'),
+        //        method: 'POST',
+        //        data: formData,
+        //        success: function (response) {
+        //            var target = $($('#myForm').data('update-target'));
+        //            var insertionMode = $($('#myForm').data('insertion-mode'));
+
+        //            if (insertionMode === 'Replace') {
+        //                target.html(response);
+        //            }
+        //            // Add other insertion mode handling if needed
+
+        //        },
+        //        error: function (error) {
+        //            console.error('Error:', error);
+        //        }
+        //    });
+        //}
     </script>
 
     @if (!Model.IsModAdaugare)
     {
         <script>
-        @*TODO: REENABLE
+        
+            @*Not called anymore*@
             $(".ChangeState").change(function() {
         var url =
           '@Url.Action("ChangeImobilState", "SuperAdmin", new { id = "__id__", stare = "__stare__", returnUrl = "__returnUrl__" })';
@@ -685,9 +672,10 @@
         //&amp seems to be a general problema when passing params, therefore replace with simple &
         var tempPath2 = tempPath.replace(/__stare__/g, $(this).val());
         var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g,
-          "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));
+                    "&returnUrl=" + encodeURIComponent(window.location.href));
+@*          "&returnUrl=" + encodeURIComponent('@HttpContext.Current.Request.Url.AbsoluteUri'));*@
         window.location.href = finalPath;
-      });*@
+      });
 
     $(".js-aproba-anunt").click(function (e) {
         var link = $(e.target);

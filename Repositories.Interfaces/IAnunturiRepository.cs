@@ -5,6 +5,7 @@
     using System.Web;
 
     using Imobiliare.Entities;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// Gets information about Imobils and provide update methods
@@ -51,7 +52,7 @@
         void RotatePhoto(int imobilId, string rotatePoza);
 
         //Returns last added image
-        //string AddImages(int imobilId, IFormFile[] files);
+        string AddImages(int imobilId, IFormFile[] files, string webRootPath);
 
         void RemoveGoogleMarkerCoordinates(int imobilId);
 

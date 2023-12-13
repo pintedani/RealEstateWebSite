@@ -154,7 +154,8 @@ namespace Imobiliare.UI.Controllers
         {
             if (orasId != 0)
             {
-                return Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId));
+                var result = Json(this.unitOfWork.CartierRepository.GetSelectableCartiers(orasId));
+                return result;
             }
             return this.Json(new List<Cartier>());
         }

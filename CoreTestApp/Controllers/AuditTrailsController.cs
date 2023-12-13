@@ -22,7 +22,7 @@ namespace Imobiliare.UI.Controllers
         }
 
         // GET: AuditTrails
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string searchText, string date)
         {
             var selectedPageFinal = 1;
 
@@ -31,12 +31,13 @@ namespace Imobiliare.UI.Controllers
                 selectedPageFinal = page.Value;
             }
 
-            var date = (string)Request.Form["auditTrailDate"];
-            var searchText = Request.Form["searchText"];
-
             var s1 = DateTime.Now.ToString(dateFormat);
             DateTime finalDate = DateTime.Parse(s1, dateFormat);
-            if (date != null) finalDate = DateTime.Parse(date, dateFormat);
+
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                finalDate = DateTime.Parse(date, dateFormat);
+            }
 
             int totalNumberOfPages;
             var logsFilter = new Entities.Filter { PageSize = PageSize, Page = selectedPageFinal };

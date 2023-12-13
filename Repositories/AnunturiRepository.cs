@@ -13,6 +13,7 @@ using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.Repositories.Interfaces;
 using Imobiliare.Utilities;
 using Logging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
@@ -519,13 +520,13 @@ namespace Imobiliare.Repositories
             list[indexB] = tmp;
         }
 
-        //public string AddImages(int imobilId, IFormFile[] files)
-        //{
-        //    string lastAddedImage = string.Empty;
-        //    var itemToExtend = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).Include(nameof(Imobil.Cartier)).First(x => x.Id == imobilId);
-        //    lastAddedImage = ImageProcessing.AddPhotos(itemToExtend, files);
-        //    return lastAddedImage;
-        //}
+        public string AddImages(int imobilId, IFormFile[] files, string webRootPath)
+        {
+            string lastAddedImage = string.Empty;
+            var itemToExtend = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).Include(nameof(Imobil.Cartier)).First(x => x.Id == imobilId);
+            lastAddedImage = ImageProcessing.AddPhotos(itemToExtend, files, webRootPath);
+            return lastAddedImage;
+        }
 
         public void RemoveGoogleMarkerCoordinates(int imobilId)
         {

@@ -8,6 +8,7 @@ using System.Web;
 using Imobiliare.Entities;
 using Imobiliare.Managers.ExtensionMethods;
 using Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace Imobiliare.Utilities
 {
@@ -15,53 +16,109 @@ namespace Imobiliare.Utilities
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ImageProcessing));
 
-        //public static string AddPhotos(Imobil imobil, IFormFile[] files)
+        public static string AddPhotos(Imobil imobil, IFormFile[] files, string webRootPath)
+        {
+            string pictureName = string.Empty;
+            if (files != null)
+            {
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        try
+                        {
+                            //This name is temporary, watermark creates real name
+                            pictureName = GetFormattedImageName(imobil);
+
+                            string uploadsFolder = Path.Combine(webRootPath, "Images\\uploadedPhotos");
+
+                            string filePath = Path.Combine(uploadsFolder, pictureName);
+
+                            // Save the file to the specified path
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                file.CopyTo(fileStream);
+                            }
+
+                            //Image image = Image.FromStream(file.InputStream);
+
+                            //var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
+
+                            //var finalImage = FixedSize(image, scaledImage.Item1, scaledImage.Item2);
+                            ////var finalImage = FixedSize(image, 640, 480);
+
+                            //finalImage.Save(path, ImageFormat.Jpeg);
+                            //finalImage.Dispose();
+                            //image.Dispose();
+
+                            if (imobil.Poze == null)
+                            {
+                                imobil.Poze = pictureName;
+                            }
+                            else
+                            {
+                                imobil.Poze += ";" + pictureName;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            pictureName = null;
+                            log.ErrorFormat($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
+                        }
+                    }
+                }
+            }
+            return pictureName;
+        }
+
+        //private static Image FixedSize(Image imgPhoto, int Width, int Height)
         //{
-        //    string pictureName = string.Empty;
-        //    if (files != null)
+        //    int sourceWidth = imgPhoto.Width;
+        //    int sourceHeight = imgPhoto.Height;
+        //    int sourceX = 0;
+        //    int sourceY = 0;
+        //    int destX = 0;
+        //    int destY = 0;
+
+        //    float nPercent = 0;
+        //    float nPercentW = 0;
+        //    float nPercentH = 0;
+
+        //    nPercentW = ((float)Width / (float)sourceWidth);
+        //    nPercentH = ((float)Height / (float)sourceHeight);
+        //    if (nPercentH < nPercentW)
         //    {
-        //        foreach (var IFormFile in files)
-        //        {
-        //            if (IFormFile != null)
-        //            {
-        //                try
-        //                {
-        //                    //This name is temporary, watermark creates real name
-        //                    pictureName = GetFormattedImageName(imobil);
-        //                    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"),
-        //                        pictureName);
-
-        //                    Image image = Image.FromStream(IFormFile.InputStream);
-
-        //                    var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
-
-        //                    var finalImage = FixedSize(image, scaledImage.Item1, scaledImage.Item2);
-        //                    //var finalImage = FixedSize(image, 640, 480);
-
-        //                    finalImage.Save(path, ImageFormat.Jpeg);
-        //                    finalImage.Dispose();
-        //                    image.Dispose();
-
-        //                    //pictureName = InsertWaterMark(pictureName, imobil);
-
-        //                    if (imobil.Poze == null)
-        //                    {
-        //                        imobil.Poze = pictureName;
-        //                    }
-        //                    else
-        //                    {
-        //                        imobil.Poze += ";" + pictureName;
-        //                    }
-        //                }
-        //                catch (Exception e)
-        //                {
-        //                    pictureName = null;
-        //                    log.ErrorFormat($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
-        //                }
-        //            }
-        //        }
+        //        nPercent = nPercentH;
+        //        destX = Convert.ToInt16((Width -
+        //                                 (sourceWidth * nPercent)) / 2);
         //    }
-        //    return pictureName;
+        //    else
+        //    {
+        //        nPercent = nPercentW;
+        //        destY = Convert.ToInt16((Height -
+        //                                 (sourceHeight * nPercent)) / 2);
+        //    }
+
+        //    int destWidth = (int)(sourceWidth * nPercent);
+        //    int destHeight = (int)(sourceHeight * nPercent);
+
+        //    Bitmap bmPhoto = new Bitmap(Width, Height,
+        //        PixelFormat.Format24bppRgb);
+        //    bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
+        //        imgPhoto.VerticalResolution);
+
+        //    Graphics grPhoto = Graphics.FromImage(bmPhoto);
+        //    grPhoto.Clear(Color.FromArgb(249, 249, 249));
+        //    grPhoto.InterpolationMode =
+        //        InterpolationMode.HighQualityBicubic;
+
+        //    grPhoto.DrawImage(imgPhoto,
+        //        new Rectangle(destX, destY, destWidth, destHeight),
+        //        new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
+        //        GraphicsUnit.Pixel);
+
+        //    grPhoto.Dispose();
+        //    return bmPhoto;
         //}
 
         public void RotateImage(Imobil imobil, string pictureName)
@@ -127,159 +184,6 @@ namespace Imobiliare.Utilities
             Tuple<int, int> result = new Tuple<int, int>(width, height);
             return result;
         }
-
-        //private static Image FixedSize(Image imgPhoto, int Width, int Height)
-        //{
-        //    int sourceWidth = imgPhoto.Width;
-        //    int sourceHeight = imgPhoto.Height;
-        //    int sourceX = 0;
-        //    int sourceY = 0;
-        //    int destX = 0;
-        //    int destY = 0;
-
-        //    float nPercent = 0;
-        //    float nPercentW = 0;
-        //    float nPercentH = 0;
-
-        //    nPercentW = ((float)Width / (float)sourceWidth);
-        //    nPercentH = ((float)Height / (float)sourceHeight);
-        //    if (nPercentH < nPercentW)
-        //    {
-        //        nPercent = nPercentH;
-        //        destX = Convert.ToInt16((Width -
-        //                                 (sourceWidth * nPercent)) / 2);
-        //    }
-        //    else
-        //    {
-        //        nPercent = nPercentW;
-        //        destY = Convert.ToInt16((Height -
-        //                                 (sourceHeight * nPercent)) / 2);
-        //    }
-
-        //    int destWidth = (int)(sourceWidth * nPercent);
-        //    int destHeight = (int)(sourceHeight * nPercent);
-
-        //    Bitmap bmPhoto = new Bitmap(Width, Height,
-        //        PixelFormat.Format24bppRgb);
-        //    bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
-        //        imgPhoto.VerticalResolution);
-
-        //    Graphics grPhoto = Graphics.FromImage(bmPhoto);
-        //    grPhoto.Clear(Color.FromArgb(249, 249, 249));
-        //    grPhoto.InterpolationMode =
-        //        InterpolationMode.HighQualityBicubic;
-
-        //    grPhoto.DrawImage(imgPhoto,
-        //        new Rectangle(destX, destY, destWidth, destHeight),
-        //        new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
-        //        GraphicsUnit.Pixel);
-
-        //    grPhoto.Dispose();
-        //    return bmPhoto;
-        //}
-
-        //Not used currently
-        //private static string InsertWaterMark(string pictureName, Imobil imobil)
-        //{
-        //    var waterMarkedImage = GetFormattedImageName(imobil);
-        //    string initialPictureLocation = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
-        //    try
-        //    {
-        //        float horizontalResolution;
-        //        float verticalResolution;
-        //        int imgPhotoWidth;
-        //        using (var imgPhoto = Image.FromFile(initialPictureLocation)) { imgPhotoWidth = imgPhoto.Width; horizontalResolution = imgPhoto.HorizontalResolution; verticalResolution = imgPhoto.VerticalResolution; }
-
-        //        using (Image imgWatermark = new Bitmap(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/DecorationImages"), "watermark.png")))
-        //        using (var bmWatermark = new Bitmap(initialPictureLocation))
-        //        {
-        //            bmWatermark.SetResolution(horizontalResolution, verticalResolution);
-        //            using (Graphics grWatermark = Graphics.FromImage(bmWatermark))
-        //            {
-        //                var imageAttributes = new ImageAttributes();
-
-        //                //The first step in manipulating the watermark image is to replace 
-        //                //the background color with one that is trasparent (Alpha=0, R=0, G=0, B=0)
-        //                //to do this we will use a Colormap and use this to define a RemapTable
-        //                ColorMap colorMap = new ColorMap();
-
-        //                //My watermark was defined with a background of 100% Green this will
-        //                //be the color we search for and replace with transparency
-        //                colorMap.OldColor = Color.FromArgb(255, 0, 255, 0);
-        //                colorMap.NewColor = Color.FromArgb(0, 0, 0, 0);
-
-        //                ColorMap[] remapTable = { colorMap };
-
-        //                imageAttributes.SetRemapTable(remapTable, ColorAdjustType.Bitmap);
-
-        //                //The second color manipulation is used to change the opacity of the 
-        //                //watermark.  This is done by applying a 5x5 matrix that contains the 
-        //                //coordinates for the RGBA space.  By setting the 3rd row and 3rd column 
-        //                //to 0.3f we achive a level of opacity
-        //                float[][] colorMatrixElements =
-        //                {
-        //                    new float[] { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f },
-        //                    new float[] { 0.0f, 1.0f, 0.0f, 0.0f, 0.0f },
-        //                    new float[] { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f },
-        //                    new float[] { 0.0f, 0.0f, 0.0f, 1.0f, 0.0f },
-        //                    new float[] { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f }
-        //                };
-        //                var wmColorMatrix = new ColorMatrix(colorMatrixElements);
-
-        //                imageAttributes.SetColorMatrix(wmColorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-        //                //For this example we will place the watermark in the upper right
-        //                //hand corner of the photograph. offset down 10 pixels and to the 
-        //                //left 10 pixles
-
-        //                int phWidth = imgPhotoWidth;
-        //                int wmWidth = imgWatermark.Width;
-        //                int wmHeight = imgWatermark.Height;
-        //                int xPosOfWm = ((phWidth - wmWidth) - 10);
-        //                int yPosOfWm = 10;
-
-        //                grWatermark.DrawImage(
-        //                    imgWatermark,
-        //                    new Rectangle(xPosOfWm, yPosOfWm, wmWidth, wmHeight),
-        //                    //Set the detination Position
-        //                    0,
-        //                    // x-coordinate of the portion of the source image to draw. 
-        //                    0,
-        //                    // y-coordinate of the portion of the source image to draw. 
-        //                    wmWidth,
-        //                    // Watermark Width
-        //                    wmHeight,
-        //                    // Watermark Height
-        //                    GraphicsUnit.Pixel,
-        //                    // Unit of measurment
-        //                    imageAttributes); //ImageAttributes Object
-        //            }
-
-        //            //replace new image to file syste
-        //            bmWatermark.Save(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), waterMarkedImage), ImageFormat.Jpeg);
-        //        }
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        log.ErrorFormat("Error applying watermark to image {0}, error {1}", pictureName, exception.Message);
-
-        //        //Use non watermarkedImage instead if not created
-        //        return pictureName;
-        //    }
-
-        //    //Delete initial image
-        //    try
-        //    {
-        //        if (File.Exists(initialPictureLocation))
-        //            File.Delete(initialPictureLocation);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        log.ErrorFormat("Error deleting initial image {0} after applying watermark, error {1}", initialPictureLocation, exception.Message);
-        //    }
-
-        //    return waterMarkedImage;
-        //}
 
         private static string GetFormattedImageName(Imobil imobil)
         {

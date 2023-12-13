@@ -90,10 +90,18 @@
                   value: 0,
                   text: 'Nespecificat'
               }));
+              //alert(cartiere);
+                    //for (var index = 0; index < cartiere.length; ++index) {
+                    //    console.log(cartiere[index]);
+                    //    cartierSelect.append($('<option/>', {
+                    //        value: cartiere[index].id,
+                    //        text: cartiere[index].nume
+                    //    }));
+                    //}
           $.each(cartiere, function (index, cartier) {
             cartierSelect.append($('<option/>', {
-              value: cartier.Id,
-              text: cartier.Nume
+              value: cartier.id,
+              text: cartier.nume
             }));
           });
           $('#cartierSelectDiv').fadeOut('fast');

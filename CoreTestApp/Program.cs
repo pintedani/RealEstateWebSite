@@ -40,7 +40,11 @@ builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp => ShoppingCart.GetCa
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
+//https://stackoverflow.com/questions/72060349/form-field-is-required-even-if-not-defined-so
+builder.Services.AddControllersWithViews(options => { 
+        options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        }
+    ).AddRazorRuntimeCompilation()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

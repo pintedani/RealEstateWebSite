@@ -79,10 +79,10 @@ namespace Imobiliare.UI.Controllers
             {
                 userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(userId, false);
             }
-            else if ((string)Request.Form["userIdSelect"] != null)
-            {
-                userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(Request.Form["userIdSelect"], false);
-            }
+            //else if ((string)Request.Form["userIdSelect"] != null)
+            //
+            //    userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(Request.Form["userIdSelect"], false);
+            //
             else
             {
                 //Default value

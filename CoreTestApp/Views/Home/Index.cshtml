@@ -4,6 +4,8 @@
 @model HomeViewModel
 
 @{
+    ViewBag.Title = "Anunturi Imobiliare Gratuite, Apartamente Vanzare Inchiriere";
+    ViewBag.MetaDescription = "Apartamente, Garsoniere, Case sau Terenuri de vanzare sau inchiriere din Romania. Anunturi imobiliare gratuite si actualizate pe apartamente24.ro";
     Layout = "_LayoutB5";
 }
 
@@ -380,14 +382,15 @@
 </div>
 
 <div class="col my-4" style="background-color: #F9F9F9; text-align: center; padding: 10px">
-    @if (!User.Identity.IsAuthenticated)
+    <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
+@*     @if (!User.Identity.IsAuthenticated)
     {
         <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
     }
     else
     {
         <a href="@Url.Action("AnuntEditare", "Administrare")" class="btn btn-primary"><span class="bi bi-pin"></span>&nbsp;Adaugă Anunț Gratuit</a>
-    }
+    } *@
 </div>
 
 
@@ -396,5 +399,5 @@
     <script>
         var enableautorefresh = false;
     </script>
-    @*@Html.Partial("_GenericAnunturiFilter")*@
+    @Html.Partial("_GenericAnunturiFilter")
 }

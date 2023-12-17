@@ -1,10 +1,14 @@
 ﻿@using Imobiliare.Entities;
 @using Microsoft.AspNetCore.Identity
+    @using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
 
 @inject SignInManager<UserProfile> SignInManager
 @inject UserManager<UserProfile> UserManager
 
-<ul class="navbar-nav">
+@inject IHttpContextAccessor HttpContextAccessor
+
+@* <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
@@ -25,4 +29,64 @@ else
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
+</ul> *@
+
+
+<div style="text-align: center; border-radius: 4px; background-color: #F9F9F9; padding-top: 5px; ">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a href="@Url.Action("Index", "Mesaje")" style="display: inline-block; vertical-align: top; cursor: pointer; padding: 0 5px 0 5px">
+            <div title="Mesaje">
+                <span class="glyphicon glyphicon-envelope" style="font-size: 1.2em"></span>
+                <p style="margin: 2px 0 3px 0">Mesaje</p>
+            </div>
+        </a>
+    }
+    @*<div class="anunutiSalvateHeader" title="Anunturi Salvate" style="display: inline-block; vertical-align: top; cursor: pointer; padding: 0 5px 0 5px">
+    <span id="anunturiSalvateHeaderImage" class="glyphicon glyphicon-heart" style="font-size: 1.2em"></span>
+    <p style="margin: 2px 0 3px 0" id="anunturiSalvateHeaderText">Salvate</p>
+    </div>
+    <div id="cautariHeaderImage" title="Cautari Salvate" style="display: inline-block; vertical-align: top; cursor: pointer; padding-right: 5px">
+    <span id="cautariSalvateHeaderImage" class="glyphicon glyphicon-search" style="font-size: 1.2em"></span>
+    <p style="margin: 2px 0 3px 0" id="cautariSalvateHeaderText">Căutări</p>
+    </div>*@
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @*<text>*@
+        <div class="dropdown" style="display: inline-block; cursor: pointer; margin-right: 5px" title="Administreaza Cont" onclick="window.location = '@Url.Action("EditUserDetails", "Manage")'">
+            <img src="~/Images/profile.png" />
+            <br />
+            <div style="display: inline-block; white-space: nowrap; overflow: hidden; max-width: 70px">
+                <p class="username" style="text-decoration: none">@User.Identity.Name.Split('@')[0]</p>
+            </div>
+            <div class="dropdown-content">
+                <a href="@Url.Action("EditUserDetails", "Manage")"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Detalii cont</a>
+                <a href="@Url.Action("Index", "Administrare")"><span class="glyphicon glyphicon-align-justify"></span>&nbsp;Anunturile mele</a>
+                <a href="javascript:document.getElementById('logoutForm').submit()"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Deconectare</a>
+            </div>
+        </div>
+        @*</text>*@
+    }
+    else
+    {
+        <div class="dropdown" style="display: inline-block; margin-bottom: 8px" title="Intra in cont" onclick="window.location = '@Url.Action("Login", "Account")'">
+            <img src="~/Images/log_in.png" style="cursor: pointer; height: 24px" onclick="window.location = '@Url.Action("Login", "Account")'" />
+            <br />
+            @Html.ActionLink("Log in", "Login", "Account", new { returnUrl = HttpContextAccessor.HttpContext?.Request?.GetDisplayUrl()/* HttpContext.Current.Request.RawUrl */ }, htmlAttributes: new { id = "loginLink", @class = "label label-success" })
+            <div class="dropdown-content">
+                <a href="@Url.Action("Login", "Account")"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Intră în cont</a>
+                <a href="@Url.Action("Register", "Account")"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Creează Cont Gratuit</a>
+            </div>
+        </div>
+    }
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div style="padding:5px 5px 0 0; text-align: right">
+        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+        {
+            @Html.AntiForgeryToken()
+            <a class="label label-success" href="javascript:document.getElementById('logoutForm').submit()">Deconectare</a>
+        }
+    </div>
+}

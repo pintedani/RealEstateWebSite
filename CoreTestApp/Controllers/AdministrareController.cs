@@ -344,7 +344,7 @@ namespace Imobiliare.UI.Controllers
             if (photoToDelete != null)
             {
                 log.DebugFormat("Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
-                this.unitOfWork.AnunturiRepository.DeleteImage(imobilId, photoToDelete);
+                this.unitOfWork.AnunturiRepository.DeleteImage(imobilId, photoToDelete, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }
             if (movePozaUp != null)
@@ -362,7 +362,7 @@ namespace Imobiliare.UI.Controllers
             if (rotatePoza != null)
             {
                 log.DebugFormat("Rotate photo {0} by {1}", rotatePoza, User.Identity.Name);
-                this.unitOfWork.AnunturiRepository.RotatePhoto(imobilId, rotatePoza);
+                this.unitOfWork.AnunturiRepository.RotatePhoto(imobilId, rotatePoza, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }
             var imobil = this.unitOfWork.AnunturiRepository.Single(x => x.Id == imobilId);
@@ -391,12 +391,12 @@ namespace Imobiliare.UI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddImageNoAjax(IFormFile file)
+        public async Task<ActionResult> AddImageNoAjax(IFormFile file)
         {
             int imobilId = int.Parse(Request.Form["imobilId"]);
             if (file != null)
             {
-                var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file }, hostingEnvironment.WebRootPath);
+                var imageName = await this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file }, hostingEnvironment.WebRootPath);
                 if (!string.IsNullOrEmpty(imageName))
                 {
                     this.unitOfWork.Complete();

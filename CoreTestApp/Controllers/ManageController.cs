@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.Net;
 using AutoMapper;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace Imobiliare.UI.Controllers
 {
@@ -20,6 +21,7 @@ namespace Imobiliare.UI.Controllers
     {
         private SignInManager<UserProfile> SignInManager;
         private UserManager<UserProfile> UserManager;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         private readonly IUnitOfWork unitOfWork;
 
@@ -28,11 +30,13 @@ namespace Imobiliare.UI.Controllers
         public ManageController(
           SignInManager<UserProfile> signInManager,
           UserManager<UserProfile> userManager,
-          IUnitOfWork unitOfWork)
+          IUnitOfWork unitOfWork,
+          IWebHostEnvironment hostingEnvironment)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             this.unitOfWork = unitOfWork;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         //
@@ -248,7 +252,7 @@ namespace Imobiliare.UI.Controllers
             log.WarnFormat("Attempting to delete anunturi for user {0}, total anunturi: {1}", user.UserName, anunturi.Count);
             foreach (var anunt in anunturi)
             {
-                this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id);
+                this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id, hostingEnvironment.WebRootPath);
             }
 
             this.unitOfWork.UsersRepository.DeleteUser(user.Id);

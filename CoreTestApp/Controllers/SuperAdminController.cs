@@ -24,6 +24,7 @@ namespace Imobiliare.UI.Controllers
         private DateTimeFormatInfo dateFormat = new DateTimeFormatInfo { ShortDatePattern = "dd'/'MM'/'yyyy" };
 
         private readonly IUnitOfWork unitOfWork;
+        private readonly IWebHostEnvironment hostingEnvironment;
         private readonly IEmailManagerService emailManagerService;
         private readonly IExternalSiteParserService externalSiteContentParser;
 
@@ -32,11 +33,13 @@ namespace Imobiliare.UI.Controllers
         public SuperAdminController(
           IUnitOfWork unitOfWork,
           IEmailManagerService emailManagerService,
-          IExternalSiteParserService externalSiteContentParser)
+          IExternalSiteParserService externalSiteContentParser,
+          IWebHostEnvironment hostingEnvironment)
         {
             this.emailManagerService = emailManagerService;
             this.externalSiteContentParser = externalSiteContentParser;
             this.unitOfWork = unitOfWork;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public ActionResult Index(
@@ -255,7 +258,7 @@ namespace Imobiliare.UI.Controllers
             log.WarnFormat("Attempting to delete anunturi for user {0}, total anunturi: {1}", user.UserName, anunturi.Count);
             foreach (var anunt in anunturi)
             {
-                this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id);
+                this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id, hostingEnvironment.WebRootPath);
             }
 
             this.unitOfWork.UsersRepository.DeleteUser(userid);
@@ -429,7 +432,7 @@ namespace Imobiliare.UI.Controllers
         {
             string date = Request.Form["logDate2"];
 
-            int number = this.unitOfWork.AnunturiRepository.DeleteAnunturiVechiBulk(DateTime.Parse(date, dateFormat));
+            int number = this.unitOfWork.AnunturiRepository.DeleteAnunturiVechiBulk(DateTime.Parse(date, dateFormat), hostingEnvironment.WebRootPath);
             this.unitOfWork.Complete();
 
             TempData["Message"] = $"Maintenance... {number} Expired Anunturi deleted";
@@ -611,7 +614,7 @@ namespace Imobiliare.UI.Controllers
         {
             try
             {
-                this.unitOfWork.AnunturiRepository.DeleteImobil(id);
+                this.unitOfWork.AnunturiRepository.DeleteImobil(id, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
                 log.DebugFormat("Deleted imobil with id {0} by administrator from anunt page {1}", id, User.Identity.Name);
 

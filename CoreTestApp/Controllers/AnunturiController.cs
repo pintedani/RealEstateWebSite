@@ -9,6 +9,7 @@ using Imobiliare.Managers.ExtensionMethods;
 using Imobiliare.UI.Utils.UrlSeoFormatters;
 using Imobiliare.UI.BusinessLayer;
 using Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Imobiliare.UI.Controllers
 {
@@ -198,6 +199,8 @@ namespace Imobiliare.UI.Controllers
         [Route("Anunturi/judet-{judetName}/{*filters}")]
         public ActionResult AnunturiList(string filters)
         {
+            //For asp.net core - seems slashes are encoded
+            filters = filters?.Replace("%2F", "/");
             var imobilFilter = new ImobilFilter() { StareAprobare = StareAprobare.Aprobat };
 
             //Put in try/catch because Single will throw error for older URL's

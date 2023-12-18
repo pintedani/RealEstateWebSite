@@ -345,11 +345,11 @@ namespace Imobiliare.Repositories
             return true;
         }
 
-        public bool DeleteImobil(int imobilId)
+        public bool DeleteImobil(int imobilId, string webRootPath)
         {
             var itemToremove = this.DbContext.Imobile.First(x => x.Id == imobilId);
             this.DbContext.Imobile.Remove(itemToremove);
-            _imageProcessing.DeleteAllImobilPhotos(itemToremove.Poze);
+            _imageProcessing.DeleteAllImobilPhotos(itemToremove.Poze, webRootPath);
 
             return true;
         }
@@ -425,7 +425,7 @@ namespace Imobiliare.Repositories
             return addedImobil.Result;
         }
 
-        public void DeleteImage(int imobilId, string imageName)
+        public void DeleteImage(int imobilId, string imageName, string webRootPath)
         {
             var itemToremove = this.DbContext.Imobile.First(x => x.Id == imobilId);
             var allPhotos = itemToremove.Poze.Split(';');
@@ -446,7 +446,7 @@ namespace Imobiliare.Repositories
             itemToremove.Poze = newPictureList != string.Empty ? newPictureList : null;
 
             //Actual delete
-            _imageProcessing.DeleteAllImobilPhotos(imageName);
+            _imageProcessing.DeleteAllImobilPhotos(imageName, webRootPath);
         }
 
         public void MovePhotoUp(int imobilId, string movePozaUp)
@@ -507,10 +507,10 @@ namespace Imobiliare.Repositories
             itemToremove.Poze = newPictureList;
         }
 
-        public void RotatePhoto(int imobilId, string rotatePoza)
+        public void RotatePhoto(int imobilId, string rotatePoza, string webRootPath)
         {
             var imobil = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).First(x => x.Id == imobilId);
-            new ImageProcessing().RotateImage(imobil, rotatePoza);
+            new ImageProcessing().RotateImage(imobil, rotatePoza, webRootPath);
         }
 
         static void Swap(IList<string> list, int indexA, int indexB)
@@ -520,11 +520,11 @@ namespace Imobiliare.Repositories
             list[indexB] = tmp;
         }
 
-        public string AddImages(int imobilId, IFormFile[] files, string webRootPath)
+        public async Task<string> AddImages(int imobilId, IFormFile[] files, string webRootPath)
         {
             string lastAddedImage = string.Empty;
             var itemToExtend = this.DbContext.Imobile.Include(nameof(Imobil.Oras)).Include(nameof(Imobil.Cartier)).First(x => x.Id == imobilId);
-            lastAddedImage = ImageProcessing.AddPhotos(itemToExtend, files, webRootPath);
+            lastAddedImage = await ImageProcessing.AddPhotos(itemToExtend, files, webRootPath);
             return lastAddedImage;
         }
 
@@ -807,7 +807,7 @@ namespace Imobiliare.Repositories
             return 1;
         }
 
-        public int DeleteAnunturiVechiBulk(DateTime dateTime)
+        public int DeleteAnunturiVechiBulk(DateTime dateTime, string webRootPath)
         {
             int result;
             var lastAddedImobils = new List<Imobil>();
@@ -818,7 +818,7 @@ namespace Imobiliare.Repositories
             foreach(var item in lastAddedImobils)
             {
                 log.DebugFormat($"Maintenance... Attempt to remove expired old anunt with id {item.Id} and title {item.Title}");
-                DeleteImobil(item.Id);
+                DeleteImobil(item.Id, webRootPath);
             }
 
             result = lastAddedImobils.Count;

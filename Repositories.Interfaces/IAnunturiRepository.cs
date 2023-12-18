@@ -31,7 +31,7 @@
 
         bool UpdateImobilNew(Imobil imobilDto, bool isAdmin);
 
-        bool DeleteImobil(int imobilId);
+        bool DeleteImobil(int imobilId, string webRootPath);
 
         void DeactivareAnunt(int imobilId);
 
@@ -43,16 +43,16 @@
 
         Imobil AddImobil(Imobil imobil, string userName);
 
-        void DeleteImage(int imobilId, string imageName);
+        void DeleteImage(int imobilId, string imageName, string webRootPath);
 
         void MovePhotoUp(int imobilId, string movePozaUp);
 
         void MovePhotoDown(int imobilId, string movePozaDown);
 
-        void RotatePhoto(int imobilId, string rotatePoza);
+        void RotatePhoto(int imobilId, string rotatePoza, string webRootPath);
 
         //Returns last added image
-        string AddImages(int imobilId, IFormFile[] files, string webRootPath);
+        Task<string> AddImages(int imobilId, IFormFile[] files, string webRootPath);
 
         void RemoveGoogleMarkerCoordinates(int imobilId);
 
@@ -78,7 +78,7 @@
         Tuple<int, int> GetNumberDeletePozeForAnunturiOlderThanDate(DateTime dateTime);
 
         int GetDbSize();
-        int DeleteAnunturiVechiBulk(DateTime dateTime);
+        int DeleteAnunturiVechiBulk(DateTime dateTime, string webRootPath);
         int GetNumberDeleteAnunturiVechiBulk(DateTime dateTime);
     }
 }

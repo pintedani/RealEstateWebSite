@@ -1,10 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Web;
+﻿using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using Imobiliare.Entities;
 using Imobiliare.Managers.ExtensionMethods;
 using Logging;
@@ -16,7 +11,7 @@ namespace Imobiliare.Utilities
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ImageProcessing));
 
-        public static string AddPhotos(Imobil imobil, IFormFile[] files, string webRootPath)
+        public async static Task<string> AddPhotos(Imobil imobil, IFormFile[] files, string webRootPath)
         {
             string pictureName = string.Empty;
             if (files != null)
@@ -34,22 +29,22 @@ namespace Imobiliare.Utilities
 
                             string filePath = Path.Combine(uploadsFolder, pictureName);
 
-                            // Save the file to the specified path
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            using (Stream sourceStream = file.OpenReadStream())
                             {
-                                file.CopyTo(fileStream);
+                                using (Image image = await Image.LoadAsync(sourceStream))
+                                {
+                                    image.Mutate(x => x.Resize(new ResizeOptions
+                                    {
+                                        Mode = ResizeMode.Max,
+                                        Size = new Size(640, 480)
+                                    }));
+
+                                    using (FileStream output = File.Create(filePath))
+                                    {
+                                        await image.SaveAsync(output, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder());
+                                    }
+                                }
                             }
-
-                            //Image image = Image.FromStream(file.InputStream);
-
-                            //var scaledImage = GetResizedImageRatio(image.Width, image.Height, 640, 480);
-
-                            //var finalImage = FixedSize(image, scaledImage.Item1, scaledImage.Item2);
-                            ////var finalImage = FixedSize(image, 640, 480);
-
-                            //finalImage.Save(path, ImageFormat.Jpeg);
-                            //finalImage.Dispose();
-                            //image.Dispose();
 
                             if (imobil.Poze == null)
                             {
@@ -71,118 +66,73 @@ namespace Imobiliare.Utilities
             return pictureName;
         }
 
-        //private static Image FixedSize(Image imgPhoto, int Width, int Height)
-        //{
-        //    int sourceWidth = imgPhoto.Width;
-        //    int sourceHeight = imgPhoto.Height;
-        //    int sourceX = 0;
-        //    int sourceY = 0;
-        //    int destX = 0;
-        //    int destY = 0;
-
-        //    float nPercent = 0;
-        //    float nPercentW = 0;
-        //    float nPercentH = 0;
-
-        //    nPercentW = ((float)Width / (float)sourceWidth);
-        //    nPercentH = ((float)Height / (float)sourceHeight);
-        //    if (nPercentH < nPercentW)
-        //    {
-        //        nPercent = nPercentH;
-        //        destX = Convert.ToInt16((Width -
-        //                                 (sourceWidth * nPercent)) / 2);
-        //    }
-        //    else
-        //    {
-        //        nPercent = nPercentW;
-        //        destY = Convert.ToInt16((Height -
-        //                                 (sourceHeight * nPercent)) / 2);
-        //    }
-
-        //    int destWidth = (int)(sourceWidth * nPercent);
-        //    int destHeight = (int)(sourceHeight * nPercent);
-
-        //    Bitmap bmPhoto = new Bitmap(Width, Height,
-        //        PixelFormat.Format24bppRgb);
-        //    bmPhoto.SetResolution(imgPhoto.HorizontalResolution,
-        //        imgPhoto.VerticalResolution);
-
-        //    Graphics grPhoto = Graphics.FromImage(bmPhoto);
-        //    grPhoto.Clear(Color.FromArgb(249, 249, 249));
-        //    grPhoto.InterpolationMode =
-        //        InterpolationMode.HighQualityBicubic;
-
-        //    grPhoto.DrawImage(imgPhoto,
-        //        new Rectangle(destX, destY, destWidth, destHeight),
-        //        new Rectangle(sourceX, sourceY, sourceWidth, sourceHeight),
-        //        GraphicsUnit.Pixel);
-
-        //    grPhoto.Dispose();
-        //    return bmPhoto;
-        //}
-
-        public void RotateImage(Imobil imobil, string pictureName)
+        public void RotateImage(Imobil imobil, string pictureName, string webRootPath)
         {
-            ////https://www.c-sharpcorner.com/forums/rotate-and-save-image-in-c-sharp
-            //var allPhotos = imobil.Poze.Split(';');
+            var allPhotos = imobil.Poze.Split(';');
 
-            //var index = 0;
-            //for (var i = 0; i < allPhotos.Count(); i++)
-            //{
-            //    if (allPhotos[i] == pictureName)
-            //    {
-            //        index = i;
-            //        break;
-            //    }
-            //}
+            var index = 0;
+            for (var i = 0; i < allPhotos.Count(); i++)
+            {
+                if (allPhotos[i] == pictureName)
+                {
+                    index = i;
+                    break;
+                }
+            }
 
-            //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), pictureName);
+            string path = Path.Combine(webRootPath + "\\Images\\uploadedPhotos", pictureName);
+            var newName = GetFormattedImageName(imobil);
+            string rotatedImagePath = Path.Combine(webRootPath + "\\Images\\uploadedPhotos", newName);
 
-            //try
-            //{
-            //    var img = Image.FromFile(path);
-            //    img.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            try
+            {
+                using (FileStream stream = File.OpenRead(path))
+                {
+                    using (Image image = Image.Load(stream))
+                    {
+                        //TODO: Possibility to rotate back?
+                        image.Mutate(x => x.Rotate(90));
 
-            //    var newName = GetFormattedImageName(imobil);
-            //    string newPath = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), newName);
-            //    img.Save(newPath);
+                        using (FileStream output = File.Create(rotatedImagePath))
+                        {
+                            image.SaveAsJpeg(output);
+                        }
+                    }
+                }
 
-            //    img.Dispose();
+                File.Delete(path);
 
-            //    File.Delete(path);
+                //var img = Image.FromFile(path);
+                //img.RotateFlip(RotateFlipType.Rotate90FlipNone);
 
-            //    allPhotos[index] = newName;
-            //}
-            //catch (Exception exception)
-            //{
-            //    log.ErrorFormat("RotateImage image {0} error {1}", pictureName, exception.Message);
-            //}
+                //var newName = GetFormattedImageName(imobil);
+                //string newPath = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), newName);
+                //img.Save(newPath);
 
-            //string newPictureList = string.Empty;
-            //foreach (var picture in allPhotos.Where(x => x != string.Empty))
-            //{
-            //    if (newPictureList == string.Empty)
-            //    {
-            //        newPictureList = picture;
-            //    }
-            //    else
-            //    {
-            //        newPictureList += ";" + picture;
-            //    }
-            //}
-            //imobil.Poze = newPictureList;
-        }
+                //img.Dispose();
 
-        public static Tuple<int, int> GetResizedImageRatio(int imgWidth, int imgHeight, int maxWidth, int maxHeight)
-        {
-            var ratioX = (double)maxWidth / imgWidth;
-            var ratioY = (double)maxHeight / imgHeight;
-            var ratio = Math.Min(ratioX, ratioY);
+                //File.Delete(path);
 
-            var width = (int)(imgWidth * ratio);
-            var height = (int)(imgHeight * ratio);
-            Tuple<int, int> result = new Tuple<int, int>(width, height);
-            return result;
+                allPhotos[index] = newName;
+            }
+            catch (Exception exception)
+            {
+                log.ErrorFormat("RotateImage image {0} error {1}", pictureName, exception.Message);
+            }
+
+            string newPictureList = string.Empty;
+            foreach (var picture in allPhotos.Where(x => x != string.Empty))
+            {
+                if (newPictureList == string.Empty)
+                {
+                    newPictureList = picture;
+                }
+                else
+                {
+                    newPictureList += ";" + picture;
+                }
+            }
+            imobil.Poze = newPictureList;
         }
 
         private static string GetFormattedImageName(Imobil imobil)
@@ -207,7 +157,7 @@ namespace Imobiliare.Utilities
             return waterMarkedImage;
         }
 
-        public void DeleteAllImobilPhotos(string poze)
+        public void DeleteAllImobilPhotos(string poze, string webRootPath)
         {
             if (poze != null)
             {
@@ -215,17 +165,17 @@ namespace Imobiliare.Utilities
                 {
                     if (poza != string.Empty)
                     {
-                        //string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), poza);
-                        //var fileDel = new FileInfo(path);
-                        //if (fileDel.Exists)
-                        //{
-                        //    log.DebugFormat("Remove photo {0}", poza);
-                        //    fileDel.Delete();
-                        //}
-                        //else
-                        //{
-                        //    log.ErrorFormat("Attempt to remove inexisting anunt photo {0}", poza);
-                        //}
+                        string path = Path.Combine(webRootPath + "\\Images\\uploadedPhotos", poza);
+                        var fileDel = new FileInfo(path);
+                        if (fileDel.Exists)
+                        {
+                            log.DebugFormat("Remove photo {0}", poza);
+                            fileDel.Delete();
+                        }
+                        else
+                        {
+                            log.ErrorFormat("Attempt to remove inexisting anunt photo {0}", poza);
+                        }
                     }
                 }
             }

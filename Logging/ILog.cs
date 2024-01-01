@@ -9,7 +9,8 @@ namespace Logging
 {
     public interface ILog
     {
-        void Debug(string v);
+        void Debug(string message, string memberName = "", string filePath = "", int lineNumber = 0);
+
         void DebugFormat(string v, string poza, int anuntId, string ids);
         void DebugFormat(string v, int imobilId, string? name);
         void DebugFormat(string v, int imobilId, string? name, string imageName);

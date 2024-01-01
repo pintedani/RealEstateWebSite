@@ -10,11 +10,15 @@ using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.ServiceLayer.ExternalSiteContentParser;
 using Imobiliare.ServiceLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Hosting;
+using ScheduledTasks;
+using Crosscutting;
+using Imobiliare.UI.Utils;
+using Imobiliare.UI.ScheduledTasks;
+using Imobiliare.UI.ScheduledTasks.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-//builder.Services.AddScoped<IImobilRepository, MockImobilRepository>();
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAnunturiRepository, AnunturiRepository>();
@@ -33,8 +37,13 @@ builder.Services.AddScoped<IAuditTrailRepository, AuditTrailRepository>();
 builder.Services.AddScoped<IEmailManagerService, EmailManagerService>();
 builder.Services.AddScoped<IExternalSiteParserService, ExternalSiteParserService>();
 builder.Services.AddScoped<IRecaptchaValidator, RecaptchaValidator>();
+builder.Services.AddSingleton<IEnvironmentService, EnvironmentService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<AnunturiAdaugateCheckerJob>();
+builder.Services.AddScoped<AnunturiExpirateCheckerJob>();
+builder.Services.AddScoped<TrimitereRapoarteAdminJob>();
 
 builder.Services.AddScoped<IShoppingCart, ShoppingCart>(sp => ShoppingCart.GetCart(sp));
 builder.Services.AddSession();
@@ -68,12 +77,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/LogOff";
     });
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options => {
-//        options.LoginPath = "/Identity/Account/Login";
-//        // Other options here
-//    });
 
+//Enable when ready
+//var path = GetRequiredService<IWebHostEnvironment>();
+//builder.Services.AddSingleton<HostingConfiguration>();
+builder.Services.AddHostedService<ScheduledTasksBackgroundService>();
 
 var app = builder.Build();
 

@@ -400,8 +400,7 @@ namespace Imobiliare.UI.Controllers
                 if (!string.IsNullOrEmpty(imageName))
                 {
                     this.unitOfWork.Complete();
-                    log.DebugFormat("Added images for imobil NOT async with id {0} by user {1}, imageName: {2}",
-                        imobilId, User.Identity.Name, imageName);
+                    log.DebugFormat($"Added images for imobil NOT async with id {imobilId} by user {User.Identity?.Name}, imageName: {imageName}");
                 }
                 else
                 {

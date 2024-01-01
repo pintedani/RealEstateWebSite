@@ -28,11 +28,14 @@
     <Folder Include="wwwroot\Images\LogoAgentii\" />
     <Folder Include="wwwroot\Images\Stiri\" />
     <Folder Include="wwwroot\Images\uploadedPhotos\" />
+    <Folder Include="wwwroot\ScheduledTaskData\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Crosscutting\Crosscutting.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
+    <ProjectReference Include="..\ScheduledTasks\ScheduledTasks.csproj" />
     <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>

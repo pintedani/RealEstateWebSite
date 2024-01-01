@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +10,15 @@ namespace Logging
 {
     public class Logger : ILog
     {
-        public void Debug(string v)
+        public void Debug(string message,
+                    [CallerMemberName] string memberName = "",
+                    [CallerFilePath] string filePath = "",
+                    [CallerLineNumber] int lineNumber = 0)
         {
             //
         }
 
-        //TODO Implement inteface!
+        //TODO Implement interface!
 
         public void DebugFormat(string v, string poza)
         {

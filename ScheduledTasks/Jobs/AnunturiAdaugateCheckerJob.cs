@@ -32,7 +32,7 @@ namespace Imobiliare.UI.ScheduledTasks
 
         if (anunturiAdaugate.Count == 0)
         {
-          log.DebugFormat("[SERVICE ANUNTURI ADAUGATE] = No anunturi adaugate....");
+          log.Debug("[SERVICE ANUNTURI ADAUGATE] = No anunturi adaugate....");
         }
         else
         {
@@ -47,7 +47,7 @@ namespace Imobiliare.UI.ScheduledTasks
           {
             this.emailManagerService.NotifyAdminAnunturiAdaugate(1, anunturiAdaugate.Count);
           }
-          log.DebugFormat("[SERVICE ANUNTURI ADAUGATE] = {0} anunturi adaugate -------------------- ", anunturiAdaugate.Count.ToString());
+          log.Debug($"[SERVICE ANUNTURI ADAUGATE] = {anunturiAdaugate.Count.ToString()} anunturi adaugate -------------------- ");
         }
       }
       catch (Exception ex)

@@ -183,7 +183,7 @@ namespace Imobiliare.UI.Controllers
                         user.AbonatLaNewsLetter = true;
                         this.unitOfWork.UsersRepository.UpdateUserProfile(user);
                         this.unitOfWork.Complete();
-                        log.DebugFormat("Userul {0} si-a creat prola locala, astfel ca s-a modificat la user local", user.Email);
+                        log.Debug($"Userul {user.Email} si-a creat prola locala, astfel ca s-a modificat la user local");
 
                         await SignInManager.SignInAsync(user, isPersistent: false);
                     }
@@ -471,7 +471,7 @@ namespace Imobiliare.UI.Controllers
                 }
 
                 this.unitOfWork.AgentiiRepository.Update(toEditAgentie);
-                log.DebugFormat("Agent {0} edited agentie details", User.Identity.Name);
+                log.Debug($"Agent {User.Identity.Name} edited agentie details");
 
                 if (editAgentieImobiliaraModel.ProfileImage != null)
                 {

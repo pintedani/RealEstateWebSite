@@ -16,7 +16,7 @@ namespace Imobiliare.ServiceLayer
     public CaptchaResponse GetCaptchaResponse(string response)
     {
       var client = new WebClient();
-      log.DebugFormat("Verifying captcha with response {0}", response);
+      log.Debug($"Verifying captcha with response {response}");
       string reply;
       try
       {
@@ -32,12 +32,12 @@ namespace Imobiliare.ServiceLayer
       }
 
       var captchaResponse = JsonConvert.DeserializeObject<CaptchaResponse>(reply);
-      log.DebugFormat("Captcha reply is {0}", captchaResponse.Success.ToString());
+      log.Debug($"Captcha reply is {captchaResponse.Success.ToString()}");
       if (captchaResponse.ErrorCodes != null)
       {
         foreach (var errorCode in captchaResponse.ErrorCodes)
         {
-          log.DebugFormat("Captcha errorcode is {0}", errorCode);
+          log.Debug($"Captcha errorcode is {errorCode}");
         }
       }
 

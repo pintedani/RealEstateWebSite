@@ -169,7 +169,7 @@ namespace Imobiliare.Utilities
                         var fileDel = new FileInfo(path);
                         if (fileDel.Exists)
                         {
-                            log.DebugFormat("Remove photo {0}", poza);
+                            log.Debug($"Remove photo {poza}");
                             fileDel.Delete();
                         }
                         else

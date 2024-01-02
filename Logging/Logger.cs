@@ -1,6 +1,8 @@
 ﻿using Imobiliare.Entities;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -10,27 +12,32 @@ namespace Logging
 {
     public class Logger : ILog
     {
+        private readonly Type type;
+        //private readonly 
+
+        public Logger(Type type)
+        {
+            this.type = type;
+        }
+
         public void Debug(string message,
                     [CallerMemberName] string memberName = "",
                     [CallerFilePath] string filePath = "",
                     [CallerLineNumber] int lineNumber = 0)
         {
-            //
-        }
+            var stackTrace = new StackTrace();
+            var frame = stackTrace.GetFrame(1); // Get the immediate caller
 
-        //TODO Implement interface!
+            var MemberName = frame.GetMethod().Name;
+            //var FilePath = frame.GetFileName();
+            //var LineNumber = frame.GetFileLineNumber();
 
-        public void DebugFormat(string v, string poza)
-        {
+            //log directly to db
             
         }
+
 
         public void DebugFormat(string v, int imobilId, string? name)
-        {
-            
-        }
-
-        public void DebugFormat(string v, int imobilId, string? name, string imageName)
         {
             
         }
@@ -41,11 +48,6 @@ namespace Logging
         }
 
         public void DebugFormat(string v, string userName, string? name)
-        {
-            
-        }
-
-        public void DebugFormat(string v, string secretNumber, int anuntId, StareAprobare stare)
         {
             
         }

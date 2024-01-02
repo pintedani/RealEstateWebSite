@@ -150,7 +150,7 @@ namespace Imobiliare.UI.Controllers
             {
                 this.unitOfWork.StiriRepository.Edit(stire);
                 this.unitOfWork.Complete();
-                log.DebugFormat("Edited stire: {0}", stire.Titlu);
+                log.Debug($"Edited stire: {stire.Titlu}");
                 TempData["FooterStatus"] = "Stire editata cu succes";
                 TempData["Message"] = "Stire editata cu succes";
                 return RedirectToAction("Edit", new { id = stire.Id });
@@ -182,7 +182,7 @@ namespace Imobiliare.UI.Controllers
         {
             this.unitOfWork.StiriRepository.Delete(id);
             this.unitOfWork.Complete();
-            log.DebugFormat("Deleted stire with id: {0}", id.ToString());
+            log.Debug($"Deleted stire with id: {id.ToString()}");
             TempData["FooterStatus"] = "Stire stearsa cu succes";
             return RedirectToAction("Index");
         }

@@ -37,7 +37,7 @@ namespace Imobiliare.UI.ScheduledTasks.Jobs
                         CreateDateTime = DateTime.Now
                     };
 
-                    log.DebugFormat("[SERVICE TRIMITE RAPOARTE ADMIN] Incepere compunere mesaj {0} ", DateTime.Now.ToString());
+                    log.Debug($"[SERVICE TRIMITE RAPOARTE ADMIN] Incepere compunere mesaj {DateTime.Now.ToString()} ");
 
                     string finalEmail = "Acest email se trimite o data la 48h, sau la orice pornire/repornire a serverului.<br/>" +
                                         "Mail trimis la urmatorii administratori(pentru abonare/dezabonare folositi pagina de admin)<br/>";

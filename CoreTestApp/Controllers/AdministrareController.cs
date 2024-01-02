@@ -409,7 +409,7 @@ namespace Imobiliare.UI.Controllers
             }
             else
             {
-                log.DebugFormat("No image selected for imobil NOT async  by user {0}", User.Identity.Name);
+                log.Debug($"No image selected for imobil NOT async  by user {User.Identity.Name}");
             }
             return RedirectToAction(nameof(AnuntEditare), new RouteValueDictionary(new Dictionary<string, object>() { { "id", imobilId } }));
         }
@@ -450,7 +450,7 @@ namespace Imobiliare.UI.Controllers
         //Schimba stare anunt prin email link mainly
         public ActionResult SchimbaStareAnunt(string secretNumber, int anuntId, StareAprobare stare)
         {
-            log.DebugFormat("User requested from EMAIL, change of imobil state with id {0}, userId {1} to state {2} ", secretNumber, anuntId, stare);
+            log.Debug($"User requested from EMAIL, change of imobil state with id {secretNumber}, userId {anuntId} to state {stare} ");
 
             var anunt = this.unitOfWork.AnunturiRepository.Single(x => x.Id == anuntId);
 

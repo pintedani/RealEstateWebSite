@@ -13,10 +13,7 @@ namespace Logging
 
         void DebugFormat(string v, string poza, int anuntId, string ids);
         void DebugFormat(string v, int imobilId, string? name);
-        void DebugFormat(string v, int imobilId, string? name, string imageName);
         void DebugFormat(string v, string userName, string? name);
-        void DebugFormat(string v, string? name);
-        void DebugFormat(string v, string secretNumber, int anuntId, StareAprobare stare);
         void DebugFormat(string v);
         void DebugFormat(string v, string title, int id);
         void DebugFormat(string v, string emailUser, string titlu, string mesaj);

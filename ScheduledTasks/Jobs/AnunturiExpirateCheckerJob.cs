@@ -66,23 +66,22 @@ namespace Imobiliare.UI.ScheduledTasks
                     }
                     else
                     {
-                        log.WarnFormat("Auto send anunturi expirat emails disabled!");
+                        log.Warn("Auto send anunturi expirat emails disabled!");
                     }
 
                     if (expiredAnunturi.Count == 0)
                     {
-                        log.DebugFormat("[SERVICE EXPIRED ANUNTURI] = No expired anunturi....");
+                        log.Debug("[SERVICE EXPIRED ANUNTURI] = No expired anunturi....");
                     }
                     else
                     {
-                        log.DebugFormat("[SERVICE EXPIRED ANUNTURI] = {0} anunturi expirate -------------------- ",
-                          expiredAnunturi.Count.ToString());
+                        log.Debug($"[SERVICE EXPIRED ANUNTURI] = {expiredAnunturi.Count.ToString()} anunturi expirate -------------------- ");
                     }
                 }
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("[SERVICE EXPIRED ANUNTURI] = Error while checking for expired anuturi {0}", ex.Message);
+                log.ErrorFormat($"[SERVICE EXPIRED ANUNTURI] = Error while checking for expired anuturi {ex.Message}");
                 //throw;
             }
         }

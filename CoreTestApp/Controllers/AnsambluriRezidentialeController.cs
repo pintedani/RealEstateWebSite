@@ -169,7 +169,7 @@ namespace Imobiliare.UI.Controllers
             {
                 this.unitOfWork.AnsambluriRepository.Edit(ansamblu);
                 this.unitOfWork.Complete();
-                log.DebugFormat("Edited ansamblu rezidential: {0}", ansamblu.Titlu);
+                log.Debug($"Edited ansamblu rezidential: {ansamblu.Titlu}");
                 TempData["FooterStatus"] = "Ansamblu rezidential editat cu succes";
                 return RedirectToAction("Index");
             }

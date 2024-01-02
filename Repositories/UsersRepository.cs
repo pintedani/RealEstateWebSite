@@ -274,11 +274,11 @@
                 if (fileDel.Exists)
                 {
                     fileDel.Delete();
-                    log.DebugFormat("Deleted photo {0} for agentie(because replaced by new one)", path);
+                    log.Debug($"Deleted photo {path} for agentie(because replaced by new one)");
                 }
                 else
                 {
-                    log.ErrorFormat("Attempt to remove photo {0} for agentie failed because not exists", path);
+                    log.ErrorFormat($"Attempt to remove photo {path} for agentie failed because not exists");
                 }
             }
             catch (Exception ex)

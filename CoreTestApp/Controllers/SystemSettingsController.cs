@@ -42,7 +42,7 @@ namespace Imobiliare.UI.Controllers
                 this.unitOfWork.SystemSettingsRepository.UpdateSystemSettings(systemSettings);
                 this.unitOfWork.Complete();
                 TempData["Message"] = "Setari updatate cu succes";
-                log.DebugFormat("SystemSettings updated by {0}", User.Identity.Name);
+                log.Debug($"SystemSettings updated by {User.Identity.Name}");
                 return RedirectToAction("Index");
             }
             return View(systemSettings);

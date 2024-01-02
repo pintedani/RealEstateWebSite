@@ -4,7 +4,7 @@
     {
         public static ILog GetLogger(Type type)
         {
-            return new Logger();
+            return new Logger(type);
         }
     }
 }

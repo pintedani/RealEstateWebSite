@@ -17,7 +17,7 @@ namespace Imobiliare.UI.BusinessLayer
   //    //if (context.ExceptionHandled)
   //    //{
   //    //Log everything
-  //      log.ErrorFormat("Internal error occured in application: {0}, StackTrace {1}", context.Exception.Message, context.Exception.StackTrace);
+  //      log.Error($"Internal error occured in application: {0}, StackTrace {1}", context.Exception.Message, context.Exception.StackTrace);
   //    //}
   //  }
   //}

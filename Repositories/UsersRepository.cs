@@ -138,7 +138,7 @@
         //{
         //    try
         //    {
-        //        log.DebugFormat("Adding image {0} for user profile {1}", file.FileName, userId);
+        //        log.Debug($"Adding image {0} for user profile {1}", file.FileName, userId);
         //        string pictureName = Guid.NewGuid() + ".jpg";
 
         //        string path = string.Empty;
@@ -164,7 +164,7 @@
         //        if (user.Picture != null)
         //        {
         //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/profileImages"), user.Picture));
-        //            log.DebugFormat("Replace initially image {0} with picture {1} for user profile id {2}", user.Picture, file.FileName, userId);
+        //            log.Debug($"Replace initially image {0} with picture {1} for user profile id {2}", user.Picture, file.FileName, userId);
         //        }
         //        user.Picture = pictureName;
 
@@ -172,7 +172,7 @@
         //    }
         //    catch (Exception ex)
         //    {
-        //        log.ErrorFormat("Eroare la adaugare imagine pentru userprofile, eroarea: {0}", ex.Message);
+        //        log.Error($"Eroare la adaugare imagine pentru userprofile, eroarea: {0}", ex.Message);
         //        return null;
         //    }
         //}
@@ -181,7 +181,7 @@
         //{
         //    try
         //    {
-        //        log.DebugFormat("Adding image {0} for agentie {1}", file.FileName, agentieId);
+        //        log.Debug($"Adding image {0} for agentie {1}", file.FileName, agentieId);
         //        string pictureName = Guid.NewGuid() + ".jpg";
 
         //        string path = string.Empty;
@@ -207,7 +207,7 @@
         //        if (user.PozaAgentie != null)
         //        {
         //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoAgentii"), user.PozaAgentie));
-        //            log.DebugFormat("Replace initially image {0} with picture {1} for agentie id {2}", user.PozaAgentie, file.FileName, agentieId);
+        //            log.Debug($"Replace initially image {0} with picture {1} for agentie id {2}", user.PozaAgentie, file.FileName, agentieId);
         //        }
         //        user.PozaAgentie = pictureName;
 
@@ -215,7 +215,7 @@
         //    }
         //    catch (Exception ex)
         //    {
-        //        log.ErrorFormat("Eroare la adaugare imagine pentru agentie, eroarea: {0}", ex.Message);
+        //        log.Error($"Eroare la adaugare imagine pentru agentie, eroarea: {0}", ex.Message);
         //        return null;
         //    }
         //}
@@ -224,7 +224,7 @@
         //{
         //    try
         //    {
-        //        log.DebugFormat("Adding image {0} for constructor {1}", file.FileName, constructorId);
+        //        log.Debug($"Adding image {0} for constructor {1}", file.FileName, constructorId);
         //        string pictureName = Guid.NewGuid() + ".jpg";
 
         //        string path = string.Empty;
@@ -250,13 +250,13 @@
         //        if (constructor.Poza != null)
         //        {
         //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoConstructori"), constructor.Poza));
-        //            log.DebugFormat("Replace initially image {0} with picture {1} for agentie id {2}", constructor.Poza, file.FileName, constructorId);
+        //            log.Debug($"Replace initially image {0} with picture {1} for agentie id {2}", constructor.Poza, file.FileName, constructorId);
         //        }
         //        constructor.Poza = pictureName;
         //    }
         //    catch (Exception ex)
         //    {
-        //        log.ErrorFormat("Eroare la adaugare imagine pentru constructor, eroarea: {0}", ex.Message);
+        //        log.Error($"Eroare la adaugare imagine pentru constructor, eroarea: {0}", ex.Message);
         //    }
         //}
 
@@ -278,12 +278,12 @@
                 }
                 else
                 {
-                    log.ErrorFormat($"Attempt to remove photo {path} for agentie failed because not exists");
+                    log.Error($"Attempt to remove photo {path} for agentie failed because not exists");
                 }
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("Error while removing agentie photo {0}, exception {1}", path, ex.Message);
+                log.Error($"Error while removing agentie photo {path}, exception {ex.Message}");
             }
         }
 
@@ -328,7 +328,7 @@
 
         public void UpdateAgentieForUser(string userid, string agentieId)
         {
-            log.DebugFormat("Updating agentie for user {0} with agentie {1}", userid, agentieId);
+            log.Debug($"Updating agentie for user {0} with agentie {1}", userid, agentieId);
             var intAgentieId = Int32.Parse(agentieId);
             var agentie = this.DbContext.Agenties.Single(x => x.Id == intAgentieId);
             var user = this.DbContext.Users.Single(x => x.Id == userid);

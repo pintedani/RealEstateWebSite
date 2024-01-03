@@ -27,7 +27,7 @@
           UserName = userName,
           NotifyAdmin = notifyAdmin
         });
-      log.InfoFormat($"AuditTrail: {auditTrailCategory} - {message} - {userName} - notifyAdmin {notifyAdmin}");
+      log.Info($"AuditTrail: {auditTrailCategory} - {message} - {userName} - notifyAdmin {notifyAdmin}");
     }
 
     public int DeleteAuditTrailsOltherThanDate(DateTime parse)

@@ -48,13 +48,13 @@ namespace Imobiliare.ServiceLayer.EmailService
             //        }
             //        catch (SmtpException ex)
             //        {
-            //            log.ErrorFormat($"(SmtpException)Error occured during sending email message to {email} with title {title} error: {ex.Message}");
+            //            log.Error($"(SmtpException)Error occured during sending email message to {email} with title {title} error: {ex.Message}");
             //            //throw;
             //            //Return something else?
             //        }
             //        catch (Exception ex)
             //        {
-            //            log.ErrorFormat($"General Error occured during sending email message to {email} with title {title} error: {ex.Message}");
+            //            log.Error($"General Error occured during sending email message to {email} with title {title} error: {ex.Message}");
             //            //throw;
             //        }
             //    }

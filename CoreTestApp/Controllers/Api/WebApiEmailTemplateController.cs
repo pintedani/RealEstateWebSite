@@ -48,7 +48,7 @@
 //        CaptchaResponse captchaResponse = this.recaptchaValidator.GetCaptchaResponse(mesajContactAgent.Recaptcha);
 //        if (!captchaResponse.Success)
 //        {
-//          log.ErrorFormat("Eroare: Va rugam confirmati ca nu sunteti robot" + mesajContactAgent.Recaptcha);
+//          log.Error($"Eroare: Va rugam confirmati ca nu sunteti robot" + mesajContactAgent.Recaptcha);
 //          return Content(HttpStatusCode.BadRequest, new { Mesaj = "Eroare: Va rugam confirmati ca nu sunteti robot" });
 //        }
 //      }

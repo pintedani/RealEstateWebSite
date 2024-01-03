@@ -37,7 +37,7 @@
 //            this.unitOfWork.AnunturiRepository.ReActualizareAnunt(anuntDto.AnuntId);
 //            this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(anuntDto.AnuntId, User.Identity.Name + " react(" + DateTime.Now.ToShortDateString() + ")");
 //            this.unitOfWork.Complete();
-//            log.DebugFormat("WEBAPI Admin {0} renewed imobil with id {1}", User.Identity.Name, anuntDto.AnuntId);
+//            log.Debug($"WEBAPI Admin {0} renewed imobil with id {1}", User.Identity.Name, anuntDto.AnuntId);
 //            return this.Ok();
 //        }
 
@@ -66,14 +66,14 @@
 //            }
 //            else if (user.Role != Role.Administrator)
 //            {
-//                log.DebugFormat("Amin approved imobil {0} with id {1}, no email send needed because added by admin", imobil.Title, imobil.Id);
+//                log.Debug($"Amin approved imobil {0} with id {1}, no email send needed because added by admin", imobil.Title, imobil.Id);
 //            }
 //            else if (previousState != StareAprobare.InAsteptare)
 //            {
-//                log.DebugFormat("Amin approved imobil {0} with id {1}, no email send needed because was not InAsteptare before", imobil.Title, imobil.Id);
+//                log.Debug($"Amin approved imobil {0} with id {1}, no email send needed because was not InAsteptare before", imobil.Title, imobil.Id);
 //            }
 //            this.unitOfWork.Complete();
-//            log.DebugFormat("Amin changed state of imobil {0} with id {1} to state {2}", imobil.Title, imobil.Id, StareAprobare.Aprobat);
+//            log.Debug($"Amin changed state of imobil {0} with id {1} to state {2}", imobil.Title, imobil.Id, StareAprobare.Aprobat);
 //            return this.Ok();
 //        }
 
@@ -83,7 +83,7 @@
 //        {
 //            this.unitOfWork.AnunturiRepository.DeleteImobil(anuntDto.AnuntId);
 //            this.unitOfWork.Complete();
-//            log.DebugFormat("Deleted imobil with id {0} by administrator {1}", anuntDto.AnuntId, User.Identity.Name);
+//            log.Debug($"Deleted imobil with id {0} by administrator {1}", anuntDto.AnuntId, User.Identity.Name);
 //            return this.Ok();
 //        }
 //    }

@@ -174,17 +174,17 @@ namespace Imobiliare.UI.ScheduledTasks.Jobs
                     this.unitOfWork.Complete();
                     this.emailManagerService.TrimitereRaportAdmin(adminWithRapoarteRecieveOption, finalEmail);
 
-                    log.DebugFormat("[SERVICE TRIMITE RAPOARTE ADMIN] S-a trimis email {0}, completat la {1} ", finalEmail, DateTime.Now.ToString());
+                    log.Debug($"[SERVICE TRIMITE RAPOARTE ADMIN] S-a trimis email {0}, completat la {1} ", finalEmail, DateTime.Now.ToString());
                 }
                 catch (Exception ex)
                 {
-                    log.ErrorFormat("[SERVICE TRIMITE RAPOARTE ADMIN] = Error while generating raport for admin: {0}", ex.Message);
+                    log.Error($"[SERVICE TRIMITE RAPOARTE ADMIN] = Error while generating raport for admin: {ex.Message}");
                     //throw;
                 }
             }
             else
             {
-                log.DebugFormat("[SERVICE TRIMITE RAPOARTE ADMIN] Timespan of 48h not passed since last report was created. Skipping....");
+                log.Debug($"[SERVICE TRIMITE RAPOARTE ADMIN] Timespan of 48h not passed since last report was created. Skipping....");
             }
         }
     }

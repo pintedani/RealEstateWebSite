@@ -79,7 +79,7 @@ namespace Imobiliare.Repositories
             //}
             //catch (Exception e)
             //{
-            //    log.ErrorFormat($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
+            //    log.Error($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
             //}
         }
 

@@ -153,7 +153,7 @@ namespace Imobiliare.UI.Utils.UrlSeoFormatters
                         {
                             filters2 += "|" + filter2;
                         }
-                        log.ErrorFormat("Generate imobil filter error, filters: {0}, error {1}", filters2, ex.Message + ex.StackTrace);
+                        log.Error($"Generate imobil filter error, filters: {filters2}, error {ex.Message + ex.StackTrace}");
                         throw;
                     }
                 }

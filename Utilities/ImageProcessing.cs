@@ -58,7 +58,7 @@ namespace Imobiliare.Utilities
                         catch (Exception e)
                         {
                             pictureName = null;
-                            log.ErrorFormat($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
+                            log.Error($"Eroare la incarcarea imaginii pentru anunt, verificati sa fie de tipul imagine: {e.Message}, Stacktrace: {e.StackTrace}");
                         }
                     }
                 }
@@ -117,7 +117,7 @@ namespace Imobiliare.Utilities
             }
             catch (Exception exception)
             {
-                log.ErrorFormat("RotateImage image {0} error {1}", pictureName, exception.Message);
+                log.Error($"RotateImage image {pictureName} error {exception.Message}");
             }
 
             string newPictureList = string.Empty;
@@ -174,7 +174,7 @@ namespace Imobiliare.Utilities
                         }
                         else
                         {
-                            log.ErrorFormat("Attempt to remove inexisting anunt photo {0}", poza);
+                            log.Error($"Attempt to remove inexisting anunt photo {poza}");
                         }
                     }
                 }

@@ -77,7 +77,7 @@ namespace Imobiliare.UI.Controllers
                 if (user.StareUser == StareUser.NeConfirmat)
                 {
                     this.ResendConfirmationToken(model.UserName);
-                    log.ErrorFormat("Va rugam confirmati mai intai contul accesand linkul din emailul trimis la {0}. In mod normal emailul se primeste in maxim 10 minute.", model.UserName);
+                    log.Error($"Va rugam confirmati mai intai contul accesand linkul din emailul trimis la {model.UserName}. In mod normal emailul se primeste in maxim 10 minute.");
                     TempData["WarningMessage"] = "Va rugam confirmati mai intai contul accesand linkul din emailul trimis la " + model.UserName;
                     return RedirectToAction("Login");
                 }
@@ -85,7 +85,7 @@ namespace Imobiliare.UI.Controllers
                 //Nu ar mai trebuii sa apara deoarece acum cream si cont local pentru user
                 if (user.StareUser == StareUser.ExternalLogin)
                 {
-                    log.ErrorFormat("V-ati autentificat anterior prin login extern (Facebook sau Google) si emailul {0}. Va rugam folositi acelasi serviciu pentru logare.", model.UserName);
+                    log.Error($"V-ati autentificat anterior prin login extern (Facebook sau Google) si emailul {model.UserName}. Va rugam folositi acelasi serviciu pentru logare.");
                     TempData["WarningMessage"] = string.Format("V-ati autentificat anterior prin login extern (Facebook sau Google) si emailul {0}. Va rugam folositi acelasi serviciu pentru logare, dupa care puteti asocia un cont local din pagina de administrare.", model.UserName);
                 }
             }
@@ -249,7 +249,7 @@ namespace Imobiliare.UI.Controllers
         {
             if (email == null || code == null)
             {
-                log.DebugFormat("EROARE la confirmarea contului. Codul de confirmare este invalid.");
+                log.Debug($"EROARE la confirmarea contului. Codul de confirmare este invalid.");
                 TempData["ErrorMessage"] = "EROARE la confirmarea contului. Codul de confirmare este invalid.";
                 return RedirectToAction("Login");
             }
@@ -271,7 +271,7 @@ namespace Imobiliare.UI.Controllers
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("EROARE la confirmarea contului manuala de email: " + email + "token: " + code + " error: " + ex.Message);
+                log.Error($"EROARE la confirmarea contului manuala de email: " + email + "token: " + code + " error: " + ex.Message);
             }
 
             //Daca am ajuns pana aici inseamna ca ceva nu a mers bine
@@ -286,7 +286,7 @@ namespace Imobiliare.UI.Controllers
         {
             if (userId == null || code == null)
             {
-                log.DebugFormat("EROARE la confirmarea contului. Linkul de confirmare este invalid.");
+                log.Debug($"EROARE la confirmarea contului. Linkul de confirmare este invalid.");
                 TempData["ErrorMessage"] = "EROARE la confirmarea contului. Linkul de confirmare este invalid.";
                 return RedirectToAction("Login");
             }
@@ -310,7 +310,7 @@ namespace Imobiliare.UI.Controllers
             }
             catch (Exception ex)
             {
-                log.ErrorFormat("EROARE la confirmarea contului ptr userID: " + userId + "token: " + code + " error: " + ex.Message);
+                log.Error($"EROARE la confirmarea contului ptr userID: " + userId + "token: " + code + " error: " + ex.Message);
             }
 
             //Daca am ajuns pana aici inseamna ca ceva nu a mers bine
@@ -350,7 +350,7 @@ namespace Imobiliare.UI.Controllers
                         }
                         catch (Exception exception)
                         {
-                            log.ErrorFormat("Eroare la trimitere mesaj de schimbare parola {0} la adresa {1}", exception.Message, email);
+                            log.Error($"Eroare la trimitere mesaj de schimbare parola {exception.Message} la adresa {email}");
                             TempData[TempDataSeverity.ErrorMessage.ToString()] = "Eroare la trimitere mesaj de recuperare parola!";
                             return RedirectToAction(nameof(Login));
                         }
@@ -358,14 +358,14 @@ namespace Imobiliare.UI.Controllers
                     else
                     {
                         ResendConfirmationToken(userProfile.UserName);
-                        log.ErrorFormat("Va rugam confirmati mai intai contul accesand linkul din emailul trimis la {0}", userProfile.UserName);
+                        log.Error($"Va rugam confirmati mai intai contul accesand linkul din emailul trimis la {userProfile.UserName}");
                         TempData[TempDataSeverity.WarningMessage.ToString()] = "Va rugam confirmati mai intai contul accesand linkul din emailul trimis la " + userProfile.UserName;
                         return RedirectToAction(nameof(Login));
                     }
                 }
                 else
                 {
-                    log.ErrorFormat("Nu exista utilizator ptr adresa {0} ptr a trimite email de recuperare parola", email);
+                    log.Error($"Nu exista utilizator ptr adresa {email} ptr a trimite email de recuperare parola");
                     TempData[TempDataSeverity.WarningMessage.ToString()] = "Nu există utilizator pentru adresa specificată " + email + " pentru a trimite email de recuperare parola. Daca v-ati logat cu Facebook sau Google incercati cu acel cont.";
                     return RedirectToAction(nameof(Login));
                 }
@@ -412,13 +412,13 @@ namespace Imobiliare.UI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.WarnFormat("Model resetare parola invalid");
+                log.Warn($"Model resetare parola invalid");
                 return View(model);
             }
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                log.ErrorFormat("Userul {0} nu exista pentru a reseta parola la {1}", model.Email, model.Password);
+                log.Error($"Userul {model.Email} nu exista pentru a reseta parola la {model.Password}");
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
@@ -434,7 +434,7 @@ namespace Imobiliare.UI.Controllers
                 this.unitOfWork.Complete();
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            log.ErrorFormat("Userul {0} incearca sa reseteze parola la {1}, dar nu cu succes, eroarea {2}", model.Email, model.Password, result.Errors != null ? result.Errors.First() : "");
+            log.Error($"Userul {model.Email} incearca sa reseteze parola la {model.Password}, dar nu cu succes, eroarea {result.Errors?.First()}");
             TempData["ErrorMessage"] = "Eroare la resetarea parolei!. Incercati sa retrimiteti un nou email de resetare al parolei si accesati linkul din email.";
             AddErrors(result);
             return View();
@@ -459,7 +459,7 @@ namespace Imobiliare.UI.Controllers
         //    //http://stackoverflow.com/questions/20180562/mvc5-null-reference-with-facebook-login
         //    ControllerContext.HttpContext.Session.RemoveAll();
 
-        //    log.InfoFormat("User attempt to login with external provider {0}", provider);
+        //    log.Info("User attempt to login with external provider {0}", provider);
 
         //    // Request a redirect to the external login provider
         //    return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
@@ -473,7 +473,7 @@ namespace Imobiliare.UI.Controllers
         //    var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
         //    if (loginInfo == null)
         //    {
-        //        log.ErrorFormat("External login provider callback returned without external login info. Redirect to login");
+        //        log.Error($"External login provider callback returned without external login info. Redirect to login");
         //        return RedirectToAction("Login");
         //    }
 
@@ -499,7 +499,7 @@ namespace Imobiliare.UI.Controllers
         //                var result2 = UserManager.FindByEmailAsync(loginInfo.Email);
         //                if (result2.Result != null)
         //                {
-        //                    log.WarnFormat("Userul {0} incearca sa se logheze cu login extern desi nu are asociat contul curent cu acest login", loginInfo.Email);
+        //                    log.Warn($"Userul {0} incearca sa se logheze cu login extern desi nu are asociat contul curent cu acest login", loginInfo.Email);
         //                    TempData["WarningMessage"] = string.Format("Aveti creat un cont local pe site. Va rugam logati-va cu contul local cu email {0}. Daca ati uitat parola, apasati Ai uitat parola? pentru a o reseta", loginInfo.Email);
         //                    return RedirectToAction("Login");
         //                }
@@ -508,7 +508,7 @@ namespace Imobiliare.UI.Controllers
         //            {
         //                //DAPI TODO de verificat daca FindByEmailAsync da eroare, ca in logs?
         //                //In caz ca loginInfo.Email == null, ce facem?
-        //                log.ErrorFormat("EROARE LA FINDBYEMAILASync. Verifica functionalitate. Exception {0}", ex.Message);
+        //                log.Error($"EROARE LA FINDBYEMAILASync. Verifica functionalitate. Exception {0}", ex.Message);
         //            }
 
         //            // If the user does not have an account, then prompt the user to create an account
@@ -536,7 +536,7 @@ namespace Imobiliare.UI.Controllers
         //        var info = await AuthenticationManager.GetExternalLoginInfoAsync();
         //        if (info == null)
         //        {
-        //            log.ErrorFormat("Eroare la logare prin serviciu extern {0}", model.Email);
+        //            log.Error($"Eroare la logare prin serviciu extern {0}", model.Email);
         //            return View("ExternalLoginFailure");
         //        }
         //        var user = new UserProfile { UserName = model.Email, Email = model.Email };
@@ -551,7 +551,7 @@ namespace Imobiliare.UI.Controllers
 
         //        //DAPI Add local password
         //        var localPassword = this.GeneratePassword();
-        //        log.DebugFormat("Local password {0} generated for {1}.", localPassword, user.UserName);
+        //        log.Debug($"Local password {0} generated for {1}.", localPassword, user.UserName);
 
         //        var result = await UserManager.CreateAsync(user, localPassword);
         //        if (result.Succeeded)
@@ -560,7 +560,7 @@ namespace Imobiliare.UI.Controllers
         //            if (result.Succeeded)
         //            {
         //                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-        //                log.DebugFormat("Userul {0} s-a autentificat cu succes cu login extern", model.Email);
+        //                log.Debug($"Userul {0} s-a autentificat cu succes cu login extern", model.Email);
         //                TempData["FooterStatus"] = "V-ati autentificat cu succes!";
         //                this.emailManagerService.ExternalLoginWelcomeMessageEmail(model.Email, localPassword);
         //                return RedirectToLocal(returnUrl);
@@ -822,7 +822,7 @@ namespace Imobiliare.UI.Controllers
         //        //Do not delete if user still has anunturi
         //        if (user.Anunturi != null && user.Anunturi.Count > 0)
         //        {
-        //            log.WarnFormat("Userul {0} incearca sa se stearga userul cu email {1}, dar acesta mai are anunturi", User.Identity.Name, user.UserName);
+        //            log.Warn($"Userul {0} incearca sa se stearga userul cu email {1}, dar acesta mai are anunturi", User.Identity.Name, user.UserName);
         //            TempData["WarningMessage"] = string.Format("Userul {0} pe care doriti sa il stergeti are {1} anunturi definite. Stergeti anunturile din contul utilizatorului mai intai!", user.UserName, user.Anunturi.Count);
         //            return RedirectToAction("EditAgentieDetails", "Manage");
         //        }
@@ -835,11 +835,11 @@ namespace Imobiliare.UI.Controllers
         //            try
         //            {
         //                fileDel.Delete();
-        //                log.DebugFormat("User profile photo {0} deleted for to be deleted user {1}", path, user.UserName);
+        //                log.Debug($"User profile photo {0} deleted for to be deleted user {1}", path, user.UserName);
         //            }
         //            catch (Exception ex)
         //            {
-        //                log.ErrorFormat("User profile photo {0} not found to delete for user {1} cu exceptie {2}", path, user.UserName, ex.Message);
+        //                log.Error($"User profile photo {0} not found to delete for user {1} cu exceptie {2}", path, user.UserName, ex.Message);
         //            }
         //        }
 
@@ -854,7 +854,7 @@ namespace Imobiliare.UI.Controllers
 
         //        db.SaveChanges();
         //    }
-        //    log.DebugFormat("Admin agentie {0} deleted user {1}", User.Identity.Name, username);
+        //    log.Debug($"Admin agentie {0} deleted user {1}", User.Identity.Name, username);
         //    //TempData["Message"] = $"Admin agentie {User.Identity.Name} deleted user {username}";
 
         //    TempData["Message"] = "Userul a fost sters cu succes.";

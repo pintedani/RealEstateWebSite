@@ -39,7 +39,7 @@ namespace Imobiliare.UI.Controllers
             {
                 return StatusCode((int)HttpStatusCode.BadRequest);
                 //DAPI: logs were too many, so no need to log
-                //log.WarnFormat("SearchForValue received null value for tipoferta, searchvalue: {0}", searchValue);
+                //log.Warn($"SearchForValue received null value for tipoferta, searchvalue: {0}", searchValue);
             }
 
             var tipProprietateEnum = tipProprietate.EnumParse<TipProprietate>();
@@ -79,7 +79,7 @@ namespace Imobiliare.UI.Controllers
                 }
                 else
                 {
-                    log.WarnFormat("Some user searched for unknown value. No judet found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
+                    log.Warn($"Some user searched for unknown value. No judet found for search value: {searchValue} and tipoferta {tipProprietate}");
                     return RedirectToAction(nameof(SugestiiCautare), new { text = searchValue });
                 }
             }
@@ -94,7 +94,7 @@ namespace Imobiliare.UI.Controllers
                 }
                 else
                 {
-                    log.DebugFormat("Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
+                    log.Debug($"Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
                     return RedirectToAction(nameof(SugestiiCautare), new { text = searchValue });
                 }
             }
@@ -111,7 +111,7 @@ namespace Imobiliare.UI.Controllers
             }
 
             //TODO Show search suggestions
-            log.DebugFormat("Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
+            log.Debug($"Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
             return RedirectToAction(nameof(SugestiiCautare), new { text = searchValue });
         }
 
@@ -214,7 +214,7 @@ namespace Imobiliare.UI.Controllers
             catch (InvalidOperationException ex)
             {
                 //Special case when Localitate name has changed and google crawler accesses old links
-                log.ErrorFormat("Attempt to access invalid url: {0}", ex.Message + ex.StackTrace);
+                log.Error($"Attempt to access invalid url: {ex.Message + ex.StackTrace}");
                 return StatusCode((int)HttpStatusCode.NotFound);
             }
 
@@ -303,7 +303,7 @@ namespace Imobiliare.UI.Controllers
 
             if (!string.IsNullOrEmpty(titlu) && titlu != newTitle)
             {
-                log.WarnFormat("Redirect permanent because of anunt title change for anunt {0} with original title {1} and updated title {2}", imobil.Id, titlu, newTitle);
+                log.Warn($"Redirect permanent because of anunt title change for anunt {imobil.Id} with original title {titlu} and updated title {newTitle}");
                 //TODO reenable redirect
                 //return RedirectPermanent(url);
             }
@@ -333,7 +333,7 @@ namespace Imobiliare.UI.Controllers
             //TODO: REENABLE
             //if (!Request.Iscrawler() && IpHistoryCaching.ShouldLogFrequentAccesor(httpContext.Connection.RemoteIpAddress.ToString()))
             //{
-            //    log.DebugFormat("User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId.ParseToInt(), httpContext.Connection.RemoteIpAddress.ToString());
+            //    log.Debug($"User {0} accessed anunt with id {1}, ip: {2}", name != string.Empty ? name : "GUEST", imobilId.ParseToInt(), httpContext.Connection.RemoteIpAddress.ToString());
             //    //if(!apartamentDetaliiData.IsCurrentUserAdmin)
             //    this.unitOfWork.AnunturiRepository.IncrementNumarAccesari(parsedImobilId);
             //    this.unitOfWork.Complete();
@@ -492,7 +492,7 @@ namespace Imobiliare.UI.Controllers
             }
             else
             {
-                //log.ErrorFormat("No judetId or orasId defined for getAnunturiList...");
+                //log.Error($"No judetId or orasId defined for getAnunturiList...");
                 imobilsData.GpsCoordinates = "(46.777248,23.599889)";
                 imobilsData.ZoomLevel = 8;
             }

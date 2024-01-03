@@ -94,11 +94,11 @@ namespace Imobiliare.Repositories
             //    if (fileDel.Exists)
             //    {
             //        fileDel.Delete();
-            //        log.DebugFormat("Deleted agentie photo {0}", poza);
+            //        log.Debug($"Deleted agentie photo {0}", poza);
             //    }
             //    else
             //    {
-            //        log.ErrorFormat("Attempt to remove inexisting agentie photo {0}", poza);
+            //        log.Error($"Attempt to remove inexisting agentie photo {0}", poza);
             //    }
             //}
         }

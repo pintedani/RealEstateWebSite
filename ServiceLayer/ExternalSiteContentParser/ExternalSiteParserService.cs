@@ -36,12 +36,12 @@ namespace Imobiliare.ServiceLayer.ExternalSiteContentParser
 
             //        if (siteContent.Contains("olx"))
             //        {
-            //            log.DebugFormat("Se incearca parsarea siteului olx {0}", url);
+            //            log.Debug($"Se incearca parsarea siteului olx {0}", url);
 
             //            if (siteContent.Contains("- arata telefon -"))
             //            {
             //                externalSourceAnunt.EroareParsare = "EROARE PARSARE, descrierea contine - arata telefon -!";
-            //                log.WarnFormat("EROARE PARSARE, descrierea contine - arata telefon -!");
+            //                log.Warn($"EROARE PARSARE, descrierea contine - arata telefon -!");
             //                return externalSourceAnunt;
             //            }
 
@@ -53,15 +53,15 @@ namespace Imobiliare.ServiceLayer.ExternalSiteContentParser
             //        }
             //        else
             //        {
-            //            log.WarnFormat("Nu exista parser pentru pagina selectata {0}, continut pagina {1}", url, siteContent);
+            //            log.Warn($"Nu exista parser pentru pagina selectata {0}, continut pagina {1}", url, siteContent);
             //        }
 
-            //        log.DebugFormat("Parsare url cu succes {0}", url);
+            //        log.Debug($"Parsare url cu succes {0}", url);
             //    }
             //    catch (Exception exception)
             //    {
             //        externalSourceAnunt.EroareParsare = "EROARE PARSARE, verificati campurile manual!";
-            //        log.ErrorFormat($"Eroare la extragere informatii de pe site extern: {exception.Message}");
+            //        log.Error($"Eroare la extragere informatii de pe site extern: {exception.Message}");
             //    }
             //}
             return externalSourceAnunt;
@@ -84,7 +84,7 @@ namespace Imobiliare.ServiceLayer.ExternalSiteContentParser
             //        //determine site
             //        if (s.Contains("olx"))
             //        {
-            //            log.DebugFormat("Se incearca parsarea imaginilor pentru url olx {0}", url);
+            //            log.Debug($"Se incearca parsarea imaginilor pentru url olx {0}", url);
             //            var images = htmlDoc.DocumentNode.SelectNodes("//div[@class='swiper-zoom-container']/img");
 
             //            foreach (var image in images)
@@ -97,11 +97,11 @@ namespace Imobiliare.ServiceLayer.ExternalSiteContentParser
             //            }
             //        }
 
-            //        log.DebugFormat("Parsare image url cu succes {0}", url);
+            //        log.Debug($"Parsare image url cu succes {0}", url);
             //    }
             //    catch (Exception exception)
             //    {
-            //        log.ErrorFormat("Eroare la extragere imagini de pe site extern: {0}", exception.Message);
+            //        log.Error($"Eroare la extragere imagini de pe site extern: {0}", exception.Message);
             //    }
             //}
 

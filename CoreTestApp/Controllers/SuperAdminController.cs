@@ -245,7 +245,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.UsersRepository.UpdateUserProfileByAdmin(userProfile);
             this.unitOfWork.Complete();
 
-            log.DebugFormat("SuperAdmin Edited user {0} by user {1}", userProfile.UserName, User.Identity.Name);
+            log.Debug($"SuperAdmin Edited user {0} by user {1}", userProfile.UserName, User.Identity.Name);
             TempData["Message"] = $"User {userProfile.UserName} editat cu success";
             return RedirectToAction("Users", new { selectSingleUserEmail = userProfile.UserName });
         }
@@ -255,7 +255,7 @@ namespace Imobiliare.UI.Controllers
             var user = this.unitOfWork.UsersRepository.Single(x => x.Id == userid);
 
             var anunturi = this.unitOfWork.AnunturiRepository.Find(x => x.UserId == user.Id);
-            log.WarnFormat("Attempting to delete anunturi for user {0}, total anunturi: {1}", user.UserName, anunturi.Count);
+            log.Warn($"Attempting to delete anunturi for user {user.UserName}, total anunturi: {anunturi.Count}");
             foreach (var anunt in anunturi)
             {
                 this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id, hostingEnvironment.WebRootPath);
@@ -264,7 +264,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.UsersRepository.DeleteUser(userid);
             this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"SuperAdmin {this.User.Identity.Name} deleted user {user.Email}", notifyAdmin: true);
             this.unitOfWork.Complete();
-            log.DebugFormat("SuperAdmin {0} deleted user {1}", User.Identity.Name, user.Email);
+            log.Debug($"SuperAdmin {0} deleted user {1}", User.Identity.Name, user.Email);
             TempData["Message"] = $"SuperAdmin {User.Identity.Name} deleted user {user.Email}";
             return RedirectToAction("Users");
         }
@@ -296,15 +296,15 @@ namespace Imobiliare.UI.Controllers
                 }
                 else if (user.Role != Role.Administrator)
                 {
-                    log.DebugFormat("Amin approved imobil {0} with id {1}, no email send needed because added by admin", imobil.Title, imobil.Id);
+                    log.Debug($"Amin approved imobil {imobil.Title} with id {imobil.Id}, no email send needed because added by admin");
                 }
                 else if (previousState != StareAprobare.InAsteptare)
                 {
-                    log.DebugFormat("Amin approved imobil {0} with id {1}, no email send needed because was not InAsteptare before", imobil.Title, imobil.Id);
+                    log.Debug($"Amin approved imobil {imobil.Title} with id {imobil.Id}, no email send needed because was not InAsteptare before");
                 }
             }
             this.unitOfWork.Complete();
-            log.DebugFormat("Amin changed state of imobil {0} with id {1} to state {2}", imobil.Title, imobil.Id, stare);
+            log.Debug($"Amin changed state of imobil {imobil.Title} with id {imobil.Id} to state {stare}");
 
             return this.Redirect(returnUrl.Replace("&amp;", "&"));
         }
@@ -340,7 +340,7 @@ namespace Imobiliare.UI.Controllers
               email,
               "");
 
-            log.DebugFormat("Email send by admin for reactualizare to user with id {0} and titlu {1}", id, titlu);
+            log.Debug($"Email send by admin for reactualizare to user with id {id} and titlu {titlu}");
             this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(id, "Trimis Email(" + emailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
             return this.Redirect(returnUrl);
@@ -359,7 +359,7 @@ namespace Imobiliare.UI.Controllers
 
             this.emailManagerService.UserRelatedEmail(emailTemplateHumanReadableId, userId, email);
 
-            log.DebugFormat("Email send by admin to user for id {0} and titlu {1}", userId, emailTemplateHumanReadableId);
+            log.Debug($"Email send by admin to user for id {userId} and titlu {emailTemplateHumanReadableId}");
             this.unitOfWork.UsersRepository.AddCustomNoteToUser(userId, "Trimis Email(" + emailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
             return this.Redirect(returnUrl);
@@ -371,7 +371,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.AnunturiRepository.ReActualizareAnunt(imobilid);
             this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(imobilid, User.Identity.Name + " react(" + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
-            log.DebugFormat("Admin {0} renewed imobil with id {1}", User.Identity.Name, imobilid);
+            log.Debug($"Admin {User.Identity.Name} renewed imobil with id {imobilid}");
             return Redirect(returnUrl);
         }
 
@@ -467,7 +467,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.AnunturiRepository.ClearPhotosExceptFirst(anuntId);
             this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(anuntId, "Removed photos except first(" + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
-            log.DebugFormat("Admin {0} cleared all photos except first for anunt with id {1}", User.Identity.Name, anuntId);
+            log.Debug($"Admin {User.Identity.Name} cleared all photos except first for anunt with id {anuntId}");
             return Redirect(returnUrl);
         }
 
@@ -478,7 +478,7 @@ namespace Imobiliare.UI.Controllers
             {
                 numarAnunturi = ids.Split(',').Count();
             }
-            log.DebugFormat("Admin started updating imobil state for a list of selected anunturi to {0}, numar de id vizate {1}, adica {2}", stareNoua, numarAnunturi, ids);
+            log.Debug($"Admin started updating imobil state for a list of selected anunturi to {stareNoua}, numar de id vizate {numarAnunturi}, adica {ids}");
             foreach (var id in ids.Split(','))
             {
                 if (id != string.Empty)
@@ -486,11 +486,11 @@ namespace Imobiliare.UI.Controllers
                     this.unitOfWork.AnunturiRepository.ChangeImobilState(Int32.Parse(id), stareNoua.EnumParse<StareAprobare>());
                     this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(Int32.Parse(id), User.Identity.Name + " multiple updt to " + stareNoua + " (" + DateTime.Now.ToShortDateString() + ")");
                     this.unitOfWork.Complete();
-                    log.DebugFormat("Changed anunt with id {0} to {1}", id, stareNoua);
+                    log.Debug($"Changed anunt with id {0} to {1}", id, stareNoua);
                 }
             }
 
-            log.DebugFormat("S-a updatat lista cu anunturi cu succes");
+            log.Debug($"S-a updatat lista cu anunturi cu succes");
             return this.Redirect(returnUrl.Replace("&amp;", "&"));
         }
 
@@ -510,14 +510,14 @@ namespace Imobiliare.UI.Controllers
             if (string.IsNullOrEmpty(listaEmails))
             {
                 TempData["ErrorMessage"] = "listaEmails is null or empty";
-                log.WarnFormat("listaEmails is null or empty");
+                log.Warn($"listaEmails is null or empty");
                 return RedirectToAction("MassEmailMessage");
             }
 
             if (string.IsNullOrEmpty(emailTemplateHumanReadableId))
             {
                 TempData["ErrorMessage"] = "emailTemplateHumanReadableId is null or empty";
-                log.WarnFormat("emailTemplateHumanReadableId is null or empty");
+                log.Warn($"emailTemplateHumanReadableId is null or empty");
                 return RedirectToAction("MassEmailMessage");
             }
 
@@ -528,7 +528,7 @@ namespace Imobiliare.UI.Controllers
                 if (!regex.Match(email).Success)
                 {
                     TempData["ErrorMessage"] = "Invalid email specified " + email;
-                    log.WarnFormat("Invalid email specified {0}", email);
+                    log.Warn($"Invalid email specified {email}");
                     return RedirectToAction("MassEmailMessage");
                 }
                 emails.Add(email);
@@ -540,7 +540,7 @@ namespace Imobiliare.UI.Controllers
             }
 
             TempData["Message"] = "Emailurile au fost trimise cu succes";
-            log.DebugFormat("Emailurile au fost trimise cu succes la lista {0} si categoria {1}", listaEmails, emailTemplateHumanReadableId);
+            log.Debug($"Emailurile au fost trimise cu succes la lista {0} si categoria {1}", listaEmails, emailTemplateHumanReadableId);
 
             //this.emailManagerService.MassEmailSendEmail()
             return RedirectToAction("MassEmailMessage");
@@ -616,14 +616,14 @@ namespace Imobiliare.UI.Controllers
             {
                 this.unitOfWork.AnunturiRepository.DeleteImobil(id, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
-                log.DebugFormat("Deleted imobil with id {0} by administrator from anunt page {1}", id, User.Identity.Name);
+                log.Debug($"Deleted imobil with id {id} by administrator from anunt page {User.Identity.Name}");
 
                 TempData["Message"] = "Anunt sters cu succes";
             }
             catch (Exception e)
             {
                 TempData["WarningMessage"] = "Eroare la stergerea anuntului cu id " + id;
-                log.ErrorFormat("Eroare la stergerea anuntului cu id {0} by administrator from anunt page {1}, eroare: {2}", id, User.Identity.Name, e.Message);
+                log.Error($"Eroare la stergerea anuntului cu id {id} by administrator from anunt page {User.Identity.Name}, eroare: {e.Message}");
             }
 
             return RedirectToAction("Index", "SuperAdmin");

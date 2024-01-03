@@ -207,7 +207,7 @@ namespace Imobiliare.UI.Controllers
 
             if (!string.IsNullOrEmpty(titlu) && titlu != newTitle)
             {
-                log.WarnFormat("STIRE Redirect permanent because of stire title change for stire {0} with original title {1} and updated title {2}", stire.Id, titlu, newTitle);
+                log.Warn($"STIRE Redirect permanent because of stire title change for stire {stire.Id} with original title {titlu} and updated title {newTitle}");
                 return RedirectPermanent(url);
             }
 
@@ -219,7 +219,7 @@ namespace Imobiliare.UI.Controllers
             }
             //if (!Request.Iscrawler())
             //{
-            //    log.DebugFormat("User: {0}, ip: {1} accessed stire with id {2}, titlu {3}", name != string.Empty ? name : "unknown user",
+            //    log.Debug($"User: {0}, ip: {1} accessed stire with id {2}, titlu {3}", name != string.Empty ? name : "unknown user",
             //      Request.UserHostAddress, stire.Id, titlu);
             //}
 
@@ -275,11 +275,11 @@ namespace Imobiliare.UI.Controllers
 
         //        var imageName = this.unitOfWork.StiriRepository.AddImage(stireId, new[] { file });
         //        this.unitOfWork.Complete();
-        //        log.DebugFormat("Added images for stire NOT async with id {0} by user {1}, imageName: {2}", stireId, User.Identity.Name, imageName);
+        //        log.Debug($"Added images for stire NOT async with id {0} by user {1}, imageName: {2}", stireId, User.Identity.Name, imageName);
         //    }
         //    else
         //    {
-        //        log.DebugFormat("No image selected for stire NOT async  by user {0}", User.Identity.Name);
+        //        log.Debug($"No image selected for stire NOT async  by user {0}", User.Identity.Name);
         //    }
         //    return RedirectToAction("Edit", new { id = stireId });
         //}

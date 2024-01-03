@@ -73,7 +73,7 @@
 //            }
 //            catch (Exception ex)
 //            {
-//                log.Error("WebapiAnunturiController api/Get: " + ex.Message);
+//                log.Error($"WebapiAnunturiController api/Get: " + ex.Message);
 //                throw;
 //            }
 
@@ -109,7 +109,7 @@
 //                }
 //                else
 //                {
-//                    log.Error("Parsat extern error: anunt link already exist: " + link);
+//                    log.Error($"Parsat extern error: anunt link already exist: " + link);
 //                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.Conflict, "Anunt already exists!"));
 //                }
 //                if (externalSourceAnunt.EroareParsare != null)
@@ -170,7 +170,7 @@
 //            }
 //            catch (Exception ex)
 //            {
-//                log.Error("Parsat extern error: generic: " + ex.Message);
+//                log.Error($"Parsat extern error: generic: " + ex.Message);
 //            }
 
 //            log.Debug("Parsat extern success: " + linkExternChromeExtDto.Link);
@@ -186,7 +186,7 @@
 
 //        private void LogThrowInvalidArgsException(string argumentName)
 //        {
-//            log.Error("AdaugaAnuntPrinLinkExtern Argument exception: " + argumentName);
+//            log.Error($"AdaugaAnuntPrinLinkExtern Argument exception: " + argumentName);
 //            throw new ArgumentException();
 //        }
 

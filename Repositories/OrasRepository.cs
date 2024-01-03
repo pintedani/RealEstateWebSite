@@ -91,7 +91,7 @@ namespace Imobiliare.Repositories
             }
             catch (Exception exception)
             {
-                log.ErrorFormat("Error while adding localitate {0} for judet with id {1}, exception {2}", nume, judetId, exception);
+                log.Error($"Error while adding localitate {nume} for judet with id {judetId}, exception {exception}");
                 return false;
             }
         }
@@ -110,7 +110,7 @@ namespace Imobiliare.Repositories
                 {
                     error += exception.InnerException.Message;
                 }
-                log.ErrorFormat("Error while deleting oras with id {0}, exception {1}", orasID, error);
+                log.Error($"Error while deleting oras with id {orasID}, exception {error}");
                 return false;
             }
             return true;
@@ -133,7 +133,7 @@ namespace Imobiliare.Repositories
                 {
                     error += exception.InnerException.Message;
                 }
-                log.ErrorFormat("Error while editing localitate with id {0}, exception {1}", orasID, error);
+                log.Error($"Error while editing localitate with id {orasID}, exception {error}");
                 return false;
             }
             return true;
@@ -218,7 +218,7 @@ namespace Imobiliare.Repositories
                 }
                 catch (Exception ex)
                 {
-                    log.ErrorFormat("Search results error for text {0} with error {1}", searchText, ex.Message);
+                    log.Error($"Search results error for text {searchText} with error {ex.Message}");
                 }
             }
 

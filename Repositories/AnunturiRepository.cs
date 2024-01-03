@@ -573,14 +573,14 @@ namespace Imobiliare.Repositories
                         {
                             expiredAnunturi.Add(imobil);
                             imobil.StareAprobare = StareAprobare.Expirat;
-                            log.DebugFormat("Anuntul cu id {0} a expirat. Titlu {1}", imobil.Id, imobil.Title);
+                            log.Debug($"Anuntul cu id {imobil.Id} a expirat. Titlu {imobil.Title}");
                         }
                     }
                 }
             }
             catch (Exception exception)
             {
-                log.ErrorFormat("Error while Checking for expired anunturi: {0}", exception.Message);
+                log.Error($"Error while Checking for expired anunturi: {exception.Message}");
             }
 
             return expiredAnunturi;
@@ -609,7 +609,7 @@ namespace Imobiliare.Repositories
             //        }
             //        else
             //        {
-            //            log.ErrorFormat("Attempt to remove inexisting anunt photo {0} for anunt with id {1}", poza, anuntId);
+            //            log.Error($"Attempt to remove inexisting anunt photo {0} for anunt with id {1}", poza, anuntId);
             //        }
             //    }
             //}
@@ -735,8 +735,7 @@ namespace Imobiliare.Repositories
             lastAddedImobils = query.Where(x => x.StareAprobare != StareAprobare.Aprobat && x.Poze != null && x.DataAdaugare < dateTime).ToList();
 
             var anunturiWithMultiplePhotos = lastAddedImobils.Where(x => x.NumarPoze > 1).ToList();
-            log.DebugFormat("Starting photo cleanup: {0} with 1 photo already, {1} with more than one photo",
-                anunturiWithMultiplePhotos.Count(), (lastAddedImobils.Count() - anunturiWithMultiplePhotos.Count()).ToString());
+            log.Debug($"Starting photo cleanup: {anunturiWithMultiplePhotos} with 1 photo already, {lastAddedImobils.Count() - anunturiWithMultiplePhotos.Count()} with more than one photo");
 
             var photoCount = 0;
             foreach (var anunt in anunturiWithMultiplePhotos)
@@ -744,8 +743,7 @@ namespace Imobiliare.Repositories
                 //First Photo will not be deleted
                 photoCount += anunt.NumarPoze - 1;
 
-                log.DebugFormat("Attempt to remove {0} secondary photos for not active anunt with id {1}, titlu {2}",
-                    (anunt.NumarPoze - 1).ToString(), anunt.Id, anunt.Title);
+                log.Debug($"Attempt to remove {anunt.NumarPoze - 1} secondary photos for not active anunt with id {anunt.Id}, titlu {anunt.Title}");
                 ClearPhotosExceptFirst(anunt.Id);
             }
 
@@ -817,7 +815,7 @@ namespace Imobiliare.Repositories
             
             foreach(var item in lastAddedImobils)
             {
-                log.DebugFormat($"Maintenance... Attempt to remove expired old anunt with id {item.Id} and title {item.Title}");
+                log.Debug($"Maintenance... Attempt to remove expired old anunt with id {item.Id} and title {item.Title}");
                 DeleteImobil(item.Id, webRootPath);
             }
 

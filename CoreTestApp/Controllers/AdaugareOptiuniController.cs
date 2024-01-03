@@ -113,11 +113,11 @@ namespace Imobiliare.UI.Controllers
                     TempData["ErrorMessage"] = "A aparut o eroare la adaugarea localitatii" + numeLocalitate + ", va rugam verificati logurile";
                 }
 
-                log.DebugFormat("Localitate {0} added for Judet with id {1}", numeLocalitate, idJudet);
+                log.Debug($"Localitate {0} added for Judet with id {1}", numeLocalitate, idJudet);
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
-                log.DebugFormat("Se editeaza localitatea cu id {0} cu numele {1} si coordinate {2}", idLocalitateEdit, numeLocalitate, coordinateGps);
+                log.Debug($"Se editeaza localitatea cu id {idLocalitateEdit} cu numele {numeLocalitate} si coordinate {coordinateGps}");
                 var editSuccess = this.unitOfWork.OrasRepository.EditeazaLocalitate(Int32.Parse(idLocalitateEdit), coordinateGps, numeLocalitate, resedintaJudet, localitateMica);
                 this.unitOfWork.Complete();
                 if (editSuccess)
@@ -155,11 +155,11 @@ namespace Imobiliare.UI.Controllers
                 {
                     TempData["Message"] = "A aparut o eroare la adaugarea cartierului " + numeCartier + ", va rugam verificati logurile";
                 }
-                log.DebugFormat("Cartier {0} added for localitate with id {1}", numeCartier, idLocalitate);
+                log.Debug($"Cartier {0} added for localitate with id {1}", numeCartier, idLocalitate);
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
-                log.DebugFormat("Se editeaza cartierul cu id {0} cu numele {1}", idCartierEdit, numeCartier);
+                log.Debug($"Se editeaza cartierul cu id {0} cu numele {1}", idCartierEdit, numeCartier);
                 var editSuccess = this.unitOfWork.CartierRepository.EditeazaCartier(Int32.Parse(idCartierEdit), numeCartier);
                 this.unitOfWork.Complete();
                 if (editSuccess)
@@ -221,12 +221,12 @@ namespace Imobiliare.UI.Controllers
             if (deleteSuccess)
             {
                 TempData["Message"] = "Descriere modificata cu succes";
-                log.DebugFormat("S-a updatat descrierea pentru localitatea cu id {0}, descriere updatata {1}", localitateID, localitateDescriere);
+                log.Debug($"S-a updatat descrierea pentru localitatea cu id {localitateID}, descriere updatata {localitateDescriere}");
             }
             else
             {
                 TempData["Message"] = "A aparut o eroare la modificarea descrierii, va rugam verificati logurile";
-                log.DebugFormat("Eroare la updatat descrierea pentru localitatea cu id {0}, descriere updatata {1}", localitateID, localitateDescriere);
+                log.Debug($"Eroare la updatat descrierea pentru localitatea cu id {localitateID}, descriere updatata {localitateDescriere}");
             }
 
             return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = judetID, orasIdParam = localitateID });

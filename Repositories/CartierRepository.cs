@@ -78,7 +78,7 @@
       }
       catch (Exception exception)
       {
-        //log.ErrorFormat("Error while adding cartier {0} for oras with id {1}, exception {2}", nume, orasId, exception);
+        //log.Error($"Error while adding cartier {0} for oras with id {1}, exception {2}", nume, orasId, exception);
         return false;
       }
     }
@@ -97,7 +97,7 @@
         {
           error += exception.InnerException.Message;
         }
-        log.ErrorFormat("Error while deleting cartier with id {0}, exception {1}", cartierID, error);
+        log.Error($"Error while deleting cartier with id {cartierID}, exception {error}");
         return false;
       }
       return true;
@@ -117,7 +117,7 @@
         {
           error += exception.InnerException.Message;
         }
-        log.ErrorFormat("Error while editing cartier with id {0}, exception {1}", cartierID, error);
+        log.Error($"Error while editing cartier with id {cartierID}, exception {error}");
         return false;
       }
       return true;

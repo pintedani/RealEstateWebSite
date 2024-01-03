@@ -100,7 +100,7 @@ namespace Imobiliare.UI.Controllers
 
             //if (!Request.Iscrawler())
             //{
-            //    log.DebugFormat("User {0} accessed ansamblu rezidential with id {1}", name != string.Empty ? name : "unknown user", ansambluId.Value);
+            //    log.Debug($"User {0} accessed ansamblu rezidential with id {1}", name != string.Empty ? name : "unknown user", ansambluId.Value);
             //    //if(!apartamentDetaliiData.IsCurrentUserAdmin)
             //    this.unitOfWork.AnsambluriRepository.IncrementNumarAccesari(ansambluId.Value);
             //    this.unitOfWork.Complete();
@@ -198,7 +198,7 @@ namespace Imobiliare.UI.Controllers
         {
             this.unitOfWork.AnsambluriRepository.Delete(id);
             this.unitOfWork.Complete();
-            log.ErrorFormat("Deleted ansamblu rezidential with id: {0}", id.ToString());
+            log.Error($"Deleted ansamblu rezidential with id: {id}");
             TempData["FooterStatus"] = "Ansamblu rezidential sters cu succes";
             return RedirectToAction("Index");
         }
@@ -211,11 +211,11 @@ namespace Imobiliare.UI.Controllers
         //    {
         //        var imageName = this.unitOfWork.AnsambluriRepository.AddImage(ansambluId, new[] { file });
         //        this.unitOfWork.Complete();
-        //        log.DebugFormat("Added images for ansamblu NOT async with id {0} by user {1}, imageName: {2}", ansambluId, User.Identity.Name, imageName);
+        //        log.Debug($"Added images for ansamblu NOT async with id {0} by user {1}, imageName: {2}", ansambluId, User.Identity.Name, imageName);
         //    }
         //    else
         //    {
-        //        log.DebugFormat("No image selected for ansamblu NOT async  by user {0}", User.Identity.Name);
+        //        log.Debug($"No image selected for ansamblu NOT async  by user {0}", User.Identity.Name);
         //    }
         //    return RedirectToAction("Edit", new { id = ansambluId });
         //}

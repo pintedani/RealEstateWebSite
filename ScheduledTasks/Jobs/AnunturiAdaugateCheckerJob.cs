@@ -52,7 +52,7 @@ namespace Imobiliare.UI.ScheduledTasks
       }
       catch (Exception ex)
       {
-        log.ErrorFormat("[SERVICE ANUNTURI ADAUGATE] = Error while checking for anuturi adaugate {0}", ex.Message);
+        log.Error($"[SERVICE ANUNTURI ADAUGATE] = Error while checking for anuturi adaugate {ex.Message}");
         //throw;
       }
     }

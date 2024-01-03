@@ -94,7 +94,7 @@ namespace Imobiliare.Repositories
             //}
             //else
             //{
-            //    log.ErrorFormat("Attempt to remove inexisting stire photo {0}", pozadeSters);
+            //    log.Error($"Attempt to remove inexisting stire photo {0}", pozadeSters);
             //}
         }
 
@@ -183,11 +183,11 @@ namespace Imobiliare.Repositories
         //                if (fileDel.Exists)
         //                {
         //                    fileDel.Delete();
-        //                    log.DebugFormat("Deleted stire photo {0}", poza);
+        //                    log.Debug($"Deleted stire photo {0}", poza);
         //                }
         //                else
         //                {
-        //                    log.ErrorFormat("Attempt to remove inexisting stire photo {0}", poza);
+        //                    log.Error($"Attempt to remove inexisting stire photo {0}", poza);
         //                }
         //            }
         //        }

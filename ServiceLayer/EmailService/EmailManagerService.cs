@@ -235,7 +235,7 @@ namespace Imobiliare.ServiceLayer.EmailService
             }
             else
             {
-                log.DebugFormat("FAKE email manager sent email  to {0} cu titlul {1} si mesajul {2}", emailUser, titlu, mesaj);
+                log.Debug($"FAKE email manager sent email  to {emailUser} cu titlul {titlu} si mesajul {mesaj}");
                 return EmailSendStatus.Success;
             }
         }

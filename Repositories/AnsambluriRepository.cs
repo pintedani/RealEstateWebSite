@@ -78,11 +78,11 @@ namespace Imobiliare.Repositories
         //                if (fileDel.Exists)
         //                {
         //                    fileDel.Delete();
-        //                    log.DebugFormat("Deleted ansamblu rezidential photo {0}", poza);
+        //                    log.Debug($"Deleted ansamblu rezidential photo {0}", poza);
         //                }
         //                else
         //                {
-        //                    log.ErrorFormat("Attempt to remove inexisting ansamblu rezidential photo {0}", poza);
+        //                    log.Error($"Attempt to remove inexisting ansamblu rezidential photo {0}", poza);
         //                }
         //            }
         //        }
@@ -125,7 +125,7 @@ namespace Imobiliare.Repositories
         //    }
         //    else
         //    {
-        //        log.ErrorFormat("Attempt to remove inexisting ansambluId photo {0}", pozadeSters);
+        //        log.Error($"Attempt to remove inexisting ansambluId photo {0}", pozadeSters);
         //    }
         }
 

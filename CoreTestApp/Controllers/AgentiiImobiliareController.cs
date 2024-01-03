@@ -182,7 +182,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.Complete();
 
             TempData["Message"] = $"Agentia cu nume {agentie.Nume} si id {id} a fost stearsa";
-            log.DebugFormat($"Admin deleted agentie {agentie.Nume} with id {id}");
+            log.Debug($"Admin deleted agentie {agentie.Nume} with id {id}");
 
             return this.RedirectToAction("ToateAgentiileAdmin");
         }

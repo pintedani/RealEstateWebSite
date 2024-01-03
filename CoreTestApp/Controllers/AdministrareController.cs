@@ -263,7 +263,7 @@ namespace Imobiliare.UI.Controllers
                     catch (DbUpdateConcurrencyException)
                     {
                         TempData["ErrorMessage"] = "Eroare la updatarea anuntului. S-a modificat intre timp din alta sesiune! Incercati din nou.";
-                        log.ErrorFormat("A aparut o eroare la updatarea anuntului {0} deoarece s-a modificat intre timp! by user {1}", imobilViewModel.Id, User.Identity.Name);
+                        log.Error($"A aparut o eroare la updatarea anuntului {imobilViewModel.Id} deoarece s-a modificat intre timp! by user {User.Identity.Name}");
                     }
                     if (this.unitOfWork.UsersRepository.Single(x => x.Email == User.Identity.Name).Role == Role.NormalUser)
                     {
@@ -325,7 +325,7 @@ namespace Imobiliare.UI.Controllers
         {
             this.unitOfWork.AnunturiRepository.RemoveGoogleMarkerCoordinates(imobilId);
             this.unitOfWork.Complete();
-            log.DebugFormat("Removed google marker for Imobil with id {0} by user {1}", imobilId, User.Identity.Name);
+            log.Debug($"Removed google marker for Imobil with id {imobilId} by user {User.Identity.Name}");
             return Json("Marker sters cu success");
         }
 
@@ -343,25 +343,25 @@ namespace Imobiliare.UI.Controllers
             //string rotatePoza = Request.Form["rotatePoza"];
             if (photoToDelete != null)
             {
-                log.DebugFormat("Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
+                log.Debug($"Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
                 this.unitOfWork.AnunturiRepository.DeleteImage(imobilId, photoToDelete, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }
             if (movePozaUp != null)
             {
-                log.DebugFormat("Photo {0} moved up by {1}", movePozaUp, User.Identity.Name);
+                log.Debug($"Photo {0} moved up by {1}", movePozaUp, User.Identity.Name);
                 this.unitOfWork.AnunturiRepository.MovePhotoUp(imobilId, movePozaUp);
                 this.unitOfWork.Complete();
             }
             if (movePozaDown != null)
             {
-                log.DebugFormat("Photo {0} moved down by {1}", movePozaDown, User.Identity.Name);
+                log.Debug($"Photo {0} moved down by {1}", movePozaDown, User.Identity.Name);
                 this.unitOfWork.AnunturiRepository.MovePhotoDown(imobilId, movePozaDown);
                 this.unitOfWork.Complete();
             }
             if (rotatePoza != null)
             {
-                log.DebugFormat("Rotate photo {0} by {1}", rotatePoza, User.Identity.Name);
+                log.Debug($"Rotate photo {0} by {1}", rotatePoza, User.Identity.Name);
                 this.unitOfWork.AnunturiRepository.RotatePhoto(imobilId, rotatePoza, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }
@@ -383,7 +383,7 @@ namespace Imobiliare.UI.Controllers
             //int imobilId = currentValue.ParseToInt();
             //var imageName = this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file });
             //this.unitOfWork.Complete();
-            //log.DebugFormat("Added images for imobil async with id {0} by user {1}, imageName: {2}", imobilId, User.Identity.Name, imageName);
+            //log.Debug($"Added images for imobil async with id {0} by user {1}, imageName: {2}", imobilId, User.Identity.Name, imageName);
             //var imobil = this.unitOfWork.AnunturiRepository.Single(x => x.Id == imobilId);
             //return PartialView("_pozeEditAnuntPartial", new ImobilCreateData { ImobilToEdit = imobil });
             return null;
@@ -400,7 +400,7 @@ namespace Imobiliare.UI.Controllers
                 if (!string.IsNullOrEmpty(imageName))
                 {
                     this.unitOfWork.Complete();
-                    log.DebugFormat($"Added images for imobil NOT async with id {imobilId} by user {User.Identity?.Name}, imageName: {imageName}");
+                    log.Debug($"Added images for imobil NOT async with id {imobilId} by user {User.Identity?.Name}, imageName: {imageName}");
                 }
                 else
                 {
@@ -457,7 +457,7 @@ namespace Imobiliare.UI.Controllers
             //Case 1: Invalid link
             if (anunt.UserId != secretNumber)
             {
-                log.ErrorFormat("User requestes change of imobil state {0} from EMAIL with invalid user! {1}", anuntId, secretNumber);
+                log.Error($"User requestes change of imobil state {anuntId} from EMAIL with invalid user! {secretNumber}");
                 ViewBag.Message = string.Format("User requestes change of imobil state {0} from EMAIL with invalid user! {1}", anuntId, secretNumber);
                 return RedirectToAction("Index");
             }
@@ -466,8 +466,9 @@ namespace Imobiliare.UI.Controllers
             //Se poate actualiza doar daca este expirat sau Aprobat
             if (anunt.StareAprobare != StareAprobare.Expirat && anunt.StareAprobare != StareAprobare.Aprobat)
             {
-                log.ErrorFormat("Eroare la actualizare anuntului cu id {0} din starea {1} in {2} prin email. Operatiune restrictionata.", anuntId, anunt.StareAprobare, stare);
-                TempData["Message"] = String.Format("Eroare la actualizare anuntului cu id {0} din starea {1} in {2} prin email. Operatiune restrictionata.", anuntId, anunt.StareAprobare, stare);
+                var message = $"Eroare la actualizare anuntului cu id {anuntId} din starea {anunt.StareAprobare} in {stare} prin email. Operatiune restrictionata.";
+                log.Error(message);
+                TempData["Message"] = message;
                 return RedirectToAction("Index");
             }
 
@@ -478,9 +479,7 @@ namespace Imobiliare.UI.Controllers
             {
                 if (stare == StareAprobare.Aprobat && anunt.DataAdaugare == anunt.DataAprobare)
                 {
-                    log.ErrorFormat(
-                      "Nu se poate actualiza anuntul cu id {0} din starea {1} in {2} prin email. Reactualizarea se poate efectua doar o data pe zi.",
-                      anuntId, anunt.StareAprobare, stare);
+                    log.Error($"Nu se poate actualiza anuntul cu id {anuntId} din starea {anunt.StareAprobare} in {stare} prin email. Reactualizarea se poate efectua doar o data pe zi.");
                     TempData["Message"] = "Anuntul este deja actualizat! Reactualizarea se poate efectua doar o data pe zi.";
                     return RedirectToAction("Index");
                 }
@@ -518,7 +517,7 @@ namespace Imobiliare.UI.Controllers
         {
             this.unitOfWork.UsersRepository.DezaboneazaNewsletter(userid);
             this.unitOfWork.Complete();
-            log.WarnFormat("Userul cu id {0} s-a dezabonat de la newsletter prin email.", userid);
+            log.Warn($"Userul cu id {userid} s-a dezabonat de la newsletter prin email.");
             TempData["Message"] = "Ati fost dezabonat de la newsletter.";
             return RedirectToAction("Index");
         }

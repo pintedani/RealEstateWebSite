@@ -136,7 +136,7 @@ namespace Imobiliare.UI.Controllers
                     var result = await UserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
-                        log.DebugFormat("Password changed successfully for user {0}, old: {1}, new: {2}", user.UserName, model.OldPassword, model.NewPassword);
+                        log.Debug($"Password changed successfully for user {user.UserName}, old: {model.OldPassword}, new: {model.NewPassword}");
                         TempData["Message"] = "Parola a fost schimbata cu succes";
                         return RedirectToAction("ChangePassword");
                     }
@@ -234,7 +234,7 @@ namespace Imobiliare.UI.Controllers
 
             if (user.Role == Role.Administrator)
             {
-                log.ErrorFormat("Admin tried to delete it's account! Not accepted");
+                log.Error($"Admin tried to delete it's account! Not accepted");
                 return StatusCode((int)HttpStatusCode.BadRequest);
             }
 
@@ -249,7 +249,7 @@ namespace Imobiliare.UI.Controllers
 
             var anunturi = this.unitOfWork.AnunturiRepository.Find(x => x.UserId == user.Id);
 
-            log.WarnFormat("Attempting to delete anunturi for user {0}, total anunturi: {1}", user.UserName, anunturi.Count);
+            log.Warn($"Attempting to delete anunturi for user {user.UserName}, total anunturi: {anunturi.Count}");
             foreach (var anunt in anunturi)
             {
                 this.unitOfWork.AnunturiRepository.DeleteImobil(anunt.Id, hostingEnvironment.WebRootPath);
@@ -258,7 +258,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.UsersRepository.DeleteUser(user.Id);
             this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Warning, "ACOUNT DELETED by user {0}", user.UserName, notifyAdmin: true);
             this.unitOfWork.Complete();
-            log.WarnFormat("ACOUNT DELETED by user {0}", user.UserName);
+            log.Warn($"ACOUNT DELETED by user {user.UserName}");
             TempData["Message"] = $"Contul a fost sters cu succes!";
             return RedirectToAction("Index", "Home");
         }
@@ -273,7 +273,7 @@ namespace Imobiliare.UI.Controllers
             //http://stackoverflow.com/questions/20180562/mvc5-null-reference-with-facebook-login
             //ControllerContext.HttpContext.Session.RemoveAll();
 
-            //log.DebugFormat("User attempt to attach new external login provider {0}", provider);
+            //log.Debug($"User attempt to attach new external login provider {0}", provider);
 
             //// Request a redirect to the external login provider to link a login for the current user
             //return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
@@ -289,7 +289,7 @@ namespace Imobiliare.UI.Controllers
             //var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, user);
             //if (loginInfo == null)
             //{
-            //    log.ErrorFormat("External authentication callback returned with error for id {0}", user.UserName);
+            //    log.Error($"External authentication callback returned with error for id {0}", user.UserName);
             //    return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             //}
             //var result = await UserManager.AddLoginAsync(user, loginInfo.Login);
@@ -571,7 +571,7 @@ namespace Imobiliare.UI.Controllers
             var user = this.unitOfWork.UsersRepository.Single(x => x.Id == id);
             user.RestrictionatPrimireEmail = true;
 
-            log.WarnFormat("User {0} RestrictionarePrimireEmail successfully, userId {1}", email, id);
+            log.Warn($"User {email} RestrictionarePrimireEmail successfully, userId {id}");
 
             this.unitOfWork.Complete();
 

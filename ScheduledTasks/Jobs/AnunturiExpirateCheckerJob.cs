@@ -81,7 +81,7 @@ namespace Imobiliare.UI.ScheduledTasks
             }
             catch (Exception ex)
             {
-                log.ErrorFormat($"[SERVICE EXPIRED ANUNTURI] = Error while checking for expired anuturi {ex.Message}");
+                log.Error($"[SERVICE EXPIRED ANUNTURI] = Error while checking for expired anuturi {ex.Message}");
                 //throw;
             }
         }

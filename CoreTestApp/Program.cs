@@ -18,7 +18,9 @@ using Imobiliare.UI.ScheduledTasks;
 using Imobiliare.UI.ScheduledTasks.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
+//Used?
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+ConnectionStrings.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IAnunturiRepository, AnunturiRepository>();

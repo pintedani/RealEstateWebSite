@@ -328,7 +328,7 @@
 
         public void UpdateAgentieForUser(string userid, string agentieId)
         {
-            log.Debug($"Updating agentie for user {0} with agentie {1}", userid, agentieId);
+            log.Debug($"Updating agentie for user {userid} with agentie {agentieId}");
             var intAgentieId = Int32.Parse(agentieId);
             var agentie = this.DbContext.Agenties.Single(x => x.Id == intAgentieId);
             var user = this.DbContext.Users.Single(x => x.Id == userid);

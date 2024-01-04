@@ -94,7 +94,7 @@ namespace Imobiliare.UI.Controllers
                 }
                 else
                 {
-                    log.Debug($"Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
+                    log.Debug($"Some user searched for unknown value. No localitate found for search value: {searchValue} and tipoferta {tipProprietate}");
                     return RedirectToAction(nameof(SugestiiCautare), new { text = searchValue });
                 }
             }
@@ -111,7 +111,7 @@ namespace Imobiliare.UI.Controllers
             }
 
             //TODO Show search suggestions
-            log.Debug($"Some user searched for unknown value. No localitate found for search value: {0} and tipoferta {1}", searchValue, tipProprietate);
+            log.Debug($"Some user searched for unknown value. No localitate found for search value: {searchValue} and tipoferta {tipProprietate}");
             return RedirectToAction(nameof(SugestiiCautare), new { text = searchValue });
         }
 

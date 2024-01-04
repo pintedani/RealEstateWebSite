@@ -343,25 +343,25 @@ namespace Imobiliare.UI.Controllers
             //string rotatePoza = Request.Form["rotatePoza"];
             if (photoToDelete != null)
             {
-                log.Debug($"Photo {0} deleted by {1}", photoToDelete, User.Identity.Name);
+                log.Debug($"Photo {photoToDelete} deleted by {User.Identity.Name}");
                 this.unitOfWork.AnunturiRepository.DeleteImage(imobilId, photoToDelete, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }
             if (movePozaUp != null)
             {
-                log.Debug($"Photo {0} moved up by {1}", movePozaUp, User.Identity.Name);
+                log.Debug($"Photo {movePozaUp} moved up by {User.Identity.Name}");
                 this.unitOfWork.AnunturiRepository.MovePhotoUp(imobilId, movePozaUp);
                 this.unitOfWork.Complete();
             }
             if (movePozaDown != null)
             {
-                log.Debug($"Photo {0} moved down by {1}", movePozaDown, User.Identity.Name);
+                log.Debug($"Photo {movePozaDown} moved down by {User.Identity.Name}");
                 this.unitOfWork.AnunturiRepository.MovePhotoDown(imobilId, movePozaDown);
                 this.unitOfWork.Complete();
             }
             if (rotatePoza != null)
             {
-                log.Debug($"Rotate photo {0} by {1}", rotatePoza, User.Identity.Name);
+                log.Debug($"Rotate photo {rotatePoza} by {User.Identity.Name}");
                 this.unitOfWork.AnunturiRepository.RotatePhoto(imobilId, rotatePoza, hostingEnvironment.WebRootPath);
                 this.unitOfWork.Complete();
             }

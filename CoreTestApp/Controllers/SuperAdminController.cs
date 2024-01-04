@@ -245,7 +245,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.UsersRepository.UpdateUserProfileByAdmin(userProfile);
             this.unitOfWork.Complete();
 
-            log.Debug($"SuperAdmin Edited user {0} by user {1}", userProfile.UserName, User.Identity.Name);
+            log.Debug($"SuperAdmin Edited user {userProfile.UserName} by user {User.Identity.Name}");
             TempData["Message"] = $"User {userProfile.UserName} editat cu success";
             return RedirectToAction("Users", new { selectSingleUserEmail = userProfile.UserName });
         }
@@ -264,7 +264,7 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.UsersRepository.DeleteUser(userid);
             this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"SuperAdmin {this.User.Identity.Name} deleted user {user.Email}", notifyAdmin: true);
             this.unitOfWork.Complete();
-            log.Debug($"SuperAdmin {0} deleted user {1}", User.Identity.Name, user.Email);
+            log.Debug($"SuperAdmin {User.Identity.Name} deleted user {user.Email}");
             TempData["Message"] = $"SuperAdmin {User.Identity.Name} deleted user {user.Email}";
             return RedirectToAction("Users");
         }
@@ -486,7 +486,7 @@ namespace Imobiliare.UI.Controllers
                     this.unitOfWork.AnunturiRepository.ChangeImobilState(Int32.Parse(id), stareNoua.EnumParse<StareAprobare>());
                     this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(Int32.Parse(id), User.Identity.Name + " multiple updt to " + stareNoua + " (" + DateTime.Now.ToShortDateString() + ")");
                     this.unitOfWork.Complete();
-                    log.Debug($"Changed anunt with id {0} to {1}", id, stareNoua);
+                    log.Debug($"Changed anunt with id {id} to {stareNoua}");
                 }
             }
 
@@ -540,7 +540,7 @@ namespace Imobiliare.UI.Controllers
             }
 
             TempData["Message"] = "Emailurile au fost trimise cu succes";
-            log.Debug($"Emailurile au fost trimise cu succes la lista {0} si categoria {1}", listaEmails, emailTemplateHumanReadableId);
+            log.Debug($"Emailurile au fost trimise cu succes la lista {listaEmails} si categoria {emailTemplateHumanReadableId}");
 
             //this.emailManagerService.MassEmailSendEmail()
             return RedirectToAction("MassEmailMessage");

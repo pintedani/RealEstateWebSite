@@ -1,4 +1,5 @@
-﻿using Imobiliare.Entities;
+﻿using Crosscutting;
+using Imobiliare.Entities;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -21,56 +22,53 @@ namespace Logging
             this.type = type;
         }
 
-        public void Debug(string message,
-                    [CallerMemberName] string memberName = "",
-                    [CallerFilePath] string filePath = "",
-                    [CallerLineNumber] int lineNumber = 0)
+        public void Debug(string message)
         {
-            var stackTrace = new StackTrace();
-            var frame = stackTrace.GetFrame(1); // Get the immediate caller
-
-            var MemberName = frame.GetMethod().Name;
-            //var FilePath = frame.GetFileName();
-            //var LineNumber = frame.GetFileLineNumber();
-
-            //log directly to db
-
-            //string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-            //string sql = "INSERT INTO LogTable (Message, MemberName, FilePath, LineNumber, LogTime) " +
-            //         "VALUES (@Message, @MemberName, @FilePath, @LineNumber, @LogTime)";
-
-            //using (var connection = new SqlConnection(_connectionString))
-            //{
-            //    using (var command = new SqlCommand(sql, connection))
-            //    {
-            //        command.Parameters.AddWithValue("@Message", message);
-            //        command.Parameters.AddWithValue("@MemberName", memberName);
-            //        command.Parameters.AddWithValue("@FilePath", filePath);
-            //        command.Parameters.AddWithValue("@LineNumber", lineNumber);
-            //        command.Parameters.AddWithValue("@LogTime", DateTime.Now);
-
-            //        connection.Open();
-            //        command.ExecuteNonQuery();
-            //    }
-            //}
-
+            LogToDatabase(message, "DEBUG");
         }
 
         public void Error(string error)
         {
-
+            LogToDatabase(error, "ERROR");
         }
 
         public void Info(string message)
         {
-
+            LogToDatabase(message, "INFO");
         }
 
 
         public void Warn(string message)
         {
-            
+            LogToDatabase(message, "WARN");
+        }
+
+        private static void LogToDatabase(string message, string level)
+        {
+            var stackTrace = new StackTrace();
+            var frame = stackTrace.GetFrame(2);
+
+            var MemberName = frame.GetMethod().Name;
+            //var FilePath = frame.GetFileName();
+            //var LineNumber = frame.GetFileLineNumber();
+
+            string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
+                     "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
+
+            using (var connection = new SqlConnection(ConnectionStrings.ConnectionString))
+            {
+                using (var command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@Date", DateTime.Now);
+                    command.Parameters.AddWithValue("@Level", level);
+                    command.Parameters.AddWithValue("@Logger", MemberName);
+                    command.Parameters.AddWithValue("@Message", message);
+                    command.Parameters.AddWithValue("@Exception", "");
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

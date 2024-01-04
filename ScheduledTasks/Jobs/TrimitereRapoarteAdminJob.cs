@@ -174,7 +174,7 @@ namespace Imobiliare.UI.ScheduledTasks.Jobs
                     this.unitOfWork.Complete();
                     this.emailManagerService.TrimitereRaportAdmin(adminWithRapoarteRecieveOption, finalEmail);
 
-                    log.Debug($"[SERVICE TRIMITE RAPOARTE ADMIN] S-a trimis email {0}, completat la {1} ", finalEmail, DateTime.Now.ToString());
+                    log.Debug($"[SERVICE TRIMITE RAPOARTE ADMIN] S-a trimis email {finalEmail}, completat la {DateTime.Now} ");
                 }
                 catch (Exception ex)
                 {

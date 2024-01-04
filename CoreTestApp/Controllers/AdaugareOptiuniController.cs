@@ -113,7 +113,7 @@ namespace Imobiliare.UI.Controllers
                     TempData["ErrorMessage"] = "A aparut o eroare la adaugarea localitatii" + numeLocalitate + ", va rugam verificati logurile";
                 }
 
-                log.Debug($"Localitate {0} added for Judet with id {1}", numeLocalitate, idJudet);
+                log.Debug($"Localitate {numeLocalitate} added for Judet with id {idJudet}");
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
@@ -155,11 +155,11 @@ namespace Imobiliare.UI.Controllers
                 {
                     TempData["Message"] = "A aparut o eroare la adaugarea cartierului " + numeCartier + ", va rugam verificati logurile";
                 }
-                log.Debug($"Cartier {0} added for localitate with id {1}", numeCartier, idLocalitate);
+                log.Debug($"Cartier {numeCartier} added for localitate with id {idLocalitate}");
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
-                log.Debug($"Se editeaza cartierul cu id {0} cu numele {1}", idCartierEdit, numeCartier);
+                log.Debug($"Se editeaza cartierul cu id {idCartierEdit} cu numele {numeCartier}");
                 var editSuccess = this.unitOfWork.CartierRepository.EditeazaCartier(Int32.Parse(idCartierEdit), numeCartier);
                 this.unitOfWork.Complete();
                 if (editSuccess)

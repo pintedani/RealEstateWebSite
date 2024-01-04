@@ -9,7 +9,7 @@ namespace Logging
 {
     public interface ILog
     {
-        void Debug(string message, string memberName = "", string filePath = "", int lineNumber = 0);
+        void Debug(string message);
         void Error(string error);
         void Info(string v);
         void Warn(string message);

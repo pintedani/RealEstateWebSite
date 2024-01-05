@@ -42,6 +42,12 @@ namespace Imobiliare.UI.Controllers
             this.hostingEnvironment = hostingEnvironment;
         }
 
+        [HttpGet]
+        public ActionResult Salam()
+        {
+            return Ok();
+        }
+
         public ActionResult Index(
           int? JudetSelect,
           int? OrasSelect,

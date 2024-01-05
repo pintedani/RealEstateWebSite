@@ -33,6 +33,12 @@ namespace Imobiliare.UI.Controllers
             this.hostingEnvironment = hostingEnvironment;
         }
 
+        [HttpGet]
+        public ActionResult Salam()
+        {
+            return Ok();
+        }
+
         /// <summary>
         /// gets all the anunturi for the curent user or the userid
         /// </summary>

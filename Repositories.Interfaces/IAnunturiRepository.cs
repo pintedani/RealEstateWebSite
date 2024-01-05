@@ -31,6 +31,7 @@
 
         bool UpdateImobilNew(Imobil imobilDto, bool isAdmin);
 
+        //webRootPath may be retrieved also from Crosscutting EnvironMentService
         bool DeleteImobil(int imobilId, string webRootPath);
 
         void DeactivareAnunt(int imobilId);

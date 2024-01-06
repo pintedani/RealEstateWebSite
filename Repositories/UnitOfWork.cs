@@ -2,6 +2,7 @@
 using Imobiliare.Repositories.CommitStrategies;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
@@ -67,108 +68,76 @@ namespace Imobiliare.Repositories
 
         public void Complete()
         {
-            //var entityChanges = this.DetectChanges();
+            var entityChanges = this.DetectChanges();
+            
+            //var entities = dbContext.ChangeTracker.Entries()
+            //.Where(e => e.State.Equals(EntityState.Modified) || e.State.Equals(EntityState.Added))
+            //.Select(e => e.Entity)
+            //.ToList();
 
             //this.preCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
 
             dbContext.SaveChanges();
 
-            //try
-            //{
-            //    this.postCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
-            //}
-            //catch (Exception e)
-            //{
-            //    log.Error($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
-            //}
+            if (entityChanges?.Count > 0)
+            {
+                try
+                {
+                    this.postCommitStrategies.ForEach(strategy => strategy.Execute(entityChanges.OfType<EntityChange>().ToList()));
+                }
+                catch (Exception e)
+                {
+                    log.Error($"PostCommitStrategies error: {e.Message} | InnerException: {e.InnerException?.Message}");
+                }
+            }
         }
 
         public IReadOnlyList<EntityChange> DetectChanges()
         {
             var changes = new List<EntityChange>();
-            this.dbContext.ChangeTracker.DetectChanges();
+            //this.dbContext.ChangeTracker.DetectChanges();
 
-            var objectContext = ((IObjectContextAdapter)this.dbContext).ObjectContext;
+            var entities = dbContext.ChangeTracker.Entries()
+            .Where(x => x.State == Microsoft.EntityFrameworkCore.EntityState.Modified || 
+                        x.State == Microsoft.EntityFrameworkCore.EntityState.Added || 
+                        x.State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+            .ToList();
 
-            var objectStateEntryList =
-              objectContext.ObjectStateManager.GetObjectStateEntries(
-                EntityState.Added | EntityState.Modified
-                | EntityState.Deleted).ToList();
 
-            foreach (var entry in objectStateEntryList)
+            foreach (var entry in entities)
             {
-                if (!entry.IsRelationship && entry.Entity != null)
+                //if (!entry.IsRelationship && entry.Entity != null)
+                //{
+                //Exception here is Userprofile which is no entity
+                if (entry.Entity is Entity)
                 {
-                    //Exception here is Userprofile which is no entity
-                    if (entry.Entity is Entity)
+                    var entity = (Entity)entry.Entity;
+                    var changedProperties = new Dictionary<string, PropertyChange>();
+                    switch (entry.State)
                     {
-                        var entity = (Entity)entry.Entity;
-                        var changedProperties = new Dictionary<string, PropertyChange>();
-                        switch (entry.State)
-                        {
-                            case EntityState.Added:
-                                changes.Add(EntityEventFactory.Create(entity, EntityState.Added, this, changedProperties));
-                                break;
+                        case Microsoft.EntityFrameworkCore.EntityState.Added:
+                            changes.Add(EntityEventFactory.Create(entity, EntityState.Added, this, changedProperties));
+                            break;
 
-                            case EntityState.Deleted:
-                                changes.Add(EntityEventFactory.Create(entity, EntityState.Deleted, this, changedProperties));
-                                break;
+                        case Microsoft.EntityFrameworkCore.EntityState.Deleted:
+                            changes.Add(EntityEventFactory.Create(entity, EntityState.Deleted, this, changedProperties));
+                            break;
 
-                            case EntityState.Modified:
-                                var modifiedProperties = entry.GetModifiedProperties().Distinct().ToList();
+                        case Microsoft.EntityFrameworkCore.EntityState.Modified:
+                            //var modifiedProperties = entry.GetModifiedProperties().Distinct().ToList();
+                            var modifiedProperties = entry.Properties.Where(p=>p.IsModified).Select(p=>p.Metadata.Name).ToList();
 
-                                modifiedProperties.ForEach(
-                                  modifiedPropertyName =>
-                                    changedProperties[modifiedPropertyName] =
-                                      new PropertyChange(
-                                        entry.OriginalValues[modifiedPropertyName],
-                                        entry.CurrentValues[modifiedPropertyName]));
+                            modifiedProperties.ForEach(
+                              modifiedPropertyName =>
+                                changedProperties[modifiedPropertyName] =
+                                  new PropertyChange(
+                                    entry.OriginalValues[modifiedPropertyName],
+                                    entry.CurrentValues[modifiedPropertyName]));
 
-                                changes.Add(
-                                  EntityEventFactory.Create((Entity)entry.Entity, EntityState.Modified, this, changedProperties));
-                                break;
-                        }
+                            changes.Add(EntityEventFactory.Create((Entity)entry.Entity, EntityState.Modified, this, changedProperties));
+                            break;
                     }
                 }
-                //else
-                //{
-                //    switch (entry.State)
-                //    {
-                //        case EntityState.Added:
-                //            changes.Add(
-                //              EntityEventFactory.Create(
-                //                (Entity)objectContext.GetObjectByKey((EntityKey)entry.CurrentValues[0]),
-                //                (Entity)objectContext.GetObjectByKey((EntityKey)entry.CurrentValues[1]),
-                //                EntityState.Added,
-                //                this,
-                //                entry.EntitySet.Name));
-                //            break;
-
-                //        case EntityState.Deleted:
-                //            changes.Add(
-                //              EntityEventFactory.Create(
-                //                (Entity)objectContext.GetObjectByKey((EntityKey)entry.OriginalValues[0]),
-                //                (Entity)objectContext.GetObjectByKey((EntityKey)entry.OriginalValues[1]),
-                //                EntityState.Deleted,
-                //                this,
-                //                entry.EntitySet.Name));
-                //            break;
-
-                //        case EntityState.Detached:
-                //            throw new InvalidOperationException("Entity in detatched state not supported.");
-
-                //        case EntityState.Modified:
-                //            throw new InvalidOperationException("Relationship entry in modified state not expected.");
-
-                //        case EntityState.Unchanged:
-                //            // NOP
-                //            break;
-
-                //        default:
-                //            throw new ArgumentOutOfRangeException();
-                //    }
-
-                //}
             }
             return changes;
         }

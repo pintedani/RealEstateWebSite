@@ -5,6 +5,7 @@ using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.UI.Models;
 using Logging;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,17 +21,20 @@ namespace Imobiliare.UI.Controllers
         private readonly IEmailManagerService emailManagerService;
 
         private readonly IWebHostEnvironment hostingEnvironment;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         private static readonly ILog log = LogManager.GetLogger(typeof(AdministrareController));
 
         public AdministrareController(
           IUnitOfWork unitOfWork,
           IEmailManagerService emailManagerService,
-          IWebHostEnvironment hostingEnvironment)
+          IWebHostEnvironment hostingEnvironment,
+          IHttpContextAccessor httpContextAccessor)
         {
             this.emailManagerService = emailManagerService;
             this.unitOfWork = unitOfWork;
             this.hostingEnvironment = hostingEnvironment;
+            httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -239,8 +243,12 @@ namespace Imobiliare.UI.Controllers
                     var imobilDto = InitializeToBeEditedAnunt(imobilViewModel);
 
                     var addedImobil = this.unitOfWork.AnunturiRepository.AddImobil(imobilDto, HttpContext.User.Identity.Name);
-                    //TODO reenable after fix with browser
-                    //this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Added anunt by user {User.Identity.Name}, de pe dispozitiv mobil {Request.Browser.IsMobileDevice}, adresa ip: {Request.UserHostAddress}, browser: {Request.UserAgent}", userName: User.Identity.Name);
+
+                    var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+                    string userHostAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                    bool isMobile = userAgent.Contains("Mobile", StringComparison.OrdinalIgnoreCase);
+
+                    this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Added anunt by user {User.Identity.Name}, de pe dispozitiv mobil {isMobile}, adresa ip: {userHostAddress}, browser: {userAgent}", userName: User.Identity.Name);
                     this.unitOfWork.Complete();
                     if (user.Role == Role.Administrator || user.TrustedUser)
                     {

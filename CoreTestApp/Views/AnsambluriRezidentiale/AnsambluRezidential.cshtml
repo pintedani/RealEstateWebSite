@@ -2,6 +2,7 @@
 @using Imobiliare.UI.BusinessLayer
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @using System.Web;
+@using Microsoft.AspNetCore.Http.Extensions
 @model Imobiliare.UI.Models.AnsambluRezidentialViewModel
 
 @{
@@ -15,8 +16,7 @@
     ViewBag.Keywords = Model.Ansamblu.Keywords;
   }
 
-  //TODO fix
-  //ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+  ViewBag.ShareUrl = Context.Request.GetDisplayUrl();
   ViewBag.ShareTitle = formattedTitle;
   ViewBag.ShareDescription = formattedTitle;
   if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))

@@ -169,32 +169,26 @@ namespace Imobiliare.UI.Controllers
         /// selectSingleUserEmail optional for also redirecting through actions in superadmin to specific user
         /// In order to be able to send email notifications from users view
         /// </summary>
-        public ActionResult Users(string selectSingleUserEmail)
+        public ActionResult Users(string selectSingleUserEmail, string userName, string page, string tipVanzatorSelect, string tipRoleSelect)
         {
-            var page = 1;
-            //if (Request.Form["page"].ToString != null)
-            //{
-            //    page = Request.Form["page"].ToString().ParseToInt();
-            //}
+            var selectedPage = 1;
+            if (!string.IsNullOrWhiteSpace(page))
+            {
+                selectedPage = int.Parse(page);
+            }
 
-            //string tipVanzator = Request.Form["TipVanzatorSelect"];
-            string tipVanzator = null;
             var tip = TipVanzator.TotiVanzatorii;
-            if (tipVanzator != null)
+            if (tipVanzatorSelect != null)
             {
-                tip = tipVanzator.EnumParse<TipVanzator>();
+                tip = tipVanzatorSelect.EnumParse<TipVanzator>();
             }
 
-            //string selectedRole = Request.Form["TipRoleSelect"];
-            string selectedRole = null;
             var role = Role.Toti;
-            if (selectedRole != null)
+            if (tipRoleSelect != null)
             {
-                role = selectedRole.EnumParse<Role>();
+                role = tipRoleSelect.EnumParse<Role>();
             }
 
-            //var userName = Request.Form["UserName"].ToString();
-            string userName = null;
             if (string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(selectSingleUserEmail))
             {
                 userName = selectSingleUserEmail;
@@ -216,7 +210,7 @@ namespace Imobiliare.UI.Controllers
 
             var pageSize = this.unitOfWork.SystemSettingsRepository.SystemSettings.DefaultPageSizeAdminPageUsers;
             var totalNumberOfUsers = 0;
-            var userProfiles = this.unitOfWork.UsersRepository.GetUserProfiles(tip, role, page, pageSize, out totalNumberOfUsers);
+            var userProfiles = this.unitOfWork.UsersRepository.GetUserProfiles(tip, role, selectedPage, pageSize, out totalNumberOfUsers);
 
             var displayPageNumber = (int)Math.Ceiling((double)totalNumberOfUsers / pageSize);
 
@@ -225,7 +219,7 @@ namespace Imobiliare.UI.Controllers
                 SelectedTipVanzator = tip,
                 SelectedRole = role,
                 UserProfiles = userProfiles,
-                Page = page,
+                Page = selectedPage,
                 NumberOfPages = displayPageNumber,
                 EmailTemplates = this.emailManagerService.GetAllEmailTemplates()
                 .Where(x => x.EmailTemplateCategory == EmailTemplateCategory.AdminUserRelated)

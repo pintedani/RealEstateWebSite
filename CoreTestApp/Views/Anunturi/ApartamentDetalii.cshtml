@@ -7,6 +7,7 @@
 @using Imobiliare.UI.Utils
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @using System.Web;
+@using Microsoft.AspNetCore.Http.Extensions
 @model Imobiliare.UI.Models.ApartamentDetaliiData
 
 
@@ -51,8 +52,7 @@
     }
     ViewBag.MetaDescription = HttpUtility.HtmlDecode(metaDescription) + " - " + Model.Imobil.Id;
 
-    //TODO fix
-    //ViewBag.ShareUrl = Request.Url.AbsoluteUri;
+    ViewBag.ShareUrl = Context.Request.GetDisplayUrl();
     ViewBag.ShareTitle = formattedTitle;
     ViewBag.ShareDescription = formattedTitle;
     ViewBag.ShareImage = "http://www.apartamente24.ro/Images/uploadedPhotos/" + Model.Imobil.FirstPhoto;

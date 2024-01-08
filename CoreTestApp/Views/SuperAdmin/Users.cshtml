@@ -1,6 +1,10 @@
 ﻿@using Imobiliare.Entities
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @model Imobiliare.UI.Models.UsersData
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Users";
@@ -232,8 +236,7 @@
             <textarea style="display: inline-block; min-height: 110px; width: 100%" id="emailConfirmareAnuntMesaj" name="emailConfirmareAnuntMesaj"></textarea>*@
         <br />
         <br />
-        @*TODO: REENABLE
- type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />*@
+        <input type="hidden" name="returnUrl" value="@HttpContextAccessor.HttpContext?.Request?.GetDisplayUrl()" />
         <input type="submit" value="Trimite Email" onclick="if ($('#emailConfirmareAnuntEmail').val().indexOf('Nu are email definit') != -1) { return confirm('Adresa de email invalida, apasati cancel!!!'); }" />
         <input type="button" value="Anuleaza" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();" />
     }

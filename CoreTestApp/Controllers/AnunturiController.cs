@@ -304,8 +304,7 @@ namespace Imobiliare.UI.Controllers
             if (!string.IsNullOrEmpty(titlu) && titlu != newTitle)
             {
                 log.Warn($"Redirect permanent because of anunt title change for anunt {imobil.Id} with original title {titlu} and updated title {newTitle}");
-                //TODO reenable redirect
-                //return RedirectPermanent(url);
+                return RedirectPermanent(url);
             }
 
             //User of anunt - different of null all the time

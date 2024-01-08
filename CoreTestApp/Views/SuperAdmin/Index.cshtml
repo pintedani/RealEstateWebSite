@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Extensions
 
+@* Or use better directly Context.Request.GetEncodedUrl() which is in razor page *@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @model Imobiliare.UI.Models.SuperAdminData
@@ -296,9 +297,8 @@ else
             <textarea style="display: inline-block; min-height: 110px; width: 100%" id="emailConfirmareAnuntMesaj" name="emailConfirmareAnuntMesaj"></textarea>*@
         <br />
         <br />
-        @*
-    TODO: REENABLE
-        <input type="hidden" name="returnUrl" value="@HttpContext.Current.Request.Url.AbsoluteUri" />*@
+
+        <input type="hidden" name="returnUrl" value="@Context.Request.GetDisplayUrl()" />
         <input type="submit" value="Trimite Email" onclick="if ($('#emailConfirmareAnuntEmail').val().indexOf('Nu are email definit') != -1) { return confirm('Adresa de email invalida, apasati cancel!!!'); }" />
         <input type="button" value="Anuleaza" onclick="document.getElementById('light').style.display = 'none'; document.getElementById('fade').style.display = 'none'; $('#adresaEmailTip').empty();" />
     }
@@ -337,12 +337,13 @@ else
 </style>
 
 @section Scripts {
-    <script src="~/Scripts/bootstrap-toggle.min.js"></script>
+@*     <script src="~/Scripts/bootstrap-toggle.min.js"></script> *@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
     @Html.Partial("_GenericPaging")
     <script>
         $(function () {
             $(".ChangeState").change(function () {
+                alert('bau');
                 //var url = "YourUrl/" + $(this).val(); //Append Id To URL
                 //window.location.replace(url);
 
@@ -350,9 +351,8 @@ else
                 var tempPath = url.replace(/__id__/g, $(this).prev().val());
                 //&amp seems to be a general problema when passing params, therefore replace with simple &
                 var tempPath2 = tempPath.replace(/__stare__/g, $(this).val());
-                //TODO: REENABLE
-                //var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g, "&returnUrl=" + encodeURIComponent('HttpContext.Current.Request.Url.AbsoluteUri'));
-                //window.location.href = finalPath;
+                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnUrl__/g, "&returnUrl=" + encodeURIComponent('@Context.Request.GetDisplayUrl()'));
+                window.location.href = finalPath;
             });
         });
 
@@ -446,10 +446,10 @@ else
                 var tempPath1 = url.replace(/__stareNoua__/g, stareNoua);
                 //&amp seems to be a general problema when passing params, therefore replace with simple &
                 var tempPath2 = tempPath1.replace(/&amp;ids=__ids__/g, "&ids=" + idList);
-                //TODO: REENABLE
-                //var currentUrl = encodeURIComponent('HttpContext.Current.Request.Url.AbsoluteUri');
-                //var finalPath = tempPath2.replace(/&amp;returnUrl=__returnurl__/g, "&returnUrl=" + currentUrl);
-                //window.location.href = finalPath;
+                
+                var currentUrl = encodeURIComponent('@Context.Request.GetDisplayUrl()');
+                var finalPath = tempPath2.replace(/&amp;returnUrl=__returnurl__/g, "&returnUrl=" + currentUrl);
+                window.location.href = finalPath;
             });
 
 

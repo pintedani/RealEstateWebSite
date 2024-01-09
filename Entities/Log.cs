@@ -18,7 +18,7 @@
       set;
     }
     [DataMember]
-    public virtual string Thread
+    public virtual string? Thread
     {
       get;
       set;

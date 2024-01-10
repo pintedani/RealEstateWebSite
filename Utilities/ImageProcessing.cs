@@ -102,17 +102,6 @@ namespace Imobiliare.Utilities
 
                 File.Delete(path);
 
-                //var img = Image.FromFile(path);
-                //img.RotateFlip(RotateFlipType.Rotate90FlipNone);
-
-                //var newName = GetFormattedImageName(imobil);
-                //string newPath = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/uploadedPhotos"), newName);
-                //img.Save(newPath);
-
-                //img.Dispose();
-
-                //File.Delete(path);
-
                 allPhotos[index] = newName;
             }
             catch (Exception exception)

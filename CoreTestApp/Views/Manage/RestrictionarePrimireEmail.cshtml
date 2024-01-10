@@ -8,8 +8,7 @@
     <h2>Restrictionare Primire Email: @ViewBag.Email</h2>
     <br />
 
-@*  TODO fix  
-    using (Html.BeginForm("RestrictionarePrimireEmail", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    using (Html.BeginForm("RestrictionarePrimireEmail", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <input type="hidden" value="@ViewBag.Id" name="userId">
         <input type="hidden" value="@ViewBag.Email" name="email">
@@ -17,6 +16,6 @@
         <br />
         <br />
         <input type="submit" class="btn btn-success" value="Dezabonare" />
-    }*@
+    }
 }
 

@@ -1,10 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-
 using Imobiliare.Repositories.Interfaces;
-//TODO old EF 6, replace
-//using System.Data.Entity;
-
 using Imobiliare.Entities;
 using Microsoft.EntityFrameworkCore;
 

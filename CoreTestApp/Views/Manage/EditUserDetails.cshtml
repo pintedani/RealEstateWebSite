@@ -10,8 +10,7 @@
 @Html.Partial("_MenuUserProfile")
 
 <br/>
-@*TODO fix
-    @using (Html.BeginForm("EditUserDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditUserDetails", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -128,7 +127,7 @@
         <br />
     </fieldset>
 }
-*@
+
 @*<div>
     <a href="@Url.Action("Index")" class="btn btn-success">
         <span class="glyphicon glyphicon-arrow-left"></span>

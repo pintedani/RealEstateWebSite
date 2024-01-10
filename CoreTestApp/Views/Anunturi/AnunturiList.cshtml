@@ -4,6 +4,7 @@
 @using Imobiliare.UI.Utils
 @using Imobiliare.UI.Utils.UrlSeoFormatters
 @using System.Web;
+@using System.Text.Json
 @model Imobiliare.UI.Models.ImobilsData
 
 @{
@@ -695,10 +696,8 @@
                 $.ajax({
                     url: '@Url.Action("GetAnunturiForLocalitate", "Anunturi")',
                     type: "POST",
-                    data: {
-                        @*
-                            TODO: REENABLE
-                        imobilFilter: @Html.Raw(Json.Encode(Model.ImobilFilter)),*@
+                    data: {                       
+                        imobilFilter: @Html.Raw(JsonSerializer.Serialize(Model.ImobilFilter)),
                         latLong: encodeURIComponent(map.getBounds())
                     },
                     success: function (data) {

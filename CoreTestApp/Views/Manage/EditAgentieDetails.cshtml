@@ -9,16 +9,15 @@
 <div class="container">
     @Html.Partial("_MenuUserProfileB5")
 
-@*    
-TODO fix    
-@if (Request.UrlReferrer != null)
+
+    @if (Context.Request.Headers.TryGetValue("Referer", out var referer))
     {
         <a class="btn btn-primary" href="@Url.Action("EditUserDetails")" style="margin: 5px 0 10px 0"><span class="bi bi-arrow-left"></span> Înapoi la detalii cont</a>
-    }*@
+    }
 
     <h3>Editeaza Detalii Agentie Imobiliara</h3>
 
-@*    @using (Html.BeginForm("EditAgentieDetails", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("EditAgentieDetails", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -85,7 +84,7 @@ TODO fix
         </div>
 
         <button type="submit" class="btn btn-primary my-2"><span class="bi bi-check"></span> Salvează</button>
-    }*@
+    }
 </div>
 
 @section Scripts {

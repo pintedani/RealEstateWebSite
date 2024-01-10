@@ -9,8 +9,8 @@
 <div class="container">
     @Html.Partial("_MenuUserProfileB5")
 
-@*  TODO fix  
-    @using (Html.BeginForm("EditAgentieImobiliaraUserprofile", "Manage", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+ 
+    @using (Html.BeginForm("EditAgentieImobiliaraUserprofile", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
@@ -135,7 +135,7 @@
                 </h3>
             }
         </div>
-    }*@
+    }
 </div>
 
 @section Scripts {

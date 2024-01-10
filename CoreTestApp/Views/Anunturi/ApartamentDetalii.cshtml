@@ -452,7 +452,8 @@
             {
                 if (User.Identity.IsAuthenticated)
                 {
-@*                    using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
+                    @*  @*TODO: Enable
+            using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
                     {
                         <div class="panel panel-success">
                             <div class="panel-heading">Trimite mesaj vanzatorului</div>

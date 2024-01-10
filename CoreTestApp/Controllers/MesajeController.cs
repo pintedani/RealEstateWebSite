@@ -174,11 +174,8 @@ namespace Imobiliare.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult TrimiteMesajVanzatoruluiAnuntRelated()
+        public ActionResult TrimiteMesajVanzatoruluiAnuntRelated(string mesajCumparator, string idAnuntVanzator)
         {
-            var mesajCumparator = Request.Form["MesajCumparator"];
-            var idAnuntVanzator = Request.Form["IdAnuntVanzator"];
-
             //TODO: Check if not null
             var fromUser = this.unitOfWork.UsersRepository.Single(x => x.Email == User.Identity.Name);
 
@@ -225,13 +222,8 @@ namespace Imobiliare.UI.Controllers
             return Content(mesaj);
         }
 
-        public ActionResult RaspundeMesajAnuntRelated()
+        public ActionResult RaspundeMesajAnuntRelated(string mesajRaspuns, int mesajId, string mesajLoggedInUserEmail, string mesajToUserEmail)
         {
-            var mesajContact = Request.Form["MesajRaspuns"];
-            var mesajId = Int32.Parse(Request.Form["MesajId"]);
-            var mesajLoggedInUserEmail = Request.Form["MesajLoggedInUserEmail"];
-            var mesajToUserEmail = Request.Form["MesajToUserEmail"];
-
             var anunt = this.unitOfWork.MesajRepository.Single(x => x.Id == mesajId).Imobil;
 
             this.unitOfWork.MesajRepository.Add(new Mesaj()
@@ -239,7 +231,7 @@ namespace Imobiliare.UI.Controllers
                 FromUser = this.unitOfWork.UsersRepository.Single(x => x.Email == mesajLoggedInUserEmail),
                 ToUser = this.unitOfWork.UsersRepository.Single(x => x.Email == mesajToUserEmail),
                 Imobil = anunt,
-                Continut = mesajContact,
+                Continut = mesajRaspuns,
                 Categorie = MesajCategorie.Anunt
             });
             this.unitOfWork.Complete();
@@ -247,7 +239,7 @@ namespace Imobiliare.UI.Controllers
             this.emailManagerService.SendAnuntCereDetaliiEmail(mesajToUserEmail, anunt.Id, anunt.Title);
 
             this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message,
-              $"TrimiteMesajVanzatorului Raspuns de la {mesajLoggedInUserEmail} la {mesajToUserEmail}, mesajul {mesajContact}", notifyAdmin: true);
+              $"TrimiteMesajVanzatorului Raspuns de la {mesajLoggedInUserEmail} la {mesajToUserEmail}, mesajul {mesajRaspuns}", notifyAdmin: true);
             this.unitOfWork.Complete();
 
             TempData["Message"] = "Mesaj trimis cu succes";

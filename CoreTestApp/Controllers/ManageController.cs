@@ -564,14 +564,12 @@ namespace Imobiliare.UI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult RestrictionarePrimireEmail()
+        public ActionResult RestrictionarePrimireEmail(string userId, string email)
         {
-            var id = Request.Form["userId"];
-            var email = Request.Form["email"];
-            var user = this.unitOfWork.UsersRepository.Single(x => x.Id == id);
+            var user = this.unitOfWork.UsersRepository.Single(x => x.Id == userId);
             user.RestrictionatPrimireEmail = true;
 
-            log.Warn($"User {email} RestrictionarePrimireEmail successfully, userId {id}");
+            log.Warn($"User {email} RestrictionarePrimireEmail successfully, userId {userId}");
 
             this.unitOfWork.Complete();
 

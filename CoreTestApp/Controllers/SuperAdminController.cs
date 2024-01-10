@@ -316,51 +316,39 @@ namespace Imobiliare.UI.Controllers
         }
 
         //[ValidateInput(false)]
-        public ActionResult SendEmailReactualizare()
-        {
-            string idString = Request.Form["emailConfirmareAnuntId"];
-            var id = idString.ParseToInt();
-            var titlu = Request.Form["emailConfirmareAnuntTitlu"];
-            var email = Request.Form["emailConfirmareAnuntEmail"];
-            var userId = Request.Form["emailConfirmareUserId"];
-            var emailTemplateHumanReadableId = Request.Form["EmailTemplateHumanReadableId"];
-            var returnUrl = Request.Form["returnUrl"];
+        public ActionResult SendEmailReactualizare(int emailConfirmareAnuntId, string emailConfirmareAnuntTitlu, string emailConfirmareAnuntEmail, string emailConfirmareUserId, string emailTemplateHumanReadableId, string returnUrl)
+        {;
             //var mesaj = Request.Unvalidated["emailConfirmareAnuntMesaj"] ;
             //mesaj = mesaj.Replace("break", "<br/>");
 
             var regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-            if (!regex.Match(email).Success)
+            if (!regex.Match(emailConfirmareAnuntEmail).Success)
                 throw new Exception("Invalid email parameter for sending Trimite Email user message");
 
             this.emailManagerService.AnuntRelatedEmail(
               emailTemplateHumanReadableId,
-              titlu,
-              id,
-              userId,
-              email,
+              emailConfirmareAnuntTitlu,
+              emailConfirmareAnuntId,
+              emailConfirmareUserId,
+              emailConfirmareAnuntEmail,
               "");
 
-            log.Debug($"Email send by admin for reactualizare to user with id {id} and titlu {titlu}");
-            this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(id, "Trimis Email(" + emailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
+            log.Debug($"Email send by admin for reactualizare to user with id {emailConfirmareAnuntId} and titlu {emailConfirmareAnuntTitlu}");
+            this.unitOfWork.AnunturiRepository.AddCustomNoteToImobil(emailConfirmareAnuntId, "Trimis Email(" + emailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
             return this.Redirect(returnUrl);
         }
 
-        public ActionResult SendEmailToUser()
+        public ActionResult SendEmailToUser(string emailConfirmareAnuntEmail, string emailConfirmareUserId, string EmailTemplateHumanReadableId, string returnUrl)
         {
-            var email = Request.Form["emailConfirmareAnuntEmail"];
-            var userId = Request.Form["emailConfirmareUserId"];
-            var emailTemplateHumanReadableId = Request.Form["EmailTemplateHumanReadableId"];
-            var returnUrl = Request.Form["returnUrl"];
-
             var regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-            if (!regex.Match(email).Success)
+            if (!regex.Match(emailConfirmareAnuntEmail).Success)
                 throw new Exception("Invalid email parameter for sending Trimite Email user message");
 
-            this.emailManagerService.UserRelatedEmail(emailTemplateHumanReadableId, userId, email);
+            this.emailManagerService.UserRelatedEmail(EmailTemplateHumanReadableId, emailConfirmareUserId, emailConfirmareAnuntEmail);
 
-            log.Debug($"Email send by admin to user for id {userId} and titlu {emailTemplateHumanReadableId}");
-            this.unitOfWork.UsersRepository.AddCustomNoteToUser(userId, "Trimis Email(" + emailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
+            log.Debug($"Email send by admin to user for id {emailConfirmareUserId} and titlu {EmailTemplateHumanReadableId}");
+            this.unitOfWork.UsersRepository.AddCustomNoteToUser(emailConfirmareUserId, "Trimis Email(" + EmailTemplateHumanReadableId + " " + DateTime.Now.ToShortDateString() + ")");
             this.unitOfWork.Complete();
             return this.Redirect(returnUrl);
         }
@@ -390,31 +378,25 @@ namespace Imobiliare.UI.Controllers
             return this.View(maintenanceData);
         }
 
-        public ActionResult DeleteLogsOlderThanDate()
+        public ActionResult DeleteLogsOlderThanDate(string logDate1)
         {
-            string date = Request.Form["logDate1"];
-
-            int number = this.unitOfWork.LogsRepository.DeleteLogsOltherThanDate(DateTime.Parse(date, dateFormat));
+            int number = this.unitOfWork.LogsRepository.DeleteLogsOltherThanDate(DateTime.Parse(logDate1, dateFormat));
 
             TempData["Message"] = number + " Logs deleted successfully";
             return RedirectToAction("Maintenance");
         }
 
-        public ActionResult DeleteAuditTrailsOlderThanDate()
+        public ActionResult DeleteAuditTrailsOlderThanDate(string logDate2)
         {
-            string date = Request.Form["logDate2"];
-
-            int number = this.unitOfWork.AuditTrailRepository.DeleteAuditTrailsOltherThanDate(DateTime.Parse(date, dateFormat));
+            int number = this.unitOfWork.AuditTrailRepository.DeleteAuditTrailsOltherThanDate(DateTime.Parse(logDate2, dateFormat));
 
             TempData["Message"] = number + " Audit Trails deleted successfully";
             return RedirectToAction("Maintenance");
         }
 
-        public ActionResult DeletePozeForAnunturiOlderThanDate()
+        public ActionResult DeletePozeForAnunturiOlderThanDate(string logDate2)
         {
-            string date = Request.Form["logDate2"];
-
-            var number = this.unitOfWork.AnunturiRepository.DeletePozeForExpiredAnunturiOlderThanDate(DateTime.Parse(date, dateFormat));
+            var number = this.unitOfWork.AnunturiRepository.DeletePozeForExpiredAnunturiOlderThanDate(DateTime.Parse(logDate2, dateFormat));
             this.unitOfWork.Complete();
 
             TempData["Message"] = $"Maintenance... {number.Item1} Anunturi cleared for secondary Photos successfully, Total {number.Item2} photos";
@@ -428,11 +410,9 @@ namespace Imobiliare.UI.Controllers
             return Content($"{number.Item1} Inactive Anunturi with secondary Photos, Total {number.Item2} photos");
         }
 
-        public ActionResult DeleteAnunturiVechiBulk()
+        public ActionResult DeleteAnunturiVechiBulk(string logDate2)
         {
-            string date = Request.Form["logDate2"];
-
-            int number = this.unitOfWork.AnunturiRepository.DeleteAnunturiVechiBulk(DateTime.Parse(date, dateFormat), hostingEnvironment.WebRootPath);
+            int number = this.unitOfWork.AnunturiRepository.DeleteAnunturiVechiBulk(DateTime.Parse(logDate2, dateFormat), hostingEnvironment.WebRootPath);
             this.unitOfWork.Complete();
 
             TempData["Message"] = $"Maintenance... {number} Expired Anunturi deleted";
@@ -502,11 +482,8 @@ namespace Imobiliare.UI.Controllers
         }
 
         //[ValidateInput(false)]
-        public ActionResult SendMassEmailMessage()
+        public ActionResult SendMassEmailMessage(string listaEmails, string emailTemplateHumanReadableId)
         {
-            string listaEmails = Request.Form["listaEmails"];
-            var emailTemplateHumanReadableId = Request.Form["EmailTemplateHumanReadableId"];
-
             if (string.IsNullOrEmpty(listaEmails))
             {
                 TempData["ErrorMessage"] = "listaEmails is null or empty";

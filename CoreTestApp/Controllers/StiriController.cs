@@ -284,11 +284,8 @@ namespace Imobiliare.UI.Controllers
         //    return RedirectToAction("Edit", new { id = stireId });
         //}
 
-        public ActionResult StergeImagine()
+        public ActionResult StergeImagine(int stireId, string poza)
         {
-            int stireId = int.Parse(Request.Form["stireId"]);
-            string poza = Request.Form["poza"];
-
             if (stireId == 0 || string.IsNullOrEmpty(poza))
             {
                 TempData["ErrorMessage"] = "Id stire or poza empty";

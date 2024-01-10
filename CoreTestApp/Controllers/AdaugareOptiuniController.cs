@@ -27,26 +27,11 @@ namespace Imobiliare.UI.Controllers
 
 
 
-        public ActionResult Index(int? judetIdParam, int? orasIdParam, int? cartierIdParam)
+        public ActionResult Index(int? JudetSelect, int? OrasSelect, int? CartierSelect)
         {
-            var judetId = judetIdParam != null ? judetIdParam.Value : 0;
-
-            if (int.TryParse(Request.Form["JudetSelect"], out int selectedJudetId))
-            {
-                judetId = selectedJudetId;
-            }
-
-            var orasId = orasIdParam != null ? orasIdParam.Value : 0;
-            if (int.TryParse(Request.Form["OrasSelect"], out int selectedOrasId))
-            {
-                orasId = selectedOrasId;
-            }
-
-            var cartierId = cartierIdParam != null ? cartierIdParam.Value : 0;
-            if (int.TryParse(Request.Form["CartierSelect"], out int selectedCartierId))
-            {
-                cartierId = selectedCartierId;
-            }
+            var judetId = JudetSelect != null ? JudetSelect.Value : 0;
+            var orasId = OrasSelect != null ? OrasSelect.Value : 0;
+            var cartierId = CartierSelect != null ? CartierSelect.Value : 0;
 
             var adaugareOptiuniData = new AdaugareOptiuniData();
             adaugareOptiuniData.Judets = this.unitOfWork.JudetRepository.Judete();
@@ -90,77 +75,68 @@ namespace Imobiliare.UI.Controllers
             return View(adaugareOptiuniData);
         }
 
-        public ActionResult AdaugaLocalitate()
+        public ActionResult AdaugaLocalitate(string IdLocalitateEdit, string NumeLocalitate, string IdJudet, string CoordinateGps, string ResedintaJudet, string LocalitateMica)
         {
-            string idLocalitateEdit = Request.Form["IdLocalitateEdit"];
-            string numeLocalitate = Request.Form["NumeLocalitate"];
-            string idJudet = Request.Form["IdJudet"];
-            string coordinateGps = Request.Form["CoordinateGps"];
-            bool resedintaJudet = (((string)Request.Form["ResedintaJudet"] != null) && (Request.Form["ResedintaJudet"] == "on"));
-            bool localitateMica = (((string)Request.Form["LocalitateMica"] != null) && (Request.Form["LocalitateMica"] == "on"));
+            bool resedintaJudet = (ResedintaJudet != null) && (ResedintaJudet == "on");
+            bool localitateMica = (LocalitateMica != null) && (LocalitateMica == "on");
 
             //http://stackoverflow.com/questions/547821/two-submit-buttons-in-one-form
             if (Request.Form["SubmitAction"] == "Adauga Localitate Noua")
             {
-                var addSuccess = this.unitOfWork.OrasRepository.AddLocalitate(numeLocalitate, idJudet.ParseToInt(), coordinateGps, resedintaJudet, localitateMica);
+                var addSuccess = this.unitOfWork.OrasRepository.AddLocalitate(NumeLocalitate, IdJudet.ParseToInt(), CoordinateGps, resedintaJudet, localitateMica);
                 this.unitOfWork.Complete();
                 if (addSuccess)
                 {
-                    TempData["Message"] = "Localitatea " + numeLocalitate + " a fost adaugata cu succes";
+                    TempData["Message"] = "Localitatea " + NumeLocalitate + " a fost adaugata cu succes";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "A aparut o eroare la adaugarea localitatii" + numeLocalitate + ", va rugam verificati logurile";
+                    TempData["ErrorMessage"] = "A aparut o eroare la adaugarea localitatii" + NumeLocalitate + ", va rugam verificati logurile";
                 }
 
-                log.Debug($"Localitate {numeLocalitate} added for Judet with id {idJudet}");
+                log.Debug($"Localitate {NumeLocalitate} added for Judet with id {IdJudet}");
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
-                log.Debug($"Se editeaza localitatea cu id {idLocalitateEdit} cu numele {numeLocalitate} si coordinate {coordinateGps}");
-                var editSuccess = this.unitOfWork.OrasRepository.EditeazaLocalitate(Int32.Parse(idLocalitateEdit), coordinateGps, numeLocalitate, resedintaJudet, localitateMica);
+                log.Debug($"Se editeaza localitatea cu id {IdLocalitateEdit} cu numele {NumeLocalitate} si coordinate {CoordinateGps}");
+                var editSuccess = this.unitOfWork.OrasRepository.EditeazaLocalitate(Int32.Parse(IdLocalitateEdit), CoordinateGps, NumeLocalitate, resedintaJudet, localitateMica);
                 this.unitOfWork.Complete();
                 if (editSuccess)
                 {
-                    TempData["Message"] = "Localitatea " + numeLocalitate + " a fost modificata cu succes";
+                    TempData["Message"] = "Localitatea " + NumeLocalitate + " a fost modificata cu succes";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "A aparut o eroare la modificarea localitatii " + numeLocalitate + ", va rugam verificati logurile";
+                    TempData["ErrorMessage"] = "A aparut o eroare la modificarea localitatii " + NumeLocalitate + ", va rugam verificati logurile";
                 }
             }
             else
             {
                 TempData["ErrorMessage"] = "A aparut o eroare, nu s-a specificat daca se face adaugare sau editare";
             }
-            return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = idJudet.ParseToInt(), orasIdParam = idLocalitateEdit.ParseToInt() });
+            return RedirectToAction("Index", "AdaugareOptiuni", new { JudetSelect = IdJudet.ParseToInt(), OrasSelect = IdLocalitateEdit.ParseToInt() });
         }
 
-        public ActionResult AdaugaCartier()
+        public ActionResult AdaugaCartier(string IdCartierEdit, string NumeCartier, string IdLocalitate, string IdJudet)
         {
-            string idCartierEdit = Request.Form["IdCartierEdit"];
-            string numeCartier = Request.Form["NumeCartier"];
-            string idLocalitate = Request.Form["IdLocalitate"];
-            string idJudet = Request.Form["IdJudet"];
-
             if (Request.Form["SubmitAction"] == "Adauga Cartier Nou")
             {
-                bool addSuccess = this.unitOfWork.CartierRepository.AddCartier(numeCartier, idLocalitate.ParseToInt());
+                bool addSuccess = this.unitOfWork.CartierRepository.AddCartier(NumeCartier, IdLocalitate.ParseToInt());
                 this.unitOfWork.Complete();
                 if (addSuccess)
                 {
-                    TempData["Message"] = "Cartierul " + numeCartier + " a fost adaugat cu succes";
+                    TempData["Message"] = "Cartierul " + NumeCartier + " a fost adaugat cu succes";
                 }
                 else
                 {
-                    TempData["Message"] = "A aparut o eroare la adaugarea cartierului " + numeCartier + ", va rugam verificati logurile";
+                    TempData["Message"] = "A aparut o eroare la adaugarea cartierului " + NumeCartier + ", va rugam verificati logurile";
                 }
-                log.Debug($"Cartier {numeCartier} added for localitate with id {idLocalitate}");
+                log.Debug($"Cartier {NumeCartier} added for localitate with id {IdLocalitate}");
             }
             else if (Request.Form["SubmitAction"] == "Salveaza Modificari")
             {
-                log.Debug($"Se editeaza cartierul cu id {idCartierEdit} cu numele {numeCartier}");
-                var editSuccess = this.unitOfWork.CartierRepository.EditeazaCartier(Int32.Parse(idCartierEdit), numeCartier);
+                log.Debug($"Se editeaza cartierul cu id {IdCartierEdit} cu numele {NumeCartier}");
+                var editSuccess = this.unitOfWork.CartierRepository.EditeazaCartier(Int32.Parse(IdCartierEdit), NumeCartier);
                 this.unitOfWork.Complete();
                 if (editSuccess)
                 {
@@ -168,14 +144,14 @@ namespace Imobiliare.UI.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "A aparut o eroare la modificarea cartierului " + numeCartier + ", va rugam verificati logurile";
+                    TempData["Message"] = "A aparut o eroare la modificarea cartierului " + NumeCartier + ", va rugam verificati logurile";
                 }
             }
             else
             {
                 TempData["ErrorMessage"] = "A aparut o eroare, nu s-a specificat daca se face adaugare sau editare";
             }
-            return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = idJudet.ParseToInt(), orasIdParam = idLocalitate.ParseToInt(), cartierIdParam = idCartierEdit.ParseToInt() });
+            return RedirectToAction("Index", "AdaugareOptiuni", new { JudetSelect = IdJudet.ParseToInt(), OrasSelect = IdLocalitate.ParseToInt(), CartierSelect = IdCartierEdit.ParseToInt() });
         }
 
         public ActionResult DeleteLastLocalitate(int orasID, int judetID)
@@ -193,7 +169,7 @@ namespace Imobiliare.UI.Controllers
                 TempData["ErrorMessage"] = "A aparut o eroare la stergerea localitatii, va rugam verificati logurile";
             }
 
-            return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = judetID });
+            return RedirectToAction("Index", "AdaugareOptiuni", new { JudetSelect = judetID });
         }
 
         public ActionResult DeleteLastCartier(int cartierID, int judetID, int localitateID)
@@ -210,7 +186,7 @@ namespace Imobiliare.UI.Controllers
                 TempData["Message"] = "A aparut o eroare la stergerea cartierului, va rugam verificati logurile";
             }
 
-            return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = judetID, orasIdParam = localitateID});
+            return RedirectToAction("Index", "AdaugareOptiuni", new { JudetSelect = judetID, OrasSelect = localitateID});
         }
 
         [HttpPost]
@@ -229,7 +205,7 @@ namespace Imobiliare.UI.Controllers
                 log.Debug($"Eroare la updatat descrierea pentru localitatea cu id {localitateID}, descriere updatata {localitateDescriere}");
             }
 
-            return RedirectToAction("Index", "AdaugareOptiuni", new { judetIdParam = judetID, orasIdParam = localitateID });
+            return RedirectToAction("Index", "AdaugareOptiuni", new { JudetSelect = judetID, OrasSelect = localitateID });
         }
     }
 }

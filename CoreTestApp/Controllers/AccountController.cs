@@ -331,13 +331,12 @@ namespace Imobiliare.UI.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model, string emailToSend)
         {
-            var email = Request.Form["emailToSend"].ToString();
-            if (!string.IsNullOrEmpty(email) && email.Contains('@'))
+            if (!string.IsNullOrEmpty(emailToSend) && emailToSend.Contains('@'))
             {
-                email = email.Replace(" ", "");
-                var userProfile = this.unitOfWork.UsersRepository.GetUserProfiles().FirstOrDefault(x => x.UserName == email.Replace(" ", ""));
+                emailToSend = emailToSend.Replace(" ", "");
+                var userProfile = this.unitOfWork.UsersRepository.GetUserProfiles().FirstOrDefault(x => x.UserName == emailToSend.Replace(" ", ""));
                 if (userProfile != null)
                 {
                     if (await UserManager.IsEmailConfirmedAsync(userProfile))
@@ -346,11 +345,11 @@ namespace Imobiliare.UI.Controllers
 
                         try
                         {
-                            this.emailManagerService.UserPasswordResetEmail(email, confirmationToken);
+                            this.emailManagerService.UserPasswordResetEmail(emailToSend, confirmationToken);
                         }
                         catch (Exception exception)
                         {
-                            log.Error($"Eroare la trimitere mesaj de schimbare parola {exception.Message} la adresa {email}");
+                            log.Error($"Eroare la trimitere mesaj de schimbare parola {exception.Message} la adresa {emailToSend}");
                             TempData[TempDataSeverity.ErrorMessage.ToString()] = "Eroare la trimitere mesaj de recuperare parola!";
                             return RedirectToAction(nameof(Login));
                         }
@@ -365,8 +364,8 @@ namespace Imobiliare.UI.Controllers
                 }
                 else
                 {
-                    log.Error($"Nu exista utilizator ptr adresa {email} ptr a trimite email de recuperare parola");
-                    TempData[TempDataSeverity.WarningMessage.ToString()] = "Nu există utilizator pentru adresa specificată " + email + " pentru a trimite email de recuperare parola. Daca v-ati logat cu Facebook sau Google incercati cu acel cont.";
+                    log.Error($"Nu exista utilizator ptr adresa {emailToSend} ptr a trimite email de recuperare parola");
+                    TempData[TempDataSeverity.WarningMessage.ToString()] = "Nu există utilizator pentru adresa specificată " + emailToSend + " pentru a trimite email de recuperare parola. Daca v-ati logat cu Facebook sau Google incercati cu acel cont.";
                     return RedirectToAction(nameof(Login));
                 }
 
@@ -752,12 +751,8 @@ namespace Imobiliare.UI.Controllers
         #endregion
 
         [HttpPost]
-        public ActionResult RegisterAgentByAgentImobiliar()
+        public ActionResult RegisterAgentByAgentImobiliar(string agentieId, string email, string password)
         {
-            var agentieId = Request.Form["agentieId"];
-            var email = Request.Form["email"];
-            var parola = Request.Form["password"];
-
             //var agentie = this.agentiiRepository.GetAgentie(Int32.Parse(id));
 
             var user = new UserProfile
@@ -779,7 +774,7 @@ namespace Imobiliare.UI.Controllers
 
             try
             {
-                var result = UserManager.CreateAsync(user, parola).Result;
+                var result = UserManager.CreateAsync(user, password).Result;
                 if (result.Succeeded)
                 {
                     var code = UserManager.GenerateEmailConfirmationTokenAsync(user).Result;
@@ -788,7 +783,7 @@ namespace Imobiliare.UI.Controllers
 
                     this.emailManagerService.UserAccountConfirmationEmail(email, user.Id, code);
 
-                    this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Userul {email} creat cu parola {parola}", userName: User.Identity.Name);
+                    this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Userul {email} creat cu parola {password}", userName: User.Identity.Name);
                     this.unitOfWork.Complete();
                 }
                 else

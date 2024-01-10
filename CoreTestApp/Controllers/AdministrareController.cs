@@ -47,7 +47,7 @@ namespace Imobiliare.UI.Controllers
         /// gets all the anunturi for the curent user or the userid
         /// </summary>
         /// <param name="userId"> userId for which to get anunturi </param>
-        public ActionResult Index(string userId, int? JudetSelect, int? OrasSelect, int? CartierSelect, StareAprobare? StareAprobareSelect, int? page)
+        public ActionResult Index(string userId, string userIdSelect, int? JudetSelect, int? OrasSelect, int? CartierSelect, StareAprobare? StareAprobareSelect, int? page)
         {
             int judetId = 0;
 
@@ -89,10 +89,10 @@ namespace Imobiliare.UI.Controllers
             {
                 userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(userId, false);
             }
-            //else if ((string)Request.Form["userIdSelect"] != null)
-            //
-            //    userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(Request.Form["userIdSelect"], false);
-            //
+            else if (userIdSelect != null)
+            {
+                userProfile = this.unitOfWork.UsersRepository.GetUserProfileById(userIdSelect, false);
+            }
             else
             {
                 //Default value
@@ -351,10 +351,6 @@ namespace Imobiliare.UI.Controllers
             {
                 imobilId = anuntId.ParseToInt();
             }
-            //string photoToDelete = Request.Form["pozaDeSters"];
-            //string movePozaUp = Request.Form["movePozaUp"];
-            //string movePozaDown = Request.Form["movePozaDown"];
-            //string rotatePoza = Request.Form["rotatePoza"];
             if (photoToDelete != null)
             {
                 log.Debug($"Photo {photoToDelete} deleted by {User.Identity.Name}");
@@ -405,9 +401,8 @@ namespace Imobiliare.UI.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> AddImageNoAjax(IFormFile file)
+        public async Task<ActionResult> AddImageNoAjax(IFormFile file, int imobilId)
         {
-            int imobilId = int.Parse(Request.Form["imobilId"]);
             if (file != null)
             {
                 var imageName = await this.unitOfWork.AnunturiRepository.AddImages(imobilId, new[] { file }, hostingEnvironment.WebRootPath);

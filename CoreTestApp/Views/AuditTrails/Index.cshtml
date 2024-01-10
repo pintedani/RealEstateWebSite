@@ -11,7 +11,7 @@
 @using (Html.BeginForm("Index", "AuditTrails", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
 {
     <text>Data:</text>
-    <input id="datepickerDate" name="auditTrailDate" value="@Model.SelectedDate.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
+    <input id="datepickerDate" name="date" value="@Model.SelectedDate.ToString("dd'/'MM'/'yyyy")" type="text" size="10" style="width: 150px" />
     <text>Cauta text:</text>
     <input id="searchText" name="searchText" value="@Model.SearchText" type="text" size="10" style="width: 200px" />
     <input class="btn btn-success" type="submit" value="Caută" />
@@ -77,6 +77,9 @@ else
 
 @section Scripts {
     @Html.Partial("_GenericPaging")
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
     <script type="text/javascript">
         $(function () {
             $("#datepickerDate").datepicker({

@@ -11,6 +11,33 @@
 
     <br />
     <br />
+
+    <form id="contactForm" method="post" action="/Home/TrimiteMesajContact">
+        <div class="form-group floating-label-form-group controls">
+            <input type="email" id="EmailContact" name="EmailContact" placeholder="Email" class="form-control" />
+        </div>
+
+        <div class="form-group floating-label-form-group controls my-4">
+            <input type="text" id="TelefonContact" name="TelefonContact" placeholder="Telefonul tau" class="form-control" />
+        </div>
+
+        <div class="form-group floating-label-form-group controls">
+            <textarea rows="4" id="MesajContact" name="MesajContact" placeholder="Mesaj" class="form-control"></textarea>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag" style="margin-top: 10px"></div>
+
+        <div style="margin-top: 10px">
+            <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
+            <p id="loadingMessage" style="display: none">Va rugam asteptati</p>
+            <button type="button" class="btn btn-primary" id="TrimiteMesajButton">
+                <span class="glyphicon glyphicon-send"></span> Trimite Mesaj
+            </button>
+            <div id="statusTrimitereEmail" style="color: blue"></div>
+        </div>
+    </form>
   
 @* @using (Ajax.BeginForm("TrimiteMesajContact", "Home", new AjaxOptions
     {
@@ -19,7 +46,7 @@
         InsertionMode = InsertionMode.Replace,
         OnBegin = "showContactFormProgress",
         OnSuccess = "hideContactFormProgress"
-    })) *@
+    }))
     {
 
         <div class="form-group floating-label-form-group controls">
@@ -35,7 +62,6 @@
             <textarea rows="4" id="MesajContact" name="MesajContact" placeholder="Mesaj" class="form-control"></textarea>
         </div>
         <div class="clearfix"></div>
-        @*Recaptcha is reset in hideContactFormProgress*@
         <div class="g-recaptcha" data-sitekey="6LdoSQwTAAAAACfODVa04naEdZkoKVojZ4lMM0ag" style="margin-top: 10px"></div>
 
         <div style="margin-top: 10px">
@@ -44,12 +70,76 @@
             <button type="submit" class="btn btn-primary" id="TrimiteMesajButton"><span class="glyphicon glyphicon-send"></span> Trimite Mesaj</button>
             <div id="statusTrimitereEmail" style="color: blue"></div>
         </div>
-    }
+    } *@
 
 </div>
 
-
 @section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js?hl=ro" async defer></script>
+    <script>
+        $(document).ready(function () {
+            $("#EmailContact").on("click", function () {
+                $("#EmailContact").val('');
+            });
+
+            $("#TelefonContact").on("click", function () {
+                $("#TelefonContact").val('');
+            });
+
+            $("#TrimiteMesajButton").on("click", function () {
+                showContactFormProgress();
+
+                $.ajax({
+                    url: "/Home/TrimiteMesajContact",
+                    type: "POST",
+                    data: $("#contactForm").serialize(),
+                    success: function (result) {
+                        hideContactFormProgress();
+                        // Process the result as needed
+                        if (result.success) {
+                            $("#statusTrimitereEmail").css("color", "blue").html(result.message);
+                        } else {
+                            $("#statusTrimitereEmail").css("color", "red").html(result.message);
+                        }
+                        showAlert("Eroare", result.message);
+                    },
+                    error: function (xhr, status, error) {
+                        hideContactFormProgress();
+                        // Handle the error
+                        $("#statusTrimitereEmail").css("color", "red").html("Error sending message: " + error);
+                        showAlert("Eroare", "Error sending message: " + error);
+                    }
+                });
+            });
+        });
+
+        function showContactFormProgress() {
+            $('#loadingGif').show();
+            $('#loadingMessage').show();
+            $("#TrimiteMesajButton").hide();
+        }
+
+        function hideContactFormProgress() {
+            $('#loadingGif').hide();
+            $('#loadingMessage').hide();
+            $("#TrimiteMesajButton").show();
+
+            // Reset form fields
+            $("#EmailContact").val(''); // Reset the email field
+            $("#TelefonContact").val(''); // Reset the phone field
+            $("#MesajContact").val(''); // Reset the message field
+
+            // Reset Recaptcha
+            grecaptcha.reset();
+        }
+
+        function showAlert(type, message) {
+            alert(type + ": " + message);
+        }
+    </script>
+}
+
+@* @section Scripts {
     <script src="https://www.google.com/recaptcha/api.js?hl=ro" async defer></script>
     <script>
         $(document).ready(function () {
@@ -91,6 +181,5 @@
             alert($('#statusTrimitereEmail').text());
         }
     </script>
-    @*    @Scripts.Render("~/bundles/jqueryval")*@
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-}
+} *@

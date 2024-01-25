@@ -45,30 +45,31 @@ namespace Logging
 
         private static void LogToDatabase(string message, string level)
         {
-            var stackTrace = new StackTrace();
-            var frame = stackTrace.GetFrame(2);
+            //TODO: Commented for sqlite
+            //var stackTrace = new StackTrace();
+            //var frame = stackTrace.GetFrame(2);
 
-            var MemberName = frame.GetMethod().Name;
-            //var FilePath = frame.GetFileName();
-            //var LineNumber = frame.GetFileLineNumber();
+            //var MemberName = frame.GetMethod().Name;
+            ////var FilePath = frame.GetFileName();
+            ////var LineNumber = frame.GetFileLineNumber();
 
-            string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
-                     "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
+            //string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
+            //         "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
 
-            using (var connection = new SqlConnection(ConnectionStrings.ConnectionString))
-            {
-                using (var command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@Date", DateTime.Now);
-                    command.Parameters.AddWithValue("@Level", level);
-                    command.Parameters.AddWithValue("@Logger", MemberName);
-                    command.Parameters.AddWithValue("@Message", message);
-                    command.Parameters.AddWithValue("@Exception", "");
+            //using (var connection = new SqlConnection(ConnectionStrings.ConnectionString))
+            //{
+            //    using (var command = new SqlCommand(sql, connection))
+            //    {
+            //        command.Parameters.AddWithValue("@Date", DateTime.Now);
+            //        command.Parameters.AddWithValue("@Level", level);
+            //        command.Parameters.AddWithValue("@Logger", MemberName);
+            //        command.Parameters.AddWithValue("@Message", message);
+            //        command.Parameters.AddWithValue("@Exception", "");
 
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                }
-            }
+            //        connection.Open();
+            //        command.ExecuteNonQuery();
+            //    }
+            //}
         }
     }
 }

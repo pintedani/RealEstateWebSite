@@ -71,7 +71,9 @@ namespace Imobiliare.UI.Controllers
                 return View(model);
             }
 
+            //var normal = UserManager.NormalizeEmail(model.UserName);
             var user = UserManager.FindByEmailAsync(model.UserName).Result;
+            
             if (user != null && !UserManager.IsEmailConfirmedAsync(user).Result)
             {
                 if (user.StareUser == StareUser.NeConfirmat)
@@ -192,24 +194,24 @@ namespace Imobiliare.UI.Controllers
 
                     this.emailManagerService.UserAccountConfirmationEmail(model.UserName, user.Id, code);
 
-                    //Upload image only in case of agentie/constructor
+                    //Upload image only in case of agentie/ constructor
                     //if (model.ProfileImage != null)
-                    //{
-                    //    //this.userManagementService.AddImageForUserProfile(model.ProfileImage, user.Id);
-                    //    if (model.TipVanzator == TipVanzator.AgentieImobiliara)
                     //    {
-                    //        var savedUser = this.unitOfWork.UsersRepository.GetUserProfileById(user.Id, true);
-                    //        this.unitOfWork.UsersRepository.AddImageForAgentie(model.ProfileImage, savedUser.AgentieId.Value);
+                    //        //this.userManagementService.AddImageForUserProfile(model.ProfileImage, user.Id);
+                    //        if (model.TipVanzator == TipVanzator.AgentieImobiliara)
+                    //        {
+                    //            var savedUser = this.unitOfWork.UsersRepository.GetUserProfileById(user.Id, true);
+                    //            this.unitOfWork.UsersRepository.AddImageForAgentie(model.ProfileImage, savedUser.AgentieId.Value);
+                    //        }
+                    //        else if (model.TipVanzator == TipVanzator.Constructor)
+                    //        {
+                    //            var savedUser = this.unitOfWork.UsersRepository.GetUserProfileById(user.Id, true);
+                    //            this.unitOfWork.UsersRepository.AddImageForConstructor(model.ProfileImage, savedUser.ConstructorId.Value);
+                    //        }
+                    //        log.Info("User image added for " + User.Identity.Name);
                     //    }
-                    //    else if (model.TipVanzator == TipVanzator.Constructor)
-                    //    {
-                    //        var savedUser = this.unitOfWork.UsersRepository.GetUserProfileById(user.Id, true);
-                    //        this.unitOfWork.UsersRepository.AddImageForConstructor(model.ProfileImage, savedUser.ConstructorId.Value);
-                    //    }
-                    //    log.Info("User image added for " + User.Identity.Name);
-                    //}
 
-                    TempData["Message"] = "Un email a fost trimis la adresa specificata. Accesati linkul din email pentru activarea contului. In mod normal emailul se primeste in maxim 10 minute.";
+                        TempData["Message"] = "Un email a fost trimis la adresa specificata. Accesati linkul din email pentru activarea contului. In mod normal emailul se primeste in maxim 10 minute.";
 
                     this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Userul {model.UserName} s-a inregistrat de pe dispozitiv mobil {GetBrowserInfo()}, adresa ip: {HttpContext.Connection.RemoteIpAddress}", userName: model.UserName);
                     this.unitOfWork.Complete();
@@ -265,7 +267,8 @@ namespace Imobiliare.UI.Controllers
                     this.unitOfWork.Complete();
                     TempData["Message"] = "Contul a fost confirmat cu succes. Introduceți emailul si parola pentru a intra in cont";
 
-                    this.emailManagerService.UserAccountConfirmedWelcomeMessageEmail(savedUser.Email);
+                    //TODO Reenable
+                    //this.emailManagerService.UserAccountConfirmedWelcomeMessageEmail(savedUser.Email);
                     return RedirectToAction("Login");
                 }
             }

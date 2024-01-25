@@ -16,10 +16,11 @@ using Crosscutting;
 using Imobiliare.UI.Utils;
 using Imobiliare.UI.ScheduledTasks;
 using Imobiliare.UI.ScheduledTasks.Jobs;
+using Microsoft.Data.Sqlite;
+
 
 var builder = WebApplication.CreateBuilder(args);
-//Used?
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 ConnectionStrings.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -52,9 +53,10 @@ builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
 //https://stackoverflow.com/questions/72060349/form-field-is-required-even-if-not-defined-so
-builder.Services.AddControllersWithViews(options => { 
-        options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
-        }
+builder.Services.AddControllersWithViews(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+}
     ).AddRazorRuntimeCompilation()
     .AddJsonOptions(options =>
     {
@@ -63,11 +65,19 @@ builder.Services.AddControllersWithViews(options => {
 
 builder.Services.AddRazorPages();
 
+//For SQL Server - need new migration files
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//{
+//    options.UseSqlServer(
+//        builder.Configuration["ConnectionStrings:DefaultConnection"]);
+//});
+
+//For SQLite - need new migration files
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(
-        builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
+SetCaseInsensitiveSQLiteDb(builder);
 
 //builder.Services.AddDefaultIdentity<UserProfile>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -105,3 +115,24 @@ app.MapRazorPages();
 DBInitializer.Seed(app);
 
 app.Run();
+
+
+
+
+
+// ----------------------- Helper methods -------------------------
+
+static void SetCaseInsensitiveSQLiteDb(WebApplicationBuilder builder)
+{
+    var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]; // Replace with your actual connection string
+    var connection = new SqliteConnection(connectionString);
+
+    connection.Open();
+
+    // Set SQLite to be case-insensitive
+    using (var command = connection.CreateCommand())
+    {
+        command.CommandText = "PRAGMA case_sensitive_like = OFF";
+        command.ExecuteNonQuery();
+    }
+}

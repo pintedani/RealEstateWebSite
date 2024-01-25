@@ -47,8 +47,8 @@ namespace Imobiliare.UI.Controllers
         public ActionResult Index()
         {
             //https://localhost:7034/Anunturi/ApartamentDetalii?imobilid=27765&titlu=sfd
-            var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
-            var role = userProfile.Role;
+            //var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
+            //var role = userProfile.Role;
             //userManager.AddToRoleAsync(user, "Admin")
 
             ViewBag.TipOferta = TipProprietate.Toate.ToString();
@@ -341,7 +341,7 @@ namespace Imobiliare.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult TrimiteMesajContact()
+        public IActionResult TrimiteMesajContact()
         {
             if (this.unitOfWork.SystemSettingsRepository.SystemSettings.CapchaEnabled)
             {
@@ -351,7 +351,7 @@ namespace Imobiliare.UI.Controllers
                 CaptchaResponse captchaResponse = this.recaptchaValidator.GetCaptchaResponse(response);
                 if (!captchaResponse.Success)
                 {
-                    return Content("Eroare: Va rugam confirmati ca nu sunteti robot");
+                    return Json(new { success = false, message = "Va rugam confirmati ca nu sunteti robot!" });
                 }
             }
             var emailContact = Request.Form["EmailContact"];
@@ -360,23 +360,21 @@ namespace Imobiliare.UI.Controllers
 
             if (!Regex.IsMatch(emailContact, "^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"))
             {
-                //In order to enter "OnFailure" Method set statusCode
-                //Response.StatusCode = 400;
-                return Content("Eroare: Emailul introdus este invalid");
+                return Json(new { success = false, message = "Emailul introdus este invalid!" });
+
             }
-            if (telefonContact == "Telefonul tau")
+            if (string.IsNullOrWhiteSpace(telefonContact) || telefonContact == "Telefonul tau")
             {
-                return Content("Eroare: Telefonul introdus este invalid");
+                return Json(new { success = false, message = "Telefonul introdus este invalid!" });
             }
-            if (mesajContact == string.Empty)
+            if (string.IsNullOrWhiteSpace(mesajContact) || mesajContact == string.Empty)
             {
-                return Content("Eroare: Va rugam introduceti un mesaj");
+                return Json(new { success = false, message = "Va rugam introduceti un mesaj!" });
             }
 
             this.emailManagerService.NotifyAdminContactForm(telefonContact, emailContact, mesajContact);
 
-            var mesaj = "Mesajul a fost receptionat. Va multumim.";
-            return Content(mesaj);
+            return Json(new { success = true, message = "Mesajul a fost receptionat. Va multumim!" });
         }
 
         public ActionResult TrimiteMesajAbuzAnunt()

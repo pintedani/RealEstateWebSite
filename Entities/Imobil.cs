@@ -129,7 +129,7 @@ namespace Imobiliare.Entities
         public string? ObservatiiAdmin { get; set; }
 
         [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public byte[]? RowVersion { get; set; }
 
         [NotMapped]
         public string GoogleMarkerCoordinates

@@ -54,7 +54,7 @@ namespace Imobiliare.Entities
 
         public bool IsAgentieAdmin { get; set; }
 
-        public List<UserRating> UserRatings { get; set; }
+        //public List<UserRating> UserRatings { get; set; }
 
         public string? DescriereAgent { get; set; }
 

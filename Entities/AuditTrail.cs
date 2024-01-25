@@ -18,7 +18,7 @@
 
     //public int? UserProfileId { get; set; }
 
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
   }
 
   public enum AuditTrailCategory

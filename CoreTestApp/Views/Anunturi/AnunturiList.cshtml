@@ -643,7 +643,7 @@
         @*-------------------------------------Google Maps-------------------------------------------------------------------------*@
 
         @*<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>*@
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXvy0awt3m-qB2Ko9ZQfNYqvZO6FNy-Ns" type="text/javascript"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhW0kEjWH1Fb6UfNZU5DdSUFCwTOQXKR0" type="text/javascript"></script>
         <script>
             $(function () {
                 console.log("loading map");
@@ -711,7 +711,7 @@
                             for (var i = 0; i < allImo.length - 1; i++) {
                                 //var imobilData = allImo[i].split(';'); -- nu merge ca pune tot acelasi marker
                                 var split = allImo[i].split(';')[4].split(','); //Cu s mic split in loc de Split!!! aici doar
-                                var image = "http://" + location.host + '/Images/markerApartment5.png';
+                                var image = document.location.protocol + '//' + location.host + '/Images/markerApartment5.png';
                                 //Do not use with ../../Images/markerApartment5.png because works only sometimes based on filters
                                 var marker = new google.maps.Marker({
                                     position: new google.maps.LatLng(split[0].replace(/\(/g, ""), split[1].replace(/\)/g, "")),

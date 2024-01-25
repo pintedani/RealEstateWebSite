@@ -8,7 +8,7 @@ namespace Imobiliare.Entities
     public string? Nume { get; set; }
 
     [ForeignKey(nameof(OrasId))]
-    public Oras Oras { get; set; }
+    public Oras? Oras { get; set; }
 
     public int? OrasId { get; set; }
 

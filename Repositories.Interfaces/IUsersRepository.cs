@@ -3,8 +3,9 @@
   using System.Collections.Generic;
   using System.Web;
   using Imobiliare.Entities;
+    using Microsoft.AspNetCore.Http;
 
-  public interface IUsersRepository : IRepository<UserProfile>
+    public interface IUsersRepository : IRepository<UserProfile>
   {
     List<UserProfile> GetUserProfiles(TipVanzator tipVanzator, Role role, int page, int pagesize, out int totalNumberOfEntries);
 
@@ -16,13 +17,13 @@
 
     void UpdateConfirmationToken(string userId, string confirmationToken);
 
-    //string AddImageForUserProfile(IFormFile file, string userId);
+        //string AddImageForUserProfile(IFormFile file, string userId);
 
-    //string AddImageForAgentie(IFormFile file, int agentieId);
+        string AddImageForAgentie(IFormFile file, int agentieId);
 
-    //void AddImageForConstructor(IFormFile profileImage, int constructorId);
+        void AddImageForConstructor(IFormFile profileImage, int constructorId);
 
-    void UpdateUserProfile(UserProfile userProfile);
+        void UpdateUserProfile(UserProfile userProfile);
 
     void UpdateUserProfileByAdmin(UserProfile userProfile);
 

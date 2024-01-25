@@ -8,18 +8,23 @@
     using System.IO;
     using System.Linq;
     using System.Web;
-
+    using Crosscutting;
     using Imobiliare.Entities;
     using Imobiliare.Repositories.Interfaces;
     using Logging;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.Processing;
 
     public class UsersRepository : Repository<UserProfile>, IUsersRepository
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UsersRepository));
+        private readonly IEnvironmentService environmentService;
 
-        public UsersRepository(ApplicationDbContext dbContext) : base(dbContext, new SortSpec(nameof(UserProfile.Id)))
+        public UsersRepository(ApplicationDbContext dbContext, IEnvironmentService environmentService) : base(dbContext, new SortSpec(nameof(UserProfile.Id)))
         {
+            this.environmentService = environmentService;
         }
 
         public List<UserProfile> GetUserProfiles(TipVanzator tipVanzator, Role role, int page, int pagesize, out int totalNumberOfEntries)
@@ -177,88 +182,96 @@
         //    }
         //}
 
-        //public string AddImageForAgentie(IFormFile file, int agentieId)
-        //{
-        //    try
-        //    {
-        //        log.Debug($"Adding image {0} for agentie {1}", file.FileName, agentieId);
-        //        string pictureName = Guid.NewGuid() + ".jpg";
+        public string AddImageForAgentie(IFormFile file, int agentieId)
+        {
+            try
+            {
+                log.Debug($"Adding image {file.FileName} for agentie {agentieId}");
+                string pictureName = Guid.NewGuid() + ".jpg";
 
-        //        string path = string.Empty;
-        //        //HttpContext.Current may be null
-        //        //Use HttpContext for editing of photo and AppDomainAppPath when registering because first one is null then
-        //        //TODO DAPI: Maybe HttpRuntime.AppDomainAppPath is better and seems to work for both
-        //        if (System.Web.HttpContext.Current != null)
-        //        {
-        //            path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Images/LogoAgentii"), pictureName);
-        //        }
-        //        else
-        //        {
-        //            path = Path.Combine(HttpRuntime.AppDomainAppPath, "Images/LogoAgentii/" + pictureName);
-        //        }
+                string path = string.Empty;
+                string uploadsFolder = Path.Combine(environmentService.GetWebRootPath(), "Images\\LogoAgentii");
+                string filePath = Path.Combine(uploadsFolder, pictureName);
 
-        //        Image image = Image.FromStream(file.InputStream, true, true);
-        //        var resizedImage = ResizeImageFixedHeight(image, 240);
-        //        var objBitmap = new Bitmap(resizedImage);
-        //        //var objBitmap = new Bitmap(Image.FromStream(file.InputStream, true, true), new Size(320, 240));
-        //        objBitmap.Save(path, ImageFormat.Jpeg);
+                using (Stream sourceStream = file.OpenReadStream())
+                {
+                    using (Image image = Image.Load(sourceStream))
+                    {
+                        int targetHeight = 240; 
+                        int targetWidth = (int)(image.Width * ((float)targetHeight / image.Height));
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max,
+                            Size = new SixLabors.ImageSharp.Size(targetHeight, targetWidth)
+                        }));
 
-        //        var user = this.DbContext.Agenties.First(x => x.Id == agentieId);
-        //        if (user.PozaAgentie != null)
-        //        {
-        //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoAgentii"), user.PozaAgentie));
-        //            log.Debug($"Replace initially image {0} with picture {1} for agentie id {2}", user.PozaAgentie, file.FileName, agentieId);
-        //        }
-        //        user.PozaAgentie = pictureName;
+                        using (FileStream output = File.Create(filePath))
+                        {
+                            image.Save(output, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder());
+                        }
+                    }
+                }
 
-        //        return pictureName;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error($"Eroare la adaugare imagine pentru agentie, eroarea: {0}", ex.Message);
-        //        return null;
-        //    }
-        //}
+                var user = this.DbContext.Agenties.First(x => x.Id == agentieId);
+                if (user.PozaAgentie != null)
+                {
+                    this.DeletePhoto(Path.Combine(uploadsFolder, user.PozaAgentie));
+                    log.Debug($"Replace initially image {user.PozaAgentie} with picture {file.FileName} for agentie id {agentieId}");
+                }
+                user.PozaAgentie = pictureName;
 
-        //public void AddImageForConstructor(IFormFile file, int constructorId)
-        //{
-        //    try
-        //    {
-        //        log.Debug($"Adding image {0} for constructor {1}", file.FileName, constructorId);
-        //        string pictureName = Guid.NewGuid() + ".jpg";
+                return pictureName;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Eroare la adaugare imagine pentru agentie, eroarea: {ex.Message}");
+                return null;
+            }
+        }
 
-        //        string path = string.Empty;
-        //        //HttpContext.Current may be null
-        //        //Use HttpContext for editing of photo and AppDomainAppPath when registering because first one is null then
-        //        //TODO DAPI: Maybe HttpRuntime.AppDomainAppPath is better and seems to work for both
-        //        if (System.Web.HttpContext.Current != null)
-        //        {
-        //            path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Images/LogoConstructori"), pictureName);
-        //        }
-        //        else
-        //        {
-        //            path = Path.Combine(HttpRuntime.AppDomainAppPath, "Images/LogoConstructori/" + pictureName);
-        //        }
+        public void AddImageForConstructor(IFormFile file, int constructorId)
+        {
+            try
+            {
+                log.Debug($"Adding image {file.FileName} for constructor {constructorId}");
+                string pictureName = Guid.NewGuid() + ".jpg";
 
-        //        Image image = Image.FromStream(file.InputStream, true, true);
-        //        var resizedImage = ResizeImageFixedHeight(image, 240);
-        //        var objBitmap = new Bitmap(resizedImage);
-        //        //var objBitmap = new Bitmap(Image.FromStream(file.InputStream, true, true), new Size(320, 240));
-        //        objBitmap.Save(path, ImageFormat.Jpeg);
+                string path = string.Empty;
+                string uploadsFolder = Path.Combine(environmentService.GetWebRootPath(), "Images\\LogoConstructori");
+                string filePath = Path.Combine(uploadsFolder, pictureName);
 
-        //        var constructor = this.DbContext.Constructori.First(x => x.Id == constructorId);
-        //        if (constructor.Poza != null)
-        //        {
-        //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/LogoConstructori"), constructor.Poza));
-        //            log.Debug($"Replace initially image {0} with picture {1} for agentie id {2}", constructor.Poza, file.FileName, constructorId);
-        //        }
-        //        constructor.Poza = pictureName;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error($"Eroare la adaugare imagine pentru constructor, eroarea: {0}", ex.Message);
-        //    }
-        //}
+                using (Stream sourceStream = file.OpenReadStream())
+                {
+                    using (Image image = Image.Load(sourceStream))
+                    {
+                        int targetHeight = 240;
+                        int targetWidth = (int)(image.Width * ((float)targetHeight / image.Height));
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max,
+                            Size = new SixLabors.ImageSharp.Size(targetHeight, targetWidth)
+                        }));
+
+                        using (FileStream output = File.Create(filePath))
+                        {
+                            image.Save(output, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder());
+                        }
+                    }
+                }
+
+                var constructor = this.DbContext.Constructori.First(x => x.Id == constructorId);
+                if (constructor.Poza != null)
+                {
+                    this.DeletePhoto(Path.Combine(uploadsFolder, constructor.Poza));
+                    log.Debug($"Replace initially image {constructor.Poza} with picture {file.FileName} for constructor id {constructorId}");
+                }
+                constructor.Poza = pictureName;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Eroare la adaugare imagine pentru agentie, eroarea: {ex.Message}");
+            }
+        }
 
         public void DezaboneazaNewsletter(string userid)
         {
@@ -286,26 +299,6 @@
                 log.Error($"Error while removing agentie photo {path}, exception {ex.Message}");
             }
         }
-
-        //private static Image ResizeImageFixedHeight(Image imgToResize, int height)
-        //{
-        //    int sourceWidth = imgToResize.Width;
-        //    int sourceHeight = imgToResize.Height;
-
-        //    float nPercent = ((float)height / (float)sourceHeight);
-
-        //    int destWidth = (int)(sourceWidth * nPercent);
-        //    int destHeight = (int)(sourceHeight * nPercent);
-
-        //    Bitmap b = new Bitmap(destWidth, destHeight);
-        //    Graphics g = Graphics.FromImage((Image)b);
-        //    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-
-        //    g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-        //    g.Dispose();
-
-        //    return (Image)b;
-        //}
 
         public Dictionary<UserProfile, int> GetAnunturiNumberPerUserProfile(List<UserProfile> userProfiles)
         {

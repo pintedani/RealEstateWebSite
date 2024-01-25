@@ -1,4 +1,5 @@
-﻿using Imobiliare.Entities;
+﻿using Crosscutting;
+using Imobiliare.Entities;
 using Imobiliare.Repositories.CommitStrategies;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
@@ -41,11 +42,11 @@ namespace Imobiliare.Repositories
         public IAnsambluriRepository AnsambluriRepository { get; }
         public IRaportActivitateRepository RaportActivitateRepository { get; }
 
-        public UnitOfWork(ApplicationDbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext, IEnvironmentService environmentService)
         {
             this.dbContext = dbContext;
             AnunturiRepository = new AnunturiRepository(dbContext);
-            UsersRepository = new UsersRepository(dbContext);
+            UsersRepository = new UsersRepository(dbContext, environmentService);
             StiriRepository = new StiriRepository(dbContext);
             JudetRepository = new JudetRepository(dbContext);
             OrasRepository = new OrasRepository(dbContext, JudetRepository);

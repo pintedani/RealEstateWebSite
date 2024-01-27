@@ -1,8 +1,6 @@
 ﻿using Imobiliare.Entities;
 using Imobiliare.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {

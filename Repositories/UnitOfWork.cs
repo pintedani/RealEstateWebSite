@@ -3,9 +3,7 @@ using Imobiliare.Entities;
 using Imobiliare.Repositories.CommitStrategies;
 using Imobiliare.Repositories.Interfaces;
 using Logging;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace Imobiliare.Repositories
 {

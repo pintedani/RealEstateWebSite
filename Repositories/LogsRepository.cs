@@ -17,8 +17,14 @@
     public int DeleteLogsOltherThanDate(DateTime parse)
     {
       string sqlFormattedDate = parse.ToString("yyyy-MM-dd HH:mm:ss");
-      //Be sure to check Db Name: "Log" or "Logs"
-      return this.DbContext.Database.ExecuteSql($"DELETE FROM dbo.Log WHERE Date < '{sqlFormattedDate}'");
+      
+            //Be sure to check Db Name: "Log" or "Logs"
+      return this.DbContext.Database.ExecuteSqlRaw($"DELETE FROM dbo.Log WHERE Date < '{sqlFormattedDate}'");
+
+            //For SQLServer
+            //return this.DbContext.Database.ExecuteSql($"DELETE FROM dbo.Log WHERE Date < '{sqlFormattedDate}'");
+
+
+        }
     }
-  }
 }

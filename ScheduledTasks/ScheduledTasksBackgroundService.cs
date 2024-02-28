@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Hosting;
 using Crosscutting;
 using Imobiliare.UI.ScheduledTasks;
 using Imobiliare.UI.ScheduledTasks.Jobs;

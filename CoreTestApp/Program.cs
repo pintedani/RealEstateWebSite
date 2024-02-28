@@ -10,7 +10,6 @@ using Imobiliare.ServiceLayer.Interfaces;
 using Imobiliare.ServiceLayer.ExternalSiteContentParser;
 using Imobiliare.ServiceLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Hosting;
 using ScheduledTasks;
 using Crosscutting;
 using Imobiliare.UI.Utils;
@@ -65,7 +64,7 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddRazorPages();
 
-//For SQL Server - need new migration files
+//For SQLServer - need new migration files
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //{
 //    options.UseSqlServer(
@@ -108,6 +107,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+//My custom file logger exception
+app.UseGlobalExceptionHandler();
 
 app.MapDefaultControllerRoute();
 

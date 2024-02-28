@@ -35,7 +35,11 @@
       string sqlFormattedDate = parse.ToString("yyyy-MM-dd HH:mm:ss");
             //Be sure to check Db Name: "Log" or "Logs"
 
-      return this.DbContext.Database.ExecuteSql($"DELETE FROM dbo.AuditTrail WHERE Date < '{sqlFormattedDate}'");
+      return this.DbContext.Database.ExecuteSqlRaw($"DELETE FROM dbo.AuditTrail WHERE Date < '{sqlFormattedDate}'");
+
+            //For SQLServer
+            //return this.DbContext.Database.ExecuteSql($"DELETE FROM dbo.AuditTrail WHERE Date < '{sqlFormattedDate}'");
+
+        }
     }
-  }
 }

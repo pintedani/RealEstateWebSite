@@ -102,7 +102,7 @@ namespace Imobiliare.UI.Controllers
                 this.unitOfWork.AuditTrailRepository.AddAuditTrail(AuditTrailCategory.Message, $"Userul {model.UserName} s-a logat cu succes de pe dispozitiv mobil {GetBrowserInfo()}, adresa ip: {HttpContext.Connection.RemoteIpAddress}", userName: model.UserName);
                 this.unitOfWork.Complete();
                 //Check if login is last visited page before login
-                if (returnUrl != "/Account/Login")
+                if (returnUrl != null && !returnUrl.Contains("Account/Login"))
                 {
                     return RedirectToLocal(returnUrl);
                 }

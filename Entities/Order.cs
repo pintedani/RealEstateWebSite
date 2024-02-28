@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Imobiliare.Entities
 {
@@ -54,10 +53,10 @@ namespace Imobiliare.Entities
             ErrorMessage = "The email address is not entered in a correct format")]
         public string Email { get; set; } = string.Empty;
 
-        [BindNever]
+        //[BindNever]
         public decimal OrderTotal { get; set; }
 
-        [BindNever]
+        //[BindNever]
         public DateTime OrderPlaced { get; set; }
     }
 }

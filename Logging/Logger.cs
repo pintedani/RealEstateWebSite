@@ -47,32 +47,6 @@ namespace Logging
         private static void LogToDatabase(string message, string level)
         {
             //TODO: For SQLServer:
-            //var stackTrace = new StackTrace();
-            //var frame = stackTrace.GetFrame(2);
-
-            //var MemberName = frame.GetMethod().Name;
-            ////var FilePath = frame.GetFileName();
-            ////var LineNumber = frame.GetFileLineNumber();
-
-            //string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
-            //         "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
-
-            //using (var connection = new SqlConnection(ConnectionStrings.ConnectionString))
-            //{
-            //    using (var command = new SqlCommand(sql, connection))
-            //    {
-            //        command.Parameters.AddWithValue("@Date", DateTime.Now);
-            //        command.Parameters.AddWithValue("@Level", level);
-            //        command.Parameters.AddWithValue("@Logger", MemberName);
-            //        command.Parameters.AddWithValue("@Message", message);
-            //        command.Parameters.AddWithValue("@Exception", "");
-
-            //        connection.Open();
-            //        command.ExecuteNonQuery();
-            //    }
-            //}
-
-            //For SQLite:
             var stackTrace = new StackTrace();
             var frame = stackTrace.GetFrame(2);
 
@@ -81,11 +55,11 @@ namespace Logging
             //var LineNumber = frame.GetFileLineNumber();
 
             string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
-                         "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
+                     "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
 
-            using (var connection = new SqliteConnection(ConnectionStrings.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionStrings.ConnectionString))
             {
-                using (var command = new SqliteCommand(sql, connection))
+                using (var command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@Date", DateTime.Now);
                     command.Parameters.AddWithValue("@Level", level);
@@ -97,6 +71,32 @@ namespace Logging
                     command.ExecuteNonQuery();
                 }
             }
+
+            //For SQLite:
+            //var stackTrace = new StackTrace();
+            //var frame = stackTrace.GetFrame(2);
+
+            //var MemberName = frame.GetMethod().Name;
+            ////var FilePath = frame.GetFileName();
+            ////var LineNumber = frame.GetFileLineNumber();
+
+            //string sql = "INSERT INTO Log (Date, Level, Logger, Message, Exception) " +
+            //             "VALUES (@Date, @Level, @Logger, @Message, @Exception)";
+
+            //using (var connection = new SqliteConnection(ConnectionStrings.ConnectionString))
+            //{
+            //    using (var command = new SqliteCommand(sql, connection))
+            //    {
+            //        command.Parameters.AddWithValue("@Date", DateTime.Now);
+            //        command.Parameters.AddWithValue("@Level", level);
+            //        command.Parameters.AddWithValue("@Logger", MemberName);
+            //        command.Parameters.AddWithValue("@Message", message);
+            //        command.Parameters.AddWithValue("@Exception", "");
+
+            //        connection.Open();
+            //        command.ExecuteNonQuery();
+            //    }
+            //}
         }
     }
 }

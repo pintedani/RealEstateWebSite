@@ -65,18 +65,21 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages();
 
 //For SQLServer - need new migration files
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//{
-//    options.UseSqlServer(
-//        builder.Configuration["ConnectionStrings:DefaultConnection"]);
-//});
-
-//For SQLite - need new migration files
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    options.UseSqlServer(
+        builder.Configuration["ConnectionStrings:DefaultConnection"]);
 });
-SetCaseInsensitiveSQLiteDb(builder);
+
+//For SQLite - need new migration files
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//{
+//    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+//});
+//SetCaseInsensitiveSQLiteDb(builder);
+//-------------------------------------------------
+
+
 
 //builder.Services.AddDefaultIdentity<UserProfile>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 

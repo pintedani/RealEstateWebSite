@@ -111,8 +111,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-//My custom file logger exception
-app.UseGlobalExceptionHandler();
+//My custom file logger exception - to detect errors on server
+//app.UseGlobalExceptionHandler();
 
 app.MapDefaultControllerRoute();
 

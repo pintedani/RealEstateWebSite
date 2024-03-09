@@ -139,48 +139,56 @@
             itemToApprove.Flags += " | " + note;
         }
 
-        //public string AddImageForUserProfile(IFormFile file, string userId)
-        //{
-        //    try
-        //    {
-        //        log.Debug($"Adding image {0} for user profile {1}", file.FileName, userId);
-        //        string pictureName = Guid.NewGuid() + ".jpg";
+        public string AddImageForUserProfile(IFormFile file, string userId)
+        {
+            try
+            {
+                log.Debug($"Adding image {file.FileName} for user profile {userId}");
+                string uploadsFolder = Path.Combine(environmentService.GetWebRootPath(), "Images\\profileImages");
+                var pictureName = Guid.NewGuid() + ".jpg";
+                string filePath = Path.Combine(uploadsFolder, pictureName);
 
-        //        string path = string.Empty;
-        //        //HttpContext.Current may be null
-        //        //Use HttpContext for editing of photo and AppDomainAppPath when registering because first one is null then
-        //        //TODO DAPI: Maybe HttpRuntime.AppDomainAppPath is better and seems to work for both
-        //        if (System.Web.HttpContext.Current != null)
-        //        {
-        //            path = Path.Combine(System.Web.HttpContext.Current.Server.MapPath("~/Images/profileImages"), pictureName);
-        //        }
-        //        else
-        //        {
-        //            path = Path.Combine(HttpRuntime.AppDomainAppPath, "Images/profileImages/" + pictureName);
-        //        }
+                using (Stream sourceStream = file.OpenReadStream())
+                {
+                    using (Image image = Image.Load(sourceStream))
+                    {
+                        //int targetHeight = 240;
+                        //int targetWidth = (int)(image.Width * ((float)targetHeight / image.Height));
+                        image.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Max,
+                            Size = new SixLabors.ImageSharp.Size(320, 240)
+                        }));
 
-        //        Image image = Image.FromStream(file.InputStream, true, true);
-        //        var resizedImage = ResizeImageFixedHeight(image, 240);
-        //        var objBitmap = new Bitmap(resizedImage);
-        //        //var objBitmap = new Bitmap(Image.FromStream(file.InputStream, true, true), new Size(320, 240));
-        //        objBitmap.Save(path, ImageFormat.Jpeg);
+                        using (FileStream output = File.Create(filePath))
+                        {
+                            image.Save(output, new SixLabors.ImageSharp.Formats.Jpeg.JpegEncoder());
+                        }
+                    }
+                }
 
-        //        var user = this.DbContext.Users.First(x => x.Id == userId);
-        //        if (user.Picture != null)
-        //        {
-        //            this.DeletePhoto(Path.Combine(HttpContext.Current.Server.MapPath("~/Images/profileImages"), user.Picture));
-        //            log.Debug($"Replace initially image {0} with picture {1} for user profile id {2}", user.Picture, file.FileName, userId);
-        //        }
-        //        user.Picture = pictureName;
+                //Image image = Image.FromStream(file.InputStream, true, true);
+                //var resizedImage = ResizeImageFixedHeight(image, 240);
+                //var objBitmap = new Bitmap(resizedImage);
+                ////var objBitmap = new Bitmap(Image.FromStream(file.InputStream, true, true), new Size(320, 240));
+                //objBitmap.Save(path, ImageFormat.Jpeg);
 
-        //        return pictureName;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        log.Error($"Eroare la adaugare imagine pentru userprofile, eroarea: {0}", ex.Message);
-        //        return null;
-        //    }
-        //}
+                var user = this.DbContext.Users.First(x => x.Id == userId);
+                if (user.Picture != null)
+                {
+                    this.DeletePhoto(Path.Combine(uploadsFolder, user.Picture));
+                    log.Debug($"Replace initially image {user.Picture} with picture {file.FileName} for user profile id {userId}");
+                }
+                user.Picture = pictureName;
+
+                return pictureName;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Eroare la adaugare imagine pentru userprofile, eroarea: {ex.Message}");
+                return null;
+            }
+        }
 
         public string AddImageForAgentie(IFormFile file, int agentieId)
         {
@@ -345,17 +353,18 @@
 
         public void DeleteUser(string id)
         {
-            //string username = string.Empty;
-            //var user = this.DbContext.Users.Single(u => u.Id == id);
-            //username = user.UserName;
-            ////Delete photo if agentie imobiliara and available
-            //if (!string.IsNullOrEmpty(user.Picture))
-            //{
-            //    string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/profileImages"), user.Picture);
-            //    this.DeletePhoto(path);
-            //}
+            string username = string.Empty;
+            var user = this.DbContext.Users.Single(u => u.Id == id);
+            username = user.UserName;
+            //Delete photo if agentie imobiliara and available
+            if (!string.IsNullOrEmpty(user.Picture))
+            {
+                string uploadsFolder = Path.Combine(environmentService.GetWebRootPath(), "Images\\profileImages");
+                string path = Path.Combine(uploadsFolder, user.Picture);
+                this.DeletePhoto(path);
+            }
 
-            //this.DbContext.Users.Remove(user);
+            this.DbContext.Users.Remove(user);
         }
     }
 }

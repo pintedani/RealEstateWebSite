@@ -226,6 +226,16 @@ namespace Imobiliare.UI.Controllers
                 .ToList()
             };
 
+            //foreach(var user in userProfiles)
+            //{
+            //    if(user.Anunturi.Count == 0)
+            //    {
+            //        this.unitOfWork.UsersRepository.DeleteUser(user.Id);
+            //        log.Debug($"SuperAdmin bulk hack delete empty users {User.Identity.Name} deleted user {user.Email}");
+            //    }
+            //}
+            //this.unitOfWork.Complete();
+
             return View(usersData);
         }
 
@@ -250,7 +260,7 @@ namespace Imobiliare.UI.Controllers
             return RedirectToAction("Users", new { selectSingleUserEmail = userProfile.UserName });
         }
 
-        public ActionResult UserStergere(string userid)
+        public ActionResult UserStergere(string userid, string returnUrl)
         {
             var user = this.unitOfWork.UsersRepository.Single(x => x.Id == userid);
 
@@ -266,7 +276,14 @@ namespace Imobiliare.UI.Controllers
             this.unitOfWork.Complete();
             log.Debug($"SuperAdmin {User.Identity.Name} deleted user {user.Email}");
             TempData["Message"] = $"SuperAdmin {User.Identity.Name} deleted user {user.Email}";
-            return RedirectToAction("Users");
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Users");
+            }
         }
 
         public ActionResult ChangeImobilState(string id, string stare, string returnUrl)

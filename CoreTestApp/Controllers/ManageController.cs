@@ -411,7 +411,7 @@ namespace Imobiliare.UI.Controllers
 
                 if (editAgentImobiliarModel.ProfileImage != null)
                 {
-                    //this.unitOfWork.UsersRepository.AddImageForUserProfile(editAgentImobiliarModel.ProfileImage, toEditUserProfile.Id);
+                    this.unitOfWork.UsersRepository.AddImageForUserProfile(editAgentImobiliarModel.ProfileImage, toEditUserProfile.Id);
                     log.Debug("User image added for " + User.Identity.Name);
                 }
 

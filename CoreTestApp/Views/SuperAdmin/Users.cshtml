@@ -14,7 +14,7 @@
 @Html.Partial("_MenuSuperAdmin")
 <br />
 
-@using (Html.BeginForm("Users", "SuperAdmin", FormMethod.Post, new { date = new DateTime(), id = "PickForm" }))
+@using (Html.BeginForm("Users", "SuperAdmin", FormMethod.Get, new { date = new DateTime(), id = "PickForm" }))
 {
     <text>Tip:</text>
     <select onchange="this.form.submit()" style="width: 170px; margin-left: 3px" class="ui-corner-all ui-widget-shadow ui-widget" name="TipVanzatorSelect">
@@ -133,7 +133,7 @@
                     }
                     <a class="btn btn-success" href="@Url.Action("UserEditare", "SuperAdmin", new { userid = user.Id })"><span class="glyphicon glyphicon-pencil"></span></a>
                     <p class="btn btn-success" style="display: inline-block" onclick="emailDiv('@user.Id', '@user.UserName', '@user.Id')"><span class="glyphicon glyphicon-envelope"></span></p>
-                    <a class="btn btn-danger" href="@Url.Action("UserStergere", "SuperAdmin", new { userid = user.Id })" onclick="return confirm('Sunteti sigur ca doriti sa stergeti permanent userul? Verificati sa nu aiba anunturi active.')"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a class="btn btn-danger" href="@Url.Action("UserStergere", "SuperAdmin", new { userid = user.Id, returnUrl = @HttpContextAccessor.HttpContext?.Request?.GetDisplayUrl() })" onclick="return confirm('Sunteti sigur ca doriti sa stergeti permanent userul? Verificati sa nu aiba anunturi active.')"><span class="glyphicon glyphicon-trash"></span></a>
                 </div>
 
             </div>

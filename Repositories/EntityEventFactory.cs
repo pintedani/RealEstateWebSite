@@ -86,6 +86,7 @@ namespace Imobiliare.Repositories
         private static object CreateEvent(Type genericEventType, Type entityType, Entity entity, IUnitOfWork unitOfWork, IReadOnlyDictionary<string, PropertyChange> changedProperties)
         {
             //TODO: check if Microsoft.EntityFrameworkCore has dynamic proxies like old EF 6
+            //Not used anymore
             Type[] typeArgs = { entityType.Namespace == "Microsoft.EntityFrameworkCore.DynamicProxies" ? entityType.BaseType : entityType };
             var concreteType = genericEventType.MakeGenericType(typeArgs);
             return Activator.CreateInstance(concreteType, entity, unitOfWork, changedProperties);

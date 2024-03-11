@@ -6,76 +6,77 @@
 @model Imobiliare.UI.Models.AnsambluRezidentialViewModel
 
 @{
-  string formattedTitle = HttpUtility.HtmlDecode(HtmlHelpers.RemoveSpecialCharacters(Model.Ansamblu.Titlu, ' ', false));
-  ViewBag.Title = formattedTitle;
+    string formattedTitle = HttpUtility.HtmlDecode(HtmlHelpers.RemoveSpecialCharacters(Model.Ansamblu.Titlu, ' ', false));
+    ViewBag.Title = formattedTitle;
 
-  ViewBag.MetaDescription = formattedTitle;
+    ViewBag.MetaDescription = formattedTitle;
 
-  if (@Model.Ansamblu.Keywords != null)
-  {
-    ViewBag.Keywords = Model.Ansamblu.Keywords;
-  }
+    if (@Model.Ansamblu.Keywords != null)
+    {
+        ViewBag.Keywords = Model.Ansamblu.Keywords;
+    }
 
-  ViewBag.ShareUrl = Context.Request.GetDisplayUrl();
-  ViewBag.ShareTitle = formattedTitle;
-  ViewBag.ShareDescription = formattedTitle;
-  if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))
-  {
-    ViewBag.ShareImage = "http://www.apartamente24.ro/Images/AnsambluriRezidentiale/" + Model.Ansamblu.Poze.Split(';')[0];
-  }
-  else
-  {
-    ViewBag.ShareImage = "http://www.apartamente24.ro/Images/imobiliare2.jpg";
-  }
-  ViewBag.ShareImageHeight = 480;
-  ViewBag.ShareImageWidth = 640;
+    ViewBag.ShareUrl = Context.Request.GetDisplayUrl();
+    ViewBag.ShareTitle = formattedTitle;
+    ViewBag.ShareDescription = formattedTitle;
+    if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))
+    {
+        ViewBag.ShareImage = "http://www.apartamente24.ro/Images/AnsambluriRezidentiale/" + Model.Ansamblu.Poze.Split(';')[0];
+    }
+    else
+    {
+        ViewBag.ShareImage = "http://www.apartamente24.ro/Images/imobiliare2.jpg";
+    }
+    ViewBag.ShareImageHeight = 480;
+    ViewBag.ShareImageWidth = 640;
+    Layout = "_LayoutB4";
 }
 
 <div id="fb-root"></div>
 <script>
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/ro_RO/sdk.js#xfbml=1&version=v2.8&appId=273830189442081";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));</script>
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/ro_RO/sdk.js#xfbml=1&version=v2.8&appId=273830189442081";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
 @*Google+*@
 <script>
-  // Defines the configuration options, these must be set before you load
-  // the platform.js file.
-  window.___gcfg = {
-    lang: 'ro-RO'
-  }
+    // Defines the configuration options, these must be set before you load
+    // the platform.js file.
+    window.___gcfg = {
+        lang: 'ro-RO'
+    }
 </script>
 <script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <div class="row" style="padding-left: 5px; padding-right: 5px">
-  <div class="col-md-10" style="margin-top: 20px; padding-left: 5px; padding-right: 5px">
+    <div class="col-md-10" style="margin-top: 20px; padding-left: 5px; padding-right: 5px">
 
-    <h1 style="margin-bottom: 5px">@Model.Ansamblu.Titlu</h1>
-    <!-- Place this tag where you want the share button to render. -->
-    <div class="g-plus" data-action="share" data-annotation="bubble"></div>
-    <br />
-    <div class="fb-share-button" data-layout="button_count"></div>
-    <hr style="margin-top: 5px" />
+        <h1 style="margin-bottom: 5px">@Model.Ansamblu.Titlu</h1>
+        <!-- Place this tag where you want the share button to render. -->
+        <div class="g-plus" data-action="share" data-annotation="bubble"></div>
+        <br />
+        <div class="fb-share-button" data-layout="button_count"></div>
+        <hr style="margin-top: 5px" />
 
-    @if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))
-    {
-      <div>
-        <img style="width: 100%" src="/Images/AnsambluriRezidentiale/@Model.Ansamblu.Poze.Split(';')[0]" />
-      </div>
-    }
-    <hr />
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama sus articol --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="4618131363" data-ad-format="auto"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    <br />
-    <div style="font-size: 1.2em">@Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Ansamblu.Continut.Replace("\n", "<br/>")))</div>
-    <br />
-    
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="2771138167" data-ad-format="auto"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
+        @if (!string.IsNullOrEmpty(Model.Ansamblu.Poze))
+        {
+            <div>
+                <img style="width: 100%" src="/Images/AnsambluriRezidentiale/@Model.Ansamblu.Poze.Split(';')[0]" />
+            </div>
+        }
+        <hr />
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- Ap 24 Reclama sus articol --><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="4618131363" data-ad-format="auto"></ins>
+        <script>    (adsbygoogle = window.adsbygoogle || []).push({});</script>
+        <br />
+        <div style="font-size: 1.2em">@Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Ansamblu.Continut.Replace("\n", "<br/>")))</div>
+        <br />
+
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1474334984782094" data-ad-slot="2771138167" data-ad-format="auto"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
 
 </div>

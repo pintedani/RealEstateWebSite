@@ -409,7 +409,7 @@
                         <div style="height: 30px">
                             <p>@imobil.Judet.Nume, @imobil.Oras.Nume, @TipOfertaDisplayFormatter.GetDisplayString(imobil.TipProprietate, imobil.TipOfertaGen)</p>
                         </div>
-                        <h3 style="font-size: 1.4em">@PriceFormatter.FormatPrice(imobil.Price)€</h3>
+                        <h3 style="font-size: 1.4em">@PriceFormatter.FormatPrice(imobil.Price.Value)€</h3>
                         @if (imobil.NumarCamere > 0)
                         {
                             <p style="margin-bottom: 0px; padding-top: 10px">@imobil.Suprafata m² &nbsp;&nbsp;&nbsp;&nbsp;@imobil.NumarCamere camere</p>

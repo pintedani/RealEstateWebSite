@@ -51,12 +51,12 @@ namespace Imobiliare.UI.Models
         [Required(ErrorMessage = "Completati pretul")]
         [Range(1, 50000000, ErrorMessage = "Adaugati o valoare corecta pentru pret")]
         [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Pretul trebuie sa contina doar cifre si sa nu inceapa cu 0")]
-        public int Price { get; set; }
+        public int? Price { get; set; }
 
         [Required(ErrorMessage = "Completati suprafata")]
         [Range(1, 5000000, ErrorMessage = "Adaugati o valoare corecta pentru suprafata < 5000000")]
         [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Suprafata Mp trebuie sa contina doar cifre si sa nu inceapa cu 0")]
-        public int Suprafata { get; set; }
+        public int? Suprafata { get; set; }
 
         public string? Poze { get; set; }
 

@@ -29,7 +29,7 @@ namespace Imobiliare.UI.Models
                 {
                     Amount = shoppingCartItem.Amount,
                     ImobilId = shoppingCartItem.Imobil.Id,
-                    Price = shoppingCartItem.Imobil.Price
+                    Price = shoppingCartItem.Imobil.Price.Value
                 };
 
                 order.OrderDetails.Add(orderDetail);

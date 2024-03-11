@@ -73,10 +73,10 @@
 
 <div class="container">
     <div class="d-flex my-4">
-@*        @if (Request.UrlReferrer != null)
+        @if (Context.Request.Headers.TryGetValue("Referer", out var referer))
         {
-            <a class="btn btn-light me-auto" href="@Request.UrlReferrer"><span class="bi bi-arrow-left"></span> Înapoi</a>
-        }*@
+        <a class="btn btn-light me-auto" href="@referer"><span class="bi bi-arrow-left"></span> Înapoi</a>
+        }
 
         @if (Model.IsCurrentUserAdmin || Model.LoggedInUserId == Model.Imobil.UserId)
         {
@@ -221,7 +221,7 @@
                     <tbody>
                         <tr>
                             <td>Preț:</td>
-                            <td><strong>@PriceFormatter.FormatPrice(Model.Imobil.Price) €</strong></td>
+                            <td><strong>@PriceFormatter.FormatPrice(Model.Imobil.Price.Value) €</strong></td>
                         </tr>
                         <tr>
                             <td>Suprafață:</td>

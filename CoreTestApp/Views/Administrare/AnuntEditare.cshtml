@@ -273,16 +273,8 @@
 
                 <div>
                     <div class="form-group col-xs-12 col-md-8 floating-label-form-group controls" style="margin-top: 5px">
-                        @Html.Label("", "Preț Euro *", new { @class = "mt-4 mb-2", style = "width: 100px" })
-                        @{
-                            //Necesar daca vine de la controller cu erori de validare din oarecare motiv
-                            string pretEuro = "";
-                            if (Model.Price != 0)
-                            {
-                                pretEuro = Model.Price.ToString();
-                            }
-                        }
-                        @Html.TextBoxFor(model => Model.Price, new { style = "max-width: 600px; width: 100%", title = "Completati pretul proprietatii(de ex 30000)", Value = pretEuro, onClick = "if(this.value == 0) {this.value=''}", placeholder = "Preț Euro *", @class = "form-control", autocomplete = "off" })
+                        @Html.Label("", "Preț Euro *", new { @class = "mt-4 mb-2" })
+                        @Html.TextBoxFor(model => Model.Price, new { style = "max-width: 600px; width: 100%", title = "Completati pretul proprietatii(de ex 30000)", onClick = "if(this.value == 0) {this.value=''}", placeholder = "Preț Euro *", @class = "form-control", autocomplete = "off" })
                         @Html.ValidationMessageFor(model => Model.Price)
                     </div>
 
@@ -300,7 +292,7 @@
                             suprafata = Model.Suprafata.ToString();
                         }
                     }
-                    @Html.TextBoxFor(model => Model.Suprafata, new { style = "max-width: 600px; width: 100%", Value = suprafata, title = "Completati suprafata proprietatii in MP (doar cifre, fara spatii sau alte semne de punctuatie)", placeholder = "Suprafață mp *", @class = "form-control", autocomplete = "off" })
+                    @Html.TextBoxFor(model => Model.Suprafata, new { style = "max-width: 600px; width: 100%", Value = suprafata, onClick = "if(this.value == 0) {this.value=''}", title = "Completati suprafata proprietatii in MP (doar cifre, fara spatii sau alte semne de punctuatie)", placeholder = "Suprafață mp *", @class = "form-control", autocomplete = "off" })
                     @Html.ValidationMessageFor(model => Model.Suprafata)
                 </div>
 

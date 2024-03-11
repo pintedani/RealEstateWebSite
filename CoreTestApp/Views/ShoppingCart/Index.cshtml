@@ -19,7 +19,7 @@
                             <h5 class="card-text">@line.Amount x @line.Imobil.Title</h5>
                             <div class="d-flex justify-content-between">
                                 <h6>@line.Imobil.Descriere</h6>
-                                <h2>@line.Imobil.Price.ToString("c")</h2>
+                                <h2>@line.Imobil.Price?.ToString("c")</h2>
                             </div>
                         </div>
                     </div>

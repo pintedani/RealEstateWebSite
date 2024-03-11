@@ -87,19 +87,19 @@ namespace Imobiliare.UI.Controllers
         }
 
         // GET: AgentiiImobiliare/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return StatusCode((int)HttpStatusCode.BadRequest);
-            }
-            Agentie agentie = this.unitOfWork.AgentiiRepository.Single(x => x.Id == id.Value);
-            if (agentie == null)
-            {
-                return StatusCode((int)HttpStatusCode.NotFound); ;
-            }
-            return View(agentie);
-        }
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return StatusCode((int)HttpStatusCode.BadRequest);
+        //    }
+        //    Agentie agentie = this.unitOfWork.AgentiiRepository.Single(x => x.Id == id.Value);
+        //    if (agentie == null)
+        //    {
+        //        return StatusCode((int)HttpStatusCode.NotFound); ;
+        //    }
+        //    return View(agentie);
+        //}
 
         public ActionResult Lista(int? id)
         {
@@ -113,6 +113,7 @@ namespace Imobiliare.UI.Controllers
             return View(agenties);
         }
 
+        [Route("Agentie/{titlu}/{id}")]
         public ActionResult Detalii(int? id)
         {
             if (id == null)

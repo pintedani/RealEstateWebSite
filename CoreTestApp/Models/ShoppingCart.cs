@@ -104,7 +104,7 @@ namespace Imobiliare.UI.Models
         {
             var total = _bethanysImobilShopDbContext.ShoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
                 .Select(c => c.Imobil.Price * c.Amount).Sum();
-            return total;
+            return (decimal)total;
         }
     }
 }

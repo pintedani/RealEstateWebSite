@@ -77,6 +77,7 @@ namespace Imobiliare.UI.Controllers
             return View(ansambluriViewModel);
         }
 
+        [Route("Ansamblu-Rezidential/{titlu}/{ansambluId}")]
         public ActionResult AnsambluRezidential(int? ansambluId)
         {
             if (ansambluId == null)

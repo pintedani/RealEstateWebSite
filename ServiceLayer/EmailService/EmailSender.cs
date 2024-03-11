@@ -17,7 +17,7 @@ namespace Imobiliare.ServiceLayer.EmailService
             //TODO reenable
             var fromAddress = new MailAddress("admin@apartamente24.ro", "apartamente24.ro");
             var toAddress = new MailAddress(email, email);
-            string fromPassword = "cirquent4!5!";
+            string fromPassword = "Cirquent4!5!";
             string subject = title;
             string body = string.Format(headerFooter, message, userId);
 

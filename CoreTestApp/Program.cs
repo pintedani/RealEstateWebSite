@@ -64,6 +64,13 @@ builder.Services.AddControllersWithViews(options =>
 
 builder.Services.AddRazorPages();
 
+//Redirect all requests to HTTPS
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.HttpsPort = 443; // Specify the HTTPS port
+    options.RedirectStatusCode = StatusCodes.Status301MovedPermanently; // Use 301 for permanent redirection
+});
+
 //For SQLServer - need new migration files
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -117,6 +124,7 @@ if (app.Environment.IsDevelopment())
 app.MapDefaultControllerRoute();
 
 app.MapRazorPages();
+app.UseHttpsRedirection(); // Add this line to enable HTTPS redirection
 DBInitializer.Seed(app);
 
 app.Run();

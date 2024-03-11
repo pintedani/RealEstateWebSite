@@ -24,7 +24,7 @@ namespace Imobiliare.UI.Controllers.Api
         }
 
         [HttpPost]
-        [ActionName("AnuntStergere")]
+        [Route("api/WebApiAdmin/AnuntStergere")]
         public ActionResult AnuntStergere(AnuntDto anuntDto)
         {
             this.CheckRights(anuntDto.AnuntId);

@@ -33,15 +33,15 @@ namespace Imobiliare.UI.Controllers
 
             this.unitOfWork = unitOfWork;
 
-            if (!roleManager.RoleExistsAsync("Admin").Result)
-            {
+            //if (!roleManager.RoleExistsAsync("Admin").Result)
+            //{
                 //var adminRole = new IdentityRole("Admin");
                 //roleManager.CreateAsync(adminRole).Wait();
 
                 //var userProfile = this.unitOfWork.UsersRepository.GetUserProfileById("1", false);
                 //var role = userProfile.Role;
                 //userManager.AddToRoleAsync(userProfile, "Admin");
-            }
+            //}
         }
 
         public ActionResult Index()

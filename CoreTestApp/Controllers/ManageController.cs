@@ -475,7 +475,7 @@ namespace Imobiliare.UI.Controllers
 
                 if (editAgentieImobiliaraModel.ProfileImage != null)
                 {
-                    //this.unitOfWork.UsersRepository.AddImageForAgentie(editAgentieImobiliaraModel.ProfileImage, toEditAgentie.Id);
+                    this.unitOfWork.UsersRepository.AddImageForAgentie(editAgentieImobiliaraModel.ProfileImage, toEditAgentie.Id);
                     log.Debug("Agentie image added for " + toEditAgentie.Nume);
                 }
 

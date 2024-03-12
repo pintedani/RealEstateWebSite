@@ -70,9 +70,13 @@ namespace Imobiliare.UI.Controllers
 
         public ActionResult Trimise()
         {
+            var user = this.unitOfWork.UsersRepository.Find(x=>x.Email == User.Identity.Name).Single();
             var mesajs =
-              this.unitOfWork.MesajRepository.Find(x => x.FromUser.Email == User.Identity.Name)
+              this.unitOfWork.MesajRepository.Find(x => x.FromUserId == user.Id)
                 .OrderByDescending(x => x.CreateDateTime);
+
+            //TODO Check why this does not work?
+            var all = this.unitOfWork.MesajRepository.Find(x=>x.Id != 0).ToList();
 
             var onlyLastMessages = new List<Mesaj>();
             foreach (var mesaj in mesajs)

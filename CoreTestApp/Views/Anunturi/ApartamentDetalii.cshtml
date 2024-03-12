@@ -75,7 +75,7 @@
     <div class="d-flex my-4">
         @if (Context.Request.Headers.TryGetValue("Referer", out var referer))
         {
-        <a class="btn btn-light me-auto" href="@referer"><span class="bi bi-arrow-left"></span> Înapoi</a>
+            <a class="btn btn-light me-auto" href="@referer"><span class="bi bi-arrow-left"></span> Înapoi</a>
         }
 
         @if (Model.IsCurrentUserAdmin || Model.LoggedInUserId == Model.Imobil.UserId)
@@ -153,16 +153,16 @@
     @if (Model.Imobil.Poze != null)
     {
         @*<div class="row panel-success">
-                @foreach (var poza in @Model.Imobil.Poze.Split(';'))
-                {
-                    <div class="col-xs-12 col-sm-6 col-md-4 img-thumbnail">
-                        <a class="fancybox fancybox-thumbs anchor-link-spanner" href="~/Images/uploadedPhotos/@poza" data-fancybox-group="gallery" title="@Model.Imobil.Title">
-                            <img class="center-cropped" style="vertical-align: top; height: 200px" src="~/Images/uploadedPhotos/@poza" alt="@HtmlHelpers.RemoveSpecialCharacters(Model.Imobil.Title, ' ', false)" />
-                        </a>
-                    </div>
-                }
-            </div>
-            <br />*@
+    @foreach (var poza in @Model.Imobil.Poze.Split(';'))
+    {
+    <div class="col-xs-12 col-sm-6 col-md-4 img-thumbnail">
+    <a class="fancybox fancybox-thumbs anchor-link-spanner" href="~/Images/uploadedPhotos/@poza" data-fancybox-group="gallery" title="@Model.Imobil.Title">
+    <img class="center-cropped" style="vertical-align: top; height: 200px" src="~/Images/uploadedPhotos/@poza" alt="@HtmlHelpers.RemoveSpecialCharacters(Model.Imobil.Title, ' ', false)" />
+    </a>
+    </div>
+    }
+    </div>
+    <br />*@
 
         <style type="text/css">
             .carousel .carousel-item {
@@ -312,9 +312,9 @@
                             <td>@Model.Imobil.DataAdaugare.ToString("dd/MM/yyyy")</td>
                         </tr>
                         @*<tr>
-                                <td>Valabilitate:</td>
-                                <td>@Model.Imobil.Valabilitate zile (@Model.Imobil.DataAdaugare.AddDays(@Model.Imobil.Valabilitate).ToString("dd/MM/yyyy"))</td>
-                            </tr>*@
+                    <td>Valabilitate:</td>
+                    <td>@Model.Imobil.Valabilitate zile (@Model.Imobil.DataAdaugare.AddDays(@Model.Imobil.Valabilitate).ToString("dd/MM/yyyy"))</td>
+                    </tr>*@
                     </tbody>
                 </table>
             </div>
@@ -443,7 +443,7 @@
                 <br />
             }
             @*TODO: Enable raport anunt button
-                <a data-toggle="modal" data-target="#modalRaporteazaAnuntInvalid" style="cursor: pointer"><span class="glyphicon glyphicon-exclamation-sign red"></span> Raportează Anunț Invalid</a>*@
+            <a data-toggle="modal" data-target="#modalRaporteazaAnuntInvalid" style="cursor: pointer"><span class="glyphicon glyphicon-exclamation-sign red"></span> Raportează Anunț Invalid</a>*@
 
         </div>
 
@@ -454,6 +454,32 @@
                 {
                     @*  @*TODO: Enable
             using (Ajax.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", new AjaxOptions { UpdateTargetId = "resultMesajVanzator", InsertionMode = InsertionMode.Replace, OnBegin = "showContactFormProgress", OnSuccess = "hideContactFormProgress" }))
+            {
+            <div class="panel panel-success">
+            <div class="panel-heading">Trimite mesaj vanzatorului</div>
+            <div class="panel-body">
+            <input type="hidden" value="@Model.Imobil.Id" name="IdAnuntVanzator" />
+            <br />
+            <div class="form-group col-xs-12 floating-label-form-group controls">
+            <label>Mesaj</label>
+            <textarea rows="4" style="max-width: 600px; width: 100%" id="MesajCumparator" name="MesajCumparator" placeholder="Mesaj" class="form-control">Buna ziua, Am gasit anuntul Dumneavoastra cu titlul @Model.Imobil.Title pe apartamente24.ro. Va rog sa-mi trimiteti informatii suplimentare. Va multumesc.</textarea>
+            </div>
+
+            <input type="hidden" value="@Model.Imobil.Id" />
+
+            <div class="clearfix"></div>
+
+            <div style="margin-top: 10px">
+            <img id="loadingGif" src="~/Images/preloader.gif" style="height: 35px; vertical-align: bottom; padding-bottom: 5px; display: none" alt="Va rugam asteptati" />
+            <p id="loadingMessage" style="display: none">Va rugam asteptati</p>
+            <input class="btn btn-success" type="submit" id="TrimiteMesajButton" value="Trimite Mesaj" />
+            <div id="resultMesajVanzator" style="color: blue"></div>
+            </div>
+            </div>
+            </div>
+            }*@
+
+                    @using (Html.BeginForm("TrimiteMesajVanzatoruluiAnuntRelated", "Mesaje", FormMethod.Post, new { id = "messageForm" }))
                     {
                         <div class="panel panel-success">
                             <div class="panel-heading">Trimite mesaj vanzatorului</div>
@@ -477,11 +503,11 @@
                                 </div>
                             </div>
                         </div>
-                    }*@
+                    }
                 }
                 else
                 {
-                    <button class="btn btn-primary"><span class="bi bi-envelope"></span>&nbsp;&nbsp;Trimite Mesaj Vanzatorului</button>
+                    <a href="@Url.Action("Login", "Account", new { returnUrl = Context.Request.GetEncodedUrl() })" class="btn btn-primary"><span class="bi bi-envelope"></span>&nbsp;&nbsp;Pentru a trimite mesaj trebuie sa va logati</a>
                 }
             }
             else
@@ -497,15 +523,15 @@
             @if (Model.Imobil.GoogleMarkerCoordinates != null)
             {
                 @*<div id="mapMode" style="margin-bottom: 10px; position: relative; cursor: pointer; width: 175px; background-color: white; box-shadow: none">
-                        <img class="img-rounded" src="~/Images/DecorationImages/hartaGoogleIcon.JPG" style="width: 175px" />
-                        <p style="position: absolute; left: 37px; top: 32px; background-color: white; opacity: 0.9; padding: 5px; border-radius: 3px">
-                            <span class="glyphicon glyphicon-map-marker"></span> Vezi pe hartă
-                        </p>
-                    </div>
-                    <div style="position: relative">
-                        <div id="map_canvas_detaliiap" style="margin-top: 20px; box-shadow: 4px 4px 3px #888888">
-                        </div>
-                    </div>*@
+            <img class="img-rounded" src="~/Images/DecorationImages/hartaGoogleIcon.JPG" style="width: 175px" />
+            <p style="position: absolute; left: 37px; top: 32px; background-color: white; opacity: 0.9; padding: 5px; border-radius: 3px">
+            <span class="glyphicon glyphicon-map-marker"></span> Vezi pe hartă
+            </p>
+            </div>
+            <div style="position: relative">
+            <div id="map_canvas_detaliiap" style="margin-top: 20px; box-shadow: 4px 4px 3px #888888">
+            </div>
+            </div>*@
 
                 <div>
                     <div>
@@ -564,25 +590,27 @@
         </div>
     }
 
-@*    @if (!Request.Url.AbsoluteUri.Contains("localhost"))
+    @*    @if (!Request.Url.AbsoluteUri.Contains("localhost"))
     {
-        <div style="margin: 20px 0">
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Ap 25 Reclama anunturi / categorii -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1474334984782094"
-                 data-ad-slot="5459285763"
-                 data-ad-format="auto"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
+    <div style="margin: 20px 0">
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Ap 25 Reclama anunturi / categorii -->
+    <ins class="adsbygoogle"
+    style="display:block"
+    data-ad-client="ca-pub-1474334984782094"
+    data-ad-slot="5459285763"
+    data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    </div>
     }*@
 
     <section class="row">
         <h3 style="margin-bottom: 10px">Cele mai căutate rezultate</h3>
-        @{ var judetName = Model.Imobil.Judet.Nume; }
+        @{
+            var judetName = Model.Imobil.Judet.Nume;
+        }
         <div class="col-xs-12 col-sm-6 col-md-4">
             <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente">Apartamente vanzare @judetName</a><br />
             <a href="/Anunturi/Lista/judet-@judetName/tip-Vanzare-Apartamente/camere-1-1">Apartamente vanzare 1 camera @judetName</a><br />
@@ -623,158 +651,174 @@
     <script>
         $(document).ready(function () {
             $("#mapMode").on("click",
-                function() {
+                function () {
                     initialize();
                     $("#mapMode").hide();
                 });
 
-              $("#hideContactVanzatorButton").hide();
+            $("#hideContactVanzatorButton").hide();
 
-              $("#contactVanzatorButton").click(function() {
+            $("#contactVanzatorButton").click(function () {
                 //get telefon Number
                 $.getJSON('@Url.Action("RetrieveTelefon", "Home")',
-                  { anuntId: @Model.Imobil.Id },
+                    { anuntId: @Model.Imobil.Id },
                     function (telefon) {
                         //alert(telefon);
                         $("#TelefonContact").html('<span class="bi bi-telephone"></span>&nbsp;Telefon: <strong>' + telefon + '</strong>');
-                  });
+                    });
                 $("#hideContactVanzatorButton").show();
                 $("#contactVanzatorButton").hide();
-              });
-
-              $("#hideContactVanzatorButton").click(function() {
-                $("#contactVanzatorButton").show();
-                $("#hideContactVanzatorButton").hide();
-              });
-
-              $("#fade").on("click",
-                function() {
-                  $("#light").hide();
-                  $("#fade").hide();
-                });
-
-              $("#EmailCumparator").on("click",
-                function() {
-                  $("#EmailCumparator").val('');
-                });
-              $("#TelefonCumparator").on("click",
-                function() {
-                  $("#TelefonCumparator").val('');
-                });
-              $("#TrimiteMesajButton").on("click",
-                function() {
-                  $("#resultMesajVanzator").html("");
-                });
-
-              $("#EmailContactAbuz").on("click",
-                function() {
-                  $("#EmailContactAbuz").val('');
-                });
-
-              $("#TrimiteMesajButtonAbuz").on("click",
-                function() {
-                  $("#resultMesajAbuz").html("");
-                });
             });
 
-            function showContactFormProgress() {
-              $('#loadingGif').show();
-              $('#loadingMessage').show();
-              $("#TrimiteMesajButton").hide();
-            }
+            $("#hideContactVanzatorButton").click(function () {
+                $("#contactVanzatorButton").show();
+                $("#hideContactVanzatorButton").hide();
+            });
 
-            function hideContactFormProgress() {
-              $('#loadingGif').hide();
-              $('#loadingMessage').hide();
-              $("#TrimiteMesajButton").show();
-              //TODO Do not rely on "Eroare" text
-              if ($('#resultMesajVanzator').text().indexOf("Eroare") == -1) {
+            $("#EmailCumparator").on("click",
+                function () {
+                    $("#EmailCumparator").val('');
+                });
+            $("#TelefonCumparator").on("click",
+                function () {
+                    $("#TelefonCumparator").val('');
+                });
+            $("#TrimiteMesajButton").on("click",
+                function () {
+                    $("#resultMesajVanzator").html("");
+                });
+
+            $("#EmailContactAbuz").on("click",
+                function () {
+                    $("#EmailContactAbuz").val('');
+                });
+
+            $("#TrimiteMesajButtonAbuz").on("click",
+                function () {
+                    $("#resultMesajAbuz").html("");
+                });
+
+            $('#messageForm').submit(function (e) {
+                e.preventDefault();              
+
+                var form = $(this);
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),
+                    beforeSend: function () {
+                        showContactFormProgress();
+                    },
+                    success: function (response) {
+                        $('#resultMesajVanzator').html(response);                        
+                    },
+                    complete: function () {
+                        hideContactFormProgress();
+                    }
+                });
+            });
+        });
+
+        function showContactFormProgress() {
+            $('#loadingGif').show();
+            $('#loadingMessage').show();
+            $("#TrimiteMesajButton").hide();
+        }
+
+        function hideContactFormProgress() {
+            $('#loadingGif').hide();
+            $('#loadingMessage').hide();
+            $("#TrimiteMesajButton").show();
+            //TODO Do not rely on "Eroare" text
+            if ($('#resultMesajVanzator').text().indexOf("Eroare") == -1) {
                 $("#EmailCumparator").val("Emailul tau");
                 $("#TelefonCumparator").val("Telefonul tau");
                 $("#MesajCumparator").val('');
                 $("#resultMesajVanzator").css("color", "blue");
-              } else {
+            } else {
                 //Keep values for editing
                 $("#resultMesajVanzator").css("color", "red");
-              }
-
-              //Reset Recaptcha here and in hideContactFormProgressAbuz
-              grecaptcha.reset();
-
-              //Show status message
-              alert($('#resultMesajVanzator').text());
             }
 
-            function showContactFormProgressAbuz() {
-              if (grecaptcha.getResponse()) {
+            //Reset Recaptcha here and in hideContactFormProgressAbuz
+            grecaptcha.reset();
+
+            //Show status message
+            alert($('#resultMesajVanzator').text());
+        }
+
+        function showContactFormProgressAbuz() {
+            if (grecaptcha.getResponse()) {
                 $('#loadingGifAbuz').show();
                 $('#loadingMessageAbuz').show();
                 $("#TrimiteMesajButtonAbuz").hide();
                 return true;
-              } else {
+            } else {
                 alert("Vă rugăm bifați căsuta că nu sunteți robot");
                 return false;
-              }
             }
+        }
     </script>
     @if (Model.Imobil.GoogleMarkerCoordinates != null)
     {
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhW0kEjWH1Fb6UfNZU5DdSUFCwTOQXKR0" type="text/javascript"></script>
         <script>
-              function initialize() {
+            function initialize() {
                 var mapOptions = {
-                  zoom: 13,
-                  scrollwheel: false,
-                  streetViewControl: false,
-                  center: new google.maps.LatLng(46.777248, 23.599889)
+                    zoom: 13,
+                    scrollwheel: false,
+                    streetViewControl: false,
+                    center: new google.maps.LatLng(46.777248, 23.599889)
                 };
                 var map = new google.maps.Map(document.getElementById('map_canvas_detaliiap'),
-                  mapOptions);
+                    mapOptions);
 
                 var lat = '@Model.Imobil.GoogleMarkerCoordinates.Split(',')[0]';
                 //alert('@Model.Imobil.GoogleMarkerCoordinates.Split(',')[1]');
                 var longu = '@Model.Imobil.GoogleMarkerCoordinates.Split(',')[1]';
 
-                  placeMarker(new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, "")), map);
-              }
+                placeMarker(new google.maps.LatLng(lat.replace(/\(/g, ""), longu.replace(/\)/g, "")), map);
+            }
 
-              function placeMarker(position, map) {
+            function placeMarker(position, map) {
                 //depends on url how many slashes / it has
                 var image = '../../../../Images/markerApartment5.png';
                 var marker = new google.maps.Marker({
-                  position: position,
-                  map: map,
-                  icon: image
-                  });
+                    position: position,
+                    map: map,
+                    icon: image
+                });
                 map.panTo(position);
                 attachSecretMessage(marker, map);
-              }
+            }
 
             function attachSecretMessage(marker, map) {
-                  //TODO: DAPI Check if we can remove the if
+                //TODO: DAPI Check if we can remove the if
                 var image = '';
-                @if (true)
-                {
-                  <text>
-                    image = 'uploadedPhotos/' + '@Model.Imobil.FirstPhoto';
-                  </text>
-                }
+            @if (true)
+            {
+                <text>
+                        image = 'uploadedPhotos/' + '@Model.Imobil.FirstPhoto';
+                </text>
+            }
 
-                var infowindow = new google.maps.InfoWindow(
-                {
-                  content:
-                    '<b>@Model.Imobil.Price €</b><br/> @Model.Imobil.Suprafata MP <br/> <img class="img img-rounded" alt="poza proprietate" width="100" src=\'/Images/' + image + '\'/>',
-                  size: new google.maps.Size(170, 170)
-                });
+                            var infowindow = new google.maps.InfoWindow(
+                    {
+                        content:
+                            '<b>@Model.Imobil.Price €</b><br/> @Model.Imobil.Suprafata MP <br/> <img class="img img-rounded" alt="poza proprietate" width="100" src=\'/Images/' + image + '\'/>',
+                        size: new google.maps.Size(170, 170)
+                    });
                 google.maps.event.addListener(marker,
-                  'click',
-                  function() {
-                    infowindow.open(map, marker);
-                  });
+                    'click',
+                    function () {
+                        infowindow.open(map, marker);
+                    });
                 infowindow.open(map, marker);
-              }
+            }
 
-              //google.maps.event.addDomListener(window, 'load', initialize);
+            //google.maps.event.addDomListener(window, 'load', initialize);
         </script>
     }
 }

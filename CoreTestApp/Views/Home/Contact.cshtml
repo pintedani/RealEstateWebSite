@@ -101,7 +101,7 @@
                         } else {
                             $("#statusTrimitereEmail").css("color", "red").html(result.message);
                         }
-                        showAlert("Eroare", result.message);
+                        showAlert(result.message);
                     },
                     error: function (xhr, status, error) {
                         hideContactFormProgress();
